@@ -1,0 +1,12 @@
+name: ServerCore
+version: 1.0.0-SNAPSHOT
+api-version: 1.18
+authors:
+  - JanLLDV
+  - JustinLLDV
+main: net.eltown.servercore.ServerCore
+description: Kernfunktionen für Eltown
+depend:
+  - Drivers
+  - floodgate
+  - Economy
