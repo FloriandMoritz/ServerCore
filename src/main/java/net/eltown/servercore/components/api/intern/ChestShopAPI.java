@@ -84,6 +84,12 @@ public class ChestShopAPI {
             }
         });
         toRemove.forEach(e -> this.removeChestShop(e.getSignLocation(), e.getId()));
+
+        this.serverCore.getServer().getScheduler().scheduleSyncRepeatingTask(this.serverCore, () -> {
+            this.cachedChestShops.values().forEach(e -> {
+                this.serverCore.getServer().getOnlinePlayers().forEach(player -> this.spawnChestShopDisplayItem(player, e, false));
+            });
+        }, 500, 5000);
     }
 
     public void createChestShop(final Location signLocation, final Location chestLocation, final Player owner, final ChestShop.ShopType shopType, final double price, final int sellAmount, final ItemStack item, final String bankAccount) {
