@@ -70,7 +70,7 @@ public class WarpCommand extends Command {
             final String displayName = h.getInput(0);
             final String imageUrl = h.getInput(0);
 
-            if (name.isEmpty() || displayName.isEmpty() || imageUrl.isEmpty()) {
+            if (name != null && displayName != null && imageUrl != null && (name.isEmpty() || displayName.isEmpty() || imageUrl.isEmpty())) {
                 player.sendMessage(Language.get("warp.input.invalid"));
                 return;
             }
@@ -105,6 +105,7 @@ public class WarpCommand extends Command {
                 final boolean delete = h.getToggle(4);
 
                 if (!delete) {
+                    assert displayName != null;
                     if (!displayName.isEmpty()) {
                         if (!displayName.equals(warp.getDisplayName())) {
                             this.serverCore.getTeleportationAPI().updateWarpDisplayName(warp.getName(), displayName);
@@ -112,9 +113,21 @@ public class WarpCommand extends Command {
                         }
                     }
 
+                    assert imageUrl != null;
                     if (!imageUrl.isEmpty()) {
-
+                        if (!imageUrl.equals(warp.getImageUrl())) {
+                            this.serverCore.getTeleportationAPI().updateWarpImageUrl(warp.getName(), imageUrl);
+                            player.sendMessage(Language.get("warp.update.image"));
+                        }
                     }
+
+                    if (updatePosition) {
+                        this.serverCore.getTeleportationAPI().updateWarpPosition(warp.getName(), player.getLocation());
+                        player.sendMessage("warp.update.location");
+                    }
+                } else {
+                    this.serverCore.getTeleportationAPI().deleteWarp(warp.getName());
+                    player.sendMessage(Language.get("warp.deleted"));
                 }
             });
             editWarpWindow.send(player);

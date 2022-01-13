@@ -9,6 +9,7 @@ import net.eltown.servercore.commands.administrative.PrintItemCommand;
 import net.eltown.servercore.commands.feature.ChestShopCommand;
 import net.eltown.servercore.commands.guardian.*;
 import net.eltown.servercore.commands.teleportation.HomeCommand;
+import net.eltown.servercore.commands.teleportation.WarpCommand;
 import net.eltown.servercore.components.api.intern.*;
 import net.eltown.servercore.components.language.Language;
 import net.eltown.servercore.components.tinyrabbit.TinyRabbit;
@@ -37,6 +38,8 @@ import java.util.function.Consumer;
 
 @Getter
 public class ServerCore extends JavaPlugin {
+
+    // ELTOWN-6
 
     private TinyRabbit tinyRabbit;
 
@@ -120,6 +123,7 @@ public class ServerCore extends JavaPlugin {
         this.getServer().getCommandMap().register("sys", new UnmutelogCommand(this));
 
         this.getServer().getCommandMap().register("sys", new HomeCommand(this));
+        this.getServer().getCommandMap().register("sys", new WarpCommand(this));
 
         /*
          * Other
