@@ -8,8 +8,7 @@ import net.eltown.servercore.commands.administrative.HologramCommand;
 import net.eltown.servercore.commands.administrative.PrintItemCommand;
 import net.eltown.servercore.commands.feature.ChestShopCommand;
 import net.eltown.servercore.commands.guardian.*;
-import net.eltown.servercore.commands.teleportation.HomeCommand;
-import net.eltown.servercore.commands.teleportation.WarpCommand;
+import net.eltown.servercore.commands.teleportation.*;
 import net.eltown.servercore.components.api.intern.*;
 import net.eltown.servercore.components.language.Language;
 import net.eltown.servercore.components.tinyrabbit.TinyRabbit;
@@ -55,6 +54,7 @@ public class ServerCore extends JavaPlugin {
     private SettingsAPI settingsAPI;
     private SyncAPI syncAPI;
     private TeleportationAPI teleportationAPI;
+    private CoreAPI coreAPI;
 
     @Override
     public void onLoad() {
@@ -93,6 +93,7 @@ public class ServerCore extends JavaPlugin {
         this.settingsAPI = new SettingsAPI(this);
         this.syncAPI = new SyncAPI(this);
         this.teleportationAPI = new TeleportationAPI(this);
+        this.coreAPI = new CoreAPI(this);
 
         /*
          * Listeners
@@ -122,7 +123,11 @@ public class ServerCore extends JavaPlugin {
         this.getServer().getCommandMap().register("sys", new UnmuteCommand(this));
         this.getServer().getCommandMap().register("sys", new UnmutelogCommand(this));
 
+        this.getServer().getCommandMap().register("sys", new CbCommand(this));
+        this.getServer().getCommandMap().register("sys", new FwCommand(this));
         this.getServer().getCommandMap().register("sys", new HomeCommand(this));
+        this.getServer().getCommandMap().register("sys", new NtCommand(this));
+        this.getServer().getCommandMap().register("sys", new TeleportCommand(this));
         this.getServer().getCommandMap().register("sys", new WarpCommand(this));
 
         /*
