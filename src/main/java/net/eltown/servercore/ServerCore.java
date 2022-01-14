@@ -7,6 +7,7 @@ import net.eltown.servercore.commands.administrative.GiveFurnaceCommand;
 import net.eltown.servercore.commands.administrative.HologramCommand;
 import net.eltown.servercore.commands.administrative.PrintItemCommand;
 import net.eltown.servercore.commands.feature.ChestShopCommand;
+import net.eltown.servercore.commands.feature.FriendCommand;
 import net.eltown.servercore.commands.guardian.*;
 import net.eltown.servercore.commands.teleportation.*;
 import net.eltown.servercore.components.api.intern.*;
@@ -55,6 +56,7 @@ public class ServerCore extends JavaPlugin {
     private SyncAPI syncAPI;
     private TeleportationAPI teleportationAPI;
     private CoreAPI coreAPI;
+    private FriendAPI friendAPI;
 
     @Override
     public void onLoad() {
@@ -94,6 +96,7 @@ public class ServerCore extends JavaPlugin {
         this.syncAPI = new SyncAPI(this);
         this.teleportationAPI = new TeleportationAPI(this);
         this.coreAPI = new CoreAPI(this);
+        this.friendAPI = new FriendAPI(this);
 
         /*
          * Listeners
@@ -111,6 +114,7 @@ public class ServerCore extends JavaPlugin {
         this.getServer().getCommandMap().register("sys", new PrintItemCommand(this));
 
         this.getServer().getCommandMap().register("sys", new ChestShopCommand(this));
+        this.getServer().getCommandMap().register("sys", new FriendCommand(this));
 
         this.getServer().getCommandMap().register("sys", new BanCommand(this));
         this.getServer().getCommandMap().register("sys", new BanlogCommand(this));

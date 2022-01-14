@@ -6,6 +6,7 @@ import net.eltown.servercore.ServerCore;
 import net.eltown.servercore.components.api.intern.GroupAPI;
 import net.eltown.servercore.components.api.intern.LevelAPI;
 import net.eltown.servercore.components.api.intern.SettingsAPI;
+import net.eltown.servercore.components.data.friends.FriendCalls;
 import net.eltown.servercore.components.data.groupmanager.GroupCalls;
 import net.eltown.servercore.components.data.level.Level;
 import net.eltown.servercore.components.data.level.LevelCalls;
@@ -126,6 +127,11 @@ public record EventListener(ServerCore serverCore) implements Listener {
                         } else SettingsAPI.cachedSettings.put(player.getName(), new AccountSettings(player.getName(), new HashMap<>()));
                     }
                 }, Queue.SETTINGS_CALLBACK, SettingsCalls.REQUEST_SETTINGS.name(), player.getName());
+
+                /*
+                 * Friends
+                 */
+                this.serverCore.getTinyRabbit().send(Queue.FRIEND_RECEIVE, FriendCalls.REQUEST_CREATE_FRIEND_DATA.name(), player.getName());
             }
         });
     }
