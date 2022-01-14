@@ -160,7 +160,7 @@ public class FriendCommand extends Command {
     private void openManageFriend(final Player player, final String friend) {
         final StringBuilder content = new StringBuilder("§8» §fHier kannst du deinen Freund oder deine Freundin §9" + friend + " §fverwalten. Schau dir die Informationen an oder interagiere mit den folgenden Möglichkeiten.\n\n");
 
-        Economy.getAPI().getMoney(player.getName(), money -> {
+        Economy.getAPI().getMoney(friend, money -> {
             this.serverCore.getSettingsAPI().getEntry(friend, "friend/level", "true", value -> {
                 if (value.equals("true")) {
                     content.append("§8» §9Level: §f").append(this.serverCore.getLevelAPI().getLevel(friend).getLevel()).append("\n");
