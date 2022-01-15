@@ -1,8 +1,10 @@
 package net.eltown.servercore.listeners;
 
+import io.papermc.paper.event.entity.EntityMoveEvent;
 import net.eltown.economy.Economy;
 import net.eltown.economy.components.economy.event.MoneyChangeEvent;
 import net.eltown.servercore.ServerCore;
+import net.eltown.servercore.commands.administrative.NpcCommand;
 import net.eltown.servercore.components.api.intern.GroupAPI;
 import net.eltown.servercore.components.api.intern.LevelAPI;
 import net.eltown.servercore.components.api.intern.SettingsAPI;
@@ -12,19 +14,23 @@ import net.eltown.servercore.components.data.level.Level;
 import net.eltown.servercore.components.data.level.LevelCalls;
 import net.eltown.servercore.components.data.settings.AccountSettings;
 import net.eltown.servercore.components.data.settings.SettingsCalls;
-import net.eltown.servercore.components.data.teleportation.TeleportationCalls;
-import net.eltown.servercore.components.language.Language;
 import net.eltown.servercore.components.tinyrabbit.Queue;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.VillagerCareerChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scoreboard.*;
 
 import java.util.*;
@@ -147,6 +153,50 @@ public record EventListener(ServerCore serverCore) implements Listener {
         event.quitMessage(Component.text(""));
         if (this.serverCore.getSyncAPI().getLoaded().contains(event.getPlayer().getName())) {
             this.serverCore.getSyncAPI().savePlayer(event.getPlayer());
+        }
+    }
+
+    @EventHandler
+    public void on(final VillagerCareerChangeEvent event) {
+        final Villager villager = event.getEntity();
+        if (villager.getPersistentDataContainer().has(new NamespacedKey(this.serverCore, "npc.key"), PersistentDataType.STRING)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void on(final EntityDamageByEntityEvent event) {
+        final Entity entity = event.getEntity();
+        if (entity.getType() == EntityType.VILLAGER) {
+            final Villager villager = (Villager) entity;
+            if (villager.getPersistentDataContainer().has(new NamespacedKey(this.serverCore, "npc.key"), PersistentDataType.STRING)) {
+                event.setCancelled(true);
+
+                if (event.getDamager() instanceof final Player player) {
+                    if (player.isOp()) {
+                        if (player.getInventory().getItemInMainHand().getType() == Material.BARRIER) {
+                            villager.setHealth(0);
+                            player.sendMessage("§8» §fCore §8| §7Der NPC wurde entfernt.");
+                        } else if (player.getInventory().getItemInMainHand().getType() == Material.WOODEN_AXE) {
+                            NpcCommand.selectedVillager.put(player.getName(), villager);
+                            player.sendMessage("§8» §fCore §8| §7Der NPC wurde zur Bearbeitung ausgewählt.");
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void on(final EntityMoveEvent event) {
+        final Entity entity = event.getEntity();
+        if (event.getEntityType() == EntityType.VILLAGER) {
+            final Villager villager = (Villager) entity;
+            if (villager.getPersistentDataContainer().has(new NamespacedKey(this.serverCore, "npc.key"), PersistentDataType.STRING)) {
+                if (event.getTo().getX() != event.getFrom().getX() || event.getTo().getY() != event.getFrom().getY() || event.getTo().getZ() != event.getFrom().getZ()) {
+                    event.setCancelled(true);
+                }
+            }
         }
     }
 

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import net.eltown.servercore.commands.administrative.GiveFurnaceCommand;
 import net.eltown.servercore.commands.administrative.HologramCommand;
+import net.eltown.servercore.commands.administrative.NpcCommand;
 import net.eltown.servercore.commands.administrative.PrintItemCommand;
 import net.eltown.servercore.commands.feature.ChestShopCommand;
 import net.eltown.servercore.commands.feature.FriendCommand;
@@ -111,6 +112,7 @@ public class ServerCore extends JavaPlugin {
          */
         this.getServer().getCommandMap().register("sys", new GiveFurnaceCommand(this));
         this.getServer().getCommandMap().register("sys", new HologramCommand(this));
+        this.getServer().getCommandMap().register("sys", new NpcCommand(this));
         this.getServer().getCommandMap().register("sys", new PrintItemCommand(this));
 
         this.getServer().getCommandMap().register("sys", new ChestShopCommand(this));
