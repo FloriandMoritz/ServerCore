@@ -2,42 +2,33 @@ package net.eltown.servercore.components.roleplay;
 
 public enum RoleplayID {
 
-    SHOP_MINER("servercore:shop.miner"),
-    SHOP_NETHER("servercore:shop.nether"),
-    SHOP_EXPLORER("servercore:shop.explorer"),
-    SHOP_LUMBERJACK("servercore:shop.lumberjack"),
-    SHOP_MONSTERUNTER("servercore:shop.monsterhunter"),
-    SHOP_BLACKSMITH("servercore:shop.blacksmith"),
+    SHOP_MINER,
+    SHOP_NETHER,
+    SHOP_EXPLORER,
+    SHOP_LUMBERJACK,
+    SHOP_MONSTERUNTER,
+    SHOP_BLACKSMITH,
 
-    BANKER("servercore:job.banker"),
-    CRYPTO("servercore:job.crypto"),
-    COOK("servercore:job.cook"),
-    FARMER("servercore:job.farmer"),
+    BANKER,
+    CRYPTO,
+    COOK,
+    FARMER,
 
-    TOWNHALL_RECEPTION("servercore:townhall_reception"),
-    TOWNHALL_TAXES("servercore:cassandra"),
-    TOWNHALL_BUILDING("servercore:jack"),
-    TOWNHALL_COURT("servercore:court"),
-    TOWNHALL_ARCHIVE("servercore:archive"),
+    TOWNHALL_RECEPTION,
+    TOWNHALL_TAXES,
+    TOWNHALL_BUILDING,
+    TOWNHALL_COURT,
+    TOWNHALL_ARCHIVE,
 
-    FEATURE_LOLA("servercore:lola"),
-    FEATURE_JOHN("servercore:john"),
-    FEATURE_AINARA("servercore:ainara"),
-    FEATURE_MIKE("servercore:mike"),
-    FEATURE_BRIAN("servercore:brian"),
-    FEATURE_ROB("servercore:rob"),
-    FEATURE_ANNA("servercore:anna"),
-    FEATURE_CARLA("servercore:carla"),
+    FEATURE_LOLA,
+    FEATURE_JOHN,
+    FEATURE_AINARA,
+    FEATURE_MIKE,
+    FEATURE_BRIAN,
+    FEATURE_ROB,
+    FEATURE_ANNA,
+    FEATURE_CARLA,
 
     ;
 
-    private final String id;
-
-    RoleplayID(final String id) {
-        this.id = id;
-    }
-
-    public String id() {
-        return id;
-    }
 }

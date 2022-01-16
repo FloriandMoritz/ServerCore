@@ -13,6 +13,7 @@ import net.eltown.servercore.commands.guardian.*;
 import net.eltown.servercore.commands.teleportation.*;
 import net.eltown.servercore.components.api.intern.*;
 import net.eltown.servercore.components.language.Language;
+import net.eltown.servercore.components.roleplay.shops.ShopRoleplay;
 import net.eltown.servercore.components.tinyrabbit.TinyRabbit;
 import net.eltown.servercore.listeners.ChestShopListener;
 import net.eltown.servercore.listeners.EventListener;
@@ -58,6 +59,8 @@ public class ServerCore extends JavaPlugin {
     private TeleportationAPI teleportationAPI;
     private CoreAPI coreAPI;
     private FriendAPI friendAPI;
+
+    private ShopRoleplay shopRoleplay;
 
     @Override
     public void onLoad() {
@@ -139,6 +142,7 @@ public class ServerCore extends JavaPlugin {
         /*
          * Other
          */
+        this.shopRoleplay = new ShopRoleplay(this);
     }
 
     @Override
