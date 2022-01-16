@@ -7,10 +7,12 @@ import lombok.SneakyThrows;
 import net.eltown.servercore.ServerCore;
 import net.eltown.servercore.components.config.Config;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
 
@@ -24,12 +26,25 @@ public class HologramAPI {
     public HologramAPI(final ServerCore serverCore) {
         this.serverCore = serverCore;
         this.configuration = new Config(serverCore.getDataFolder() + "/components/holograms.yml", Config.YAML);
-        this.configuration.getSection("holograms").getAll().getKeys(false).forEach(e -> {
-            final Location location = new Location(serverCore.getServer().getWorld(this.configuration.getString("holograms." + e + ".world")), this.configuration.getDouble("holograms." + e + ".x"), this.configuration.getDouble("holograms." + e + ".y"), this.configuration.getDouble("holograms." + e + ".z"));
-            final List<String> lines = this.configuration.getStringList("holograms." + e + ".lines");
-            this.holograms.put(e, new Hologram(e, location));
-            this.holograms.get(e).create(lines);
-        });
+        this.serverCore.getServer().getScheduler().scheduleSyncDelayedTask(this.serverCore, () -> {
+            this.serverCore.getServer().getWorlds().forEach(world -> {
+                world.getEntities().forEach(entity -> {
+                    if (entity.getType() == EntityType.ARMOR_STAND) {
+                        if (entity.getPersistentDataContainer().has(new NamespacedKey(ServerCore.getServerCore(), "container.hologram"), PersistentDataType.INTEGER)) {
+                            entity.remove();
+                        }
+                    }
+                });
+            });
+        }, 150);
+        this.serverCore.getServer().getScheduler().scheduleSyncDelayedTask(this.serverCore, () -> {
+            this.configuration.getSection("holograms").getAll().getKeys(false).forEach(e -> {
+                final Location location = new Location(serverCore.getServer().getWorld(this.configuration.getString("holograms." + e + ".world")), this.configuration.getDouble("holograms." + e + ".x"), this.configuration.getDouble("holograms." + e + ".y"), this.configuration.getDouble("holograms." + e + ".z"));
+                final List<String> lines = this.configuration.getStringList("holograms." + e + ".lines");
+                this.holograms.put(e, new Hologram(e, location));
+                this.holograms.get(e).create(lines);
+            });
+        }, 170);
     }
 
     public boolean hologramExists(final String id) {
@@ -142,6 +157,7 @@ public class HologramAPI {
             int i = 1;
             for (final String line : lines) {
                 final ArmorStand armorStand = (ArmorStand) this.location.getWorld().spawnEntity(this.getLocation(i), EntityType.ARMOR_STAND);
+                armorStand.getPersistentDataContainer().set(new NamespacedKey(ServerCore.getServerCore(), "container.hologram"), PersistentDataType.INTEGER, 1);
                 armorStand.setGravity(false);
                 armorStand.setCanPickupItems(false);
                 armorStand.setCustomNameVisible(true);
@@ -160,6 +176,7 @@ public class HologramAPI {
 
         public void addLine(final String text) {
             final ArmorStand armorStand = (ArmorStand) this.location.getWorld().spawnEntity(this.getLocation(this.lines.size() + 1), EntityType.ARMOR_STAND);
+            armorStand.getPersistentDataContainer().set(new NamespacedKey(ServerCore.getServerCore(), "container.hologram"), PersistentDataType.INTEGER, 1);
             armorStand.setGravity(false);
             armorStand.setCanPickupItems(false);
             armorStand.setCustomNameVisible(true);
@@ -171,7 +188,7 @@ public class HologramAPI {
         }
 
         private Location getLocation(final int line) {
-            return new Location(this.location.getWorld(), this.getLocation().getX(), this.getLocation().getY() + (line *  -.37), this.getLocation().getZ());
+            return new Location(this.location.getWorld(), this.getLocation().getX(), this.getLocation().getY() + (line * -.37), this.getLocation().getZ());
         }
 
         public void removeLine(final int line) {
@@ -183,6 +200,7 @@ public class HologramAPI {
             for (final Line e : new ArrayList<>(this.lines)) {
                 final String set = e.getText();
                 final ArmorStand armorStand = (ArmorStand) this.location.getWorld().spawnEntity(this.getLocation(i), EntityType.ARMOR_STAND);
+                armorStand.getPersistentDataContainer().set(new NamespacedKey(ServerCore.getServerCore(), "container.hologram"), PersistentDataType.INTEGER, 1);
                 armorStand.setGravity(false);
                 armorStand.setCanPickupItems(false);
                 armorStand.setCustomNameVisible(true);
@@ -204,6 +222,7 @@ public class HologramAPI {
             for (final Line e : new ArrayList<>(this.lines)) {
                 final String set = e.getText();
                 final ArmorStand armorStand = (ArmorStand) this.location.getWorld().spawnEntity(this.getLocation(i), EntityType.ARMOR_STAND);
+                armorStand.getPersistentDataContainer().set(new NamespacedKey(ServerCore.getServerCore(), "container.hologram"), PersistentDataType.INTEGER, 1);
                 armorStand.setGravity(false);
                 armorStand.setCanPickupItems(false);
                 armorStand.setCustomNameVisible(true);

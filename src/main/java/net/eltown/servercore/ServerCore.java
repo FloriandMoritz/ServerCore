@@ -42,6 +42,7 @@ import java.util.function.Consumer;
 public class ServerCore extends JavaPlugin {
 
     // ELTOWN-6
+    private static ServerCore serverCore;
 
     private TinyRabbit tinyRabbit;
 
@@ -70,6 +71,7 @@ public class ServerCore extends JavaPlugin {
     @Override
     public void onEnable() {
         try {
+            serverCore = this;
             this.saveDefaultConfig();
             this.loadPlugin();
             this.getLogger().info("§aServerCore erfolgreich initialisiert.");
@@ -148,7 +150,6 @@ public class ServerCore extends JavaPlugin {
     @Override
     public void onDisable() {
         try {
-            this.getHologramAPI().removeAll();
             this.getServer().getOnlinePlayers().forEach(e -> {
                 this.syncAPI.savePlayer(e);
             });
@@ -307,4 +308,7 @@ public class ServerCore extends JavaPlugin {
         return free.get() >= itemStack.getAmount();
     }
 
+    public static ServerCore getServerCore() {
+        return serverCore;
+    }
 }
