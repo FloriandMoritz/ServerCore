@@ -113,8 +113,6 @@ public record ChestShopListener(ServerCore serverCore) implements Listener {
                         event.setCancelled(true);
                     }
                 }
-            } else {
-                event.setCancelled(true);
             }
         }
     }
