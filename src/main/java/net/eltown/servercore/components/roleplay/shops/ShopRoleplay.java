@@ -402,6 +402,7 @@ public record ShopRoleplay(ServerCore serverCore) {
                         } catch (final Exception ignored) {
                         }
                     }
+                    event.setCancelled(true);
                 }
             }
         }
