@@ -34,7 +34,7 @@ public class TeleportCommand extends Command {
 
                     PluginCommand.broadcastCommandMessage(sender, "Teleported to " + target.getName(), false);
                 } else {
-                    this.serverCore.getCoreAPI().proxyPlayerIsOnline(player.getName(), isOnline -> {
+                    this.serverCore.getCoreAPI().proxyPlayerIsOnline(args[0], isOnline -> {
                         if (isOnline) {
                             this.serverCore.getTeleportationAPI().teleportToPlayer(player, args[0]);
                             player.sendMessage(Language.get("teleport.teleported.target", args[0]));
