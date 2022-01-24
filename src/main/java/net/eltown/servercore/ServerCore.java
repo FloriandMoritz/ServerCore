@@ -139,6 +139,8 @@ public class ServerCore extends JavaPlugin {
         this.getServer().getCommandMap().register("sys", new HomeCommand(this));
         this.getServer().getCommandMap().register("sys", new NtCommand(this));
         this.getServer().getCommandMap().register("sys", new TeleportCommand(this));
+        this.getServer().getCommandMap().register("sys", new TpacceptCommand(this));
+        this.getServer().getCommandMap().register("sys", new TpaCommand(this));
         this.getServer().getCommandMap().register("sys", new WarpCommand(this));
 
         /*
