@@ -3,12 +3,10 @@ package net.eltown.servercore;
 import com.google.common.net.HttpHeaders;
 import lombok.Getter;
 import lombok.SneakyThrows;
-import net.eltown.servercore.commands.administrative.GiveFurnaceCommand;
-import net.eltown.servercore.commands.administrative.HologramCommand;
-import net.eltown.servercore.commands.administrative.NpcCommand;
-import net.eltown.servercore.commands.administrative.PrintItemCommand;
+import net.eltown.servercore.commands.administrative.*;
 import net.eltown.servercore.commands.feature.ChestShopCommand;
 import net.eltown.servercore.commands.feature.FriendCommand;
+import net.eltown.servercore.commands.feature.RedeemCommand;
 import net.eltown.servercore.commands.guardian.*;
 import net.eltown.servercore.commands.teleportation.*;
 import net.eltown.servercore.components.api.intern.*;
@@ -60,6 +58,7 @@ public class ServerCore extends JavaPlugin {
     private TeleportationAPI teleportationAPI;
     private CoreAPI coreAPI;
     private FriendAPI friendAPI;
+    private GiftKeyAPI giftKeyAPI;
 
     private ShopRoleplay shopRoleplay;
 
@@ -103,6 +102,7 @@ public class ServerCore extends JavaPlugin {
         this.teleportationAPI = new TeleportationAPI(this);
         this.coreAPI = new CoreAPI(this);
         this.friendAPI = new FriendAPI(this);
+        this.giftKeyAPI = new GiftKeyAPI(this);
 
         /*
          * Listeners
@@ -115,6 +115,7 @@ public class ServerCore extends JavaPlugin {
         /*
          * Commands
          */
+        this.getServer().getCommandMap().register("sys", new GiftkeySystemCommand(this));
         this.getServer().getCommandMap().register("sys", new GiveFurnaceCommand(this));
         this.getServer().getCommandMap().register("sys", new HologramCommand(this));
         this.getServer().getCommandMap().register("sys", new NpcCommand(this));
@@ -122,6 +123,7 @@ public class ServerCore extends JavaPlugin {
 
         this.getServer().getCommandMap().register("sys", new ChestShopCommand(this));
         this.getServer().getCommandMap().register("sys", new FriendCommand(this));
+        this.getServer().getCommandMap().register("sys", new RedeemCommand(this));
 
         this.getServer().getCommandMap().register("sys", new BanCommand(this));
         this.getServer().getCommandMap().register("sys", new BanlogCommand(this));
