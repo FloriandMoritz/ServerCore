@@ -90,7 +90,7 @@ public class ServerCore extends JavaPlugin {
         /*
          * API
          */
-        this.chestShopAPI = new ChestShopAPI(this);
+        if (this.serverName.equals("server-1")) this.chestShopAPI = new ChestShopAPI(this);
         this.crateAPI = new CrateAPI(this);
         this.furnaceAPI = new FurnaceAPI(this);
         this.groupAPI = new GroupAPI(this);
@@ -107,7 +107,7 @@ public class ServerCore extends JavaPlugin {
         /*
          * Listeners
          */
-        this.getServer().getPluginManager().registerEvents(new ChestShopListener(this), this);
+        if (this.serverName.equals("server-1")) this.getServer().getPluginManager().registerEvents(new ChestShopListener(this), this);
         this.getServer().getPluginManager().registerEvents(new EventListener(this), this);
         this.getServer().getPluginManager().registerEvents(new FurnaceListener(this), this);
         this.getServer().getPluginManager().registerEvents(new LevelListener(this, this.getConfig().getBoolean("settings.farmxp")), this);
