@@ -19,10 +19,12 @@ public class GiftkeySystemCommand extends Command {
     public GiftkeySystemCommand(final ServerCore serverCore) {
         super("giftkeysystem");
         this.serverCore = serverCore;
+        this.setPermission("core.command.giftkeysystem");
     }
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String s, @NotNull String[] args) {
+        if (!sender.hasPermission(this.getPermission())) return true;
         if (sender instanceof Player player) {
             final SimpleWindow window = new SimpleWindow.Builder("§7» §8GiftkeySystem", "\n\n")
                     .addButton("§8» §fGiftkey erstellen", this::openCreateGiftKey)
