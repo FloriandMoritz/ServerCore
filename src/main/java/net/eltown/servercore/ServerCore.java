@@ -121,7 +121,7 @@ public class ServerCore extends JavaPlugin {
         this.getServer().getCommandMap().register("sys", new NpcCommand(this));
         this.getServer().getCommandMap().register("sys", new PrintItemCommand(this));
 
-        this.getServer().getCommandMap().register("sys", new ChestShopCommand(this));
+        if (this.serverName.equals("server-1")) this.getServer().getCommandMap().register("sys", new ChestShopCommand(this));
         this.getServer().getCommandMap().register("sys", new FriendCommand(this));
         this.getServer().getCommandMap().register("sys", new RedeemCommand(this));
 
