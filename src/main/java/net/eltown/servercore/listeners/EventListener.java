@@ -7,11 +7,14 @@ import net.eltown.servercore.ServerCore;
 import net.eltown.servercore.commands.administrative.NpcCommand;
 import net.eltown.servercore.components.api.intern.GroupAPI;
 import net.eltown.servercore.components.api.intern.LevelAPI;
+import net.eltown.servercore.components.api.intern.QuestAPI;
 import net.eltown.servercore.components.api.intern.SettingsAPI;
 import net.eltown.servercore.components.data.friends.FriendCalls;
 import net.eltown.servercore.components.data.groupmanager.GroupCalls;
 import net.eltown.servercore.components.data.level.Level;
 import net.eltown.servercore.components.data.level.LevelCalls;
+import net.eltown.servercore.components.data.quests.QuestCalls;
+import net.eltown.servercore.components.data.quests.QuestPlayer;
 import net.eltown.servercore.components.data.settings.AccountSettings;
 import net.eltown.servercore.components.data.settings.SettingsCalls;
 import net.eltown.servercore.components.tinyrabbit.Queue;
@@ -138,6 +141,35 @@ public record EventListener(ServerCore serverCore) implements Listener {
                  * Friends
                  */
                 this.serverCore.getTinyRabbit().send(Queue.FRIEND_RECEIVE, FriendCalls.REQUEST_CREATE_FRIEND_DATA.name(), player.getName());
+
+                /*
+                 * Quests
+                 */
+                this.serverCore.getTinyRabbit().sendAndReceive(delivery -> {
+                    final String[] d = delivery.getData();
+                    try {
+                        switch (QuestCalls.valueOf(delivery.getKey().toUpperCase())) {
+                            case CALLBACK_PLAYER_DATA:
+                                final List<QuestPlayer.QuestData> questPlayerData = new ArrayList<>();
+
+                                if (!d[1].equals("null")) {
+                                    for (String s : d[1].split("-#-")) {
+                                        final String[] sSplit = s.split("-:-");
+                                        questPlayerData.add(new QuestPlayer.QuestData(sSplit[0], sSplit[1], sSplit[2], Integer.parseInt(sSplit[3]), Integer.parseInt(sSplit[4]), Long.parseLong(sSplit[5])));
+                                    }
+                                }
+                                QuestAPI.cachedQuestPlayer.put(player.getName(), new QuestPlayer(player.getName(), questPlayerData));
+                                this.serverCore.getQuestAPI().checkIfQuestIsExpired(player.getName());
+                                System.out.println("player data loaded");
+                                break;
+                            case CALLBACK_NULL:
+                                QuestAPI.cachedQuestPlayer.put(player.getName(), new QuestPlayer(player.getName(), new ArrayList<>()));
+                                break;
+                        }
+                    } catch (final Exception e) {
+                        e.printStackTrace();
+                    }
+                }, Queue.QUESTS_CALLBACK, QuestCalls.REQUEST_PLAYER_DATA.name(), player.getName());
             }
         });
     }

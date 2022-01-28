@@ -12,17 +12,28 @@ import java.util.List;
 public class QuestPlayer {
 
     private final String player;
-    private List<QuestPlayerData> questPlayerData;
+    private List<QuestData> questPlayerData;
 
     @AllArgsConstructor
     @Getter
     @Setter
-    public static class QuestPlayerData {
+    public static class QuestData {
 
         private String questNameId;
-        private long expire;
-        private int required;
+        private String questSubId;
+        private String data;
         private int current;
+        private int required;
+        private long expire;
+
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class FullQuestPlayer {
+
+        private Quest quest;
+        private QuestPlayer.QuestData questPlayerData;
 
     }
 
