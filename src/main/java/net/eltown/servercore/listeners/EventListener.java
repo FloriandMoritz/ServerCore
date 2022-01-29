@@ -160,7 +160,6 @@ public record EventListener(ServerCore serverCore) implements Listener {
                                 }
                                 QuestAPI.cachedQuestPlayer.put(player.getName(), new QuestPlayer(player.getName(), questPlayerData));
                                 this.serverCore.getQuestAPI().checkIfQuestIsExpired(player.getName());
-                                System.out.println("player data loaded");
                                 break;
                             case CALLBACK_NULL:
                                 QuestAPI.cachedQuestPlayer.put(player.getName(), new QuestPlayer(player.getName(), new ArrayList<>()));

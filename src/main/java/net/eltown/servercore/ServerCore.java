@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import net.eltown.servercore.commands.administrative.*;
 import net.eltown.servercore.commands.feature.ChestShopCommand;
 import net.eltown.servercore.commands.feature.FriendCommand;
+import net.eltown.servercore.commands.feature.QuestCommand;
 import net.eltown.servercore.commands.feature.RedeemCommand;
 import net.eltown.servercore.commands.guardian.*;
 import net.eltown.servercore.commands.teleportation.*;
@@ -122,6 +123,7 @@ public class ServerCore extends JavaPlugin {
 
         if (this.serverName.equals("server-1")) this.getServer().getCommandMap().register("sys", new ChestShopCommand(this));
         this.getServer().getCommandMap().register("sys", new FriendCommand(this));
+        this.getServer().getCommandMap().register("sys", new QuestCommand(this));
         this.getServer().getCommandMap().register("sys", new RedeemCommand(this));
 
         this.getServer().getCommandMap().register("sys", new BanCommand(this));

@@ -180,13 +180,11 @@ public record QuestAPI(ServerCore serverCore) {
     public void checkForQuestEnding(final Player player, final String questNameId) {
         this.getQuest(questNameId, quest -> {
             final Set<QuestPlayer.QuestData> questData = this.getQuestPlayerDataByNameId(player.getName(), questNameId);
-            System.out.println("size: " + questData.size());
             final AtomicInteger i = new AtomicInteger(0);
 
             questData.forEach(e -> {
                 if (e.getCurrent() >= e.getRequired()) i.addAndGet(1);
             });
-            System.out.println("current: " + i.get());
 
             if (i.get() >= questData.size()) {
                 player.sendMessage(" ");
