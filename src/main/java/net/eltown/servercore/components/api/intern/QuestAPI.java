@@ -1,15 +1,11 @@
 package net.eltown.servercore.components.api.intern;
 
-import net.eltown.economy.Economy;
 import net.eltown.servercore.ServerCore;
-import net.eltown.servercore.components.data.giftkeys.GiftkeyCalls;
 import net.eltown.servercore.components.data.quests.Quest;
 import net.eltown.servercore.components.data.quests.QuestCalls;
 import net.eltown.servercore.components.data.quests.QuestPlayer;
-import net.eltown.servercore.components.language.Language;
 import net.eltown.servercore.components.tinyrabbit.Queue;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -31,7 +27,7 @@ public record QuestAPI(ServerCore serverCore) {
                         final List<Quest.QuestData> questData = new ArrayList<>();
                         data.forEach(g -> {
                             final String[] e = g.split("-:-");
-                            questData.add(new Quest.QuestData(d[1], e[0], e[1], e[2], Integer.parseInt(e[3])));
+                            questData.add(new Quest.QuestData(d[1], e[1], e[2], e[3], Integer.parseInt(e[4])));
                         });
                         cachedQuests.put(d[1], new Quest(d[1], d[2], questData, Long.parseLong(d[4]), d[5], d[6]));
                         quest.accept(new Quest(d[1], d[2], questData, Long.parseLong(d[4]), d[5], d[6]));
@@ -52,7 +48,7 @@ public record QuestAPI(ServerCore serverCore) {
                     final List<Quest.QuestData> questData = new ArrayList<>();
                     data.forEach(g -> {
                         final String[] e = g.split("-:-");
-                        questData.add(new Quest.QuestData(d[1], e[0], e[1], e[2], Integer.parseInt(e[3])));
+                        questData.add(new Quest.QuestData(d[1], e[1], e[2], e[3], Integer.parseInt(e[4])));
                     });
                     if (!cachedQuests.containsKey(d[1])) cachedQuests.put(d[1], new Quest(d[1], d[2], questData, Long.parseLong(d[4]), d[5], d[6]));
                     final AtomicReference<Quest> questReference = new AtomicReference<>(null);
@@ -73,15 +69,30 @@ public record QuestAPI(ServerCore serverCore) {
         }, Queue.QUESTS_CALLBACK, QuestCalls.REQUEST_RANDOM_QUEST_DATA_BY_LINK.name(), link);
     }
 
-    public void updateQuest(final String questNameId, final String displayName, final List<Quest.QuestData> data, final long expire, final String rewardData, final String link) {
-        cachedQuests.remove(questNameId);
-        cachedQuests.put(questNameId, new Quest(questNameId, displayName, data, expire, rewardData, link));
+    public void updateSubQuest(final String questNameId, final String questSubId, final String description, final String data, final int required) {
+        final List<Quest.QuestData> list = new ArrayList<>(cachedQuests.get(questNameId).getData());
+        list.removeIf(s -> s.getQuestNameId().equals(questNameId) && s.getQuestSubId().equals(questSubId));
+        list.add(new Quest.QuestData(questNameId, questSubId, description, data, required));
+        cachedQuests.get(questNameId).setData(list);
+
+        this.serverCore.getTinyRabbit().send(Queue.QUESTS_RECEIVE, QuestCalls.REQUEST_UPDATE_SUB_QUEST.name(), questNameId, questSubId, description, data, String.valueOf(required));
+    }
+
+    public void updateQuest(final Quest quest, final String displayName, final long expire, final String rewardData, final String link) {
+        cachedQuests.remove(quest.getNameId());
+        cachedQuests.put(quest.getNameId(), new Quest(quest.getNameId(), displayName, quest.getData(), expire, rewardData, link));
 
         final StringBuilder dataBuilder = new StringBuilder();
-        data.forEach(e -> {
+        quest.getData().forEach(e -> {
             dataBuilder.append(e.getQuestNameId()).append("-:-").append(e.getQuestSubId()).append("-:-").append(e.getDescription()).append("-:-").append(e.getData()).append("-:-").append(e.getRequired()).append("-#-");
         });
-        this.serverCore.getTinyRabbit().send(Queue.QUESTS_RECEIVE, QuestCalls.REQUEST_UPDATE_QUEST.name(), questNameId, displayName, dataBuilder.substring(0, dataBuilder.length() - 3), String.valueOf(expire), rewardData, link);
+        this.serverCore.getTinyRabbit().send(Queue.QUESTS_RECEIVE, QuestCalls.REQUEST_UPDATE_QUEST.name(), quest.getNameId(), displayName, dataBuilder.substring(0, dataBuilder.length() - 3), String.valueOf(expire), rewardData, link);
+    }
+
+    public void createSubQuest(final String questNameId, final String questSubId, final String description, final String data, final int required) {
+        cachedQuests.get(questNameId).getData().add(new Quest.QuestData(questNameId, questSubId, description, data, required));
+
+        this.serverCore.getTinyRabbit().send(Queue.QUESTS_RECEIVE, QuestCalls.REQUEST_CREATE_SUB_QUEST.name(), questNameId, questSubId, description, data, String.valueOf(required));
     }
 
     public void createQuest(final String questNameId, final String displayName, final List<Quest.QuestData> data, final long expire, final String rewardData, final String link) {
@@ -135,7 +146,7 @@ public record QuestAPI(ServerCore serverCore) {
     }
 
     public void removeQuestFromPlayer(final String player, final String questNameId) {
-        final List<QuestPlayer.QuestData> playerData = cachedQuestPlayer.get(player).getQuestPlayerData();
+        final List<QuestPlayer.QuestData> playerData = new ArrayList<>(cachedQuestPlayer.get(player).getQuestPlayerData());
         playerData.removeIf(s -> s.getQuestNameId().equals(questNameId));
         cachedQuestPlayer.get(player).setQuestPlayerData(playerData);
 
@@ -212,6 +223,28 @@ public record QuestAPI(ServerCore serverCore) {
         if (!list.isEmpty()) {
             list.forEach(e -> this.removeQuestFromPlayer(player, e));
         }
+    }
+
+    public void removeQuest(final String questNameId) {
+        cachedQuests.remove(questNameId);
+
+        this.serverCore.getTinyRabbit().send(Queue.QUESTS_RECEIVE, QuestCalls.REQUEST_REMOVE_QUEST.name(), questNameId);
+    }
+
+    public void removeSubQuest(final String questNameId, final String questSubId) {
+        final List<Quest.QuestData> questData = new ArrayList<>(cachedQuests.get(questNameId).getData());
+        questData.removeIf(s -> s.getQuestNameId().equals(questNameId) && s.getQuestSubId().equals(questSubId));
+        cachedQuests.get(questNameId).setData(questData);
+
+        this.serverCore.getTinyRabbit().send(Queue.QUESTS_RECEIVE, QuestCalls.REQUEST_REMOVE_SUB_QUEST.name(), questNameId, questSubId);
+    }
+
+    public void invalidateQuestCache() {
+        cachedQuests.clear();
+    }
+
+    public void invalidatePlayerCache() {
+        cachedQuestPlayer.clear();
     }
 
 }
