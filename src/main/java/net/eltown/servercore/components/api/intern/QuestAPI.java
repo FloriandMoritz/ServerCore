@@ -1,14 +1,19 @@
 package net.eltown.servercore.components.api.intern;
 
+import net.eltown.economy.Economy;
 import net.eltown.servercore.ServerCore;
+import net.eltown.servercore.components.data.giftkeys.GiftkeyCalls;
 import net.eltown.servercore.components.data.quests.Quest;
 import net.eltown.servercore.components.data.quests.QuestCalls;
 import net.eltown.servercore.components.data.quests.QuestPlayer;
+import net.eltown.servercore.components.language.Language;
 import net.eltown.servercore.components.tinyrabbit.Queue;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
@@ -130,14 +135,12 @@ public record QuestAPI(ServerCore serverCore) {
     }
 
     public void setQuestOnPlayer(final String player, final String questNameId) {
-        cachedQuestPlayer.get(player).getQuestPlayerData().forEach(questPlayerData -> {
-            this.serverCore.getTinyRabbit().send(Queue.QUESTS_RECEIVE, QuestCalls.REQUEST_UPDATE_PLAYER_DATA.name(), player, questPlayerData.getQuestNameId(), questPlayerData.getQuestSubId(), String.valueOf(questPlayerData.getCurrent()));
-        });
+        this.updateQuestPlayerData(player);
 
         this.getQuest(questNameId, quest -> {
-            final List<QuestPlayer.QuestData> playerData = cachedQuestPlayer.get(player).getQuestPlayerData();
+            final List<QuestPlayer.QuestData> playerData = new ArrayList<>(cachedQuestPlayer.get(player).getQuestPlayerData());
             quest.getData().forEach(e -> {
-                playerData.add(new QuestPlayer.QuestData(e.getQuestNameId(), e.getQuestSubId(), e.getData(), 0, e.getRequired(), quest.getExpire()));
+                playerData.add(new QuestPlayer.QuestData(e.getQuestNameId(), e.getQuestSubId(), e.getData(), 0, e.getRequired(), System.currentTimeMillis() + quest.getExpire()));
             });
             cachedQuestPlayer.get(player).setQuestPlayerData(playerData);
 
@@ -158,16 +161,34 @@ public record QuestAPI(ServerCore serverCore) {
             if (e.getQuestNameId().equals(questNameId) && e.getQuestSubId().equals(questSubId)) {
                 if (!(e.getCurrent() >= e.getRequired())) {
                     e.setCurrent(e.getCurrent() + progress);
-                    this.checkForQuestEnding(player, questNameId, e);
+                    this.checkForQuestEnding(player, questNameId);
                 }
             }
         });
     }
 
-    public void checkForQuestEnding(final Player player, final String questNameId, final QuestPlayer.QuestData questData) {
+    public Set<QuestPlayer.QuestData> getQuestPlayerDataByNameId(final String player, final String questNameId) {
+        final Set<QuestPlayer.QuestData> questData = new HashSet<>();
+
+        cachedQuestPlayer.get(player).getQuestPlayerData().forEach(e -> {
+            if (e.getQuestNameId().equals(questNameId)) questData.add(e);
+        });
+
+        return questData;
+    }
+
+    public void checkForQuestEnding(final Player player, final String questNameId) {
         this.getQuest(questNameId, quest -> {
-            if (questData.getRequired() <= questData.getCurrent()) {
-                /*
+            final Set<QuestPlayer.QuestData> questData = this.getQuestPlayerDataByNameId(player.getName(), questNameId);
+            System.out.println("size: " + questData.size());
+            final AtomicInteger i = new AtomicInteger(0);
+
+            questData.forEach(e -> {
+                if (e.getCurrent() >= e.getRequired()) i.addAndGet(1);
+            });
+            System.out.println("current: " + i.get());
+
+            if (i.get() >= questData.size()) {
                 player.sendMessage(" ");
                 player.sendMessage(Language.get("quest.completed", quest.getDisplayName()));
 
@@ -206,8 +227,7 @@ public record QuestAPI(ServerCore serverCore) {
                 player.sendMessage(" ");
 
                 //this.serverCore.getServer().getPluginManager().callEvent(new QuestCompleteEvent(player, quest, questPlayerData));
-                this.serverCore.getTinyRabbit().send(Queue.QUESTS_RECEIVE, QuestCalls.REQUEST_UPDATE_PLAYER_DATA.name(), player.getName(), questData.getQuestNameId(), String.valueOf(questData.getCurrent()));
-                */
+                this.updateQuestPlayerData(player.getName());
             }
         });
     }
@@ -216,12 +236,27 @@ public record QuestAPI(ServerCore serverCore) {
         final List<String> list = new ArrayList<>();
         if (!cachedQuestPlayer.get(player).getQuestPlayerData().isEmpty()) {
             cachedQuestPlayer.get(player).getQuestPlayerData().forEach(e -> {
-                if (e.getExpire() < System.currentTimeMillis()) list.add(e.getQuestNameId());
+                if (e.getExpire() < System.currentTimeMillis()) {
+                    if (!list.contains(e.getQuestNameId())) list.add(e.getQuestNameId());
+                }
             });
         }
 
         if (!list.isEmpty()) {
             list.forEach(e -> this.removeQuestFromPlayer(player, e));
+        }
+    }
+
+    public void updateQuestPlayerData(final String player) {
+        final QuestPlayer questPlayer = cachedQuestPlayer.get(player);
+
+        final StringBuilder builder = new StringBuilder();
+        if (!questPlayer.getQuestPlayerData().isEmpty()) {
+            questPlayer.getQuestPlayerData().forEach(e -> {
+                builder.append(e.getQuestNameId()).append("-:-").append(e.getQuestSubId()).append("-:-").append(e.getData()).append("-:-").append(e.getCurrent()).append("-:-").append(e.getRequired()).append("-:-").append(e.getExpire()).append("-#-");
+            });
+
+            this.serverCore.getTinyRabbit().send(Queue.QUESTS_RECEIVE, QuestCalls.REQUEST_UPDATE_PLAYER_DATA.name(), player, builder.substring(0, builder.length() - 3));
         }
     }
 

@@ -185,6 +185,9 @@ public record EventListener(ServerCore serverCore) implements Listener {
         event.quitMessage(Component.text(""));
         if (this.serverCore.getSyncAPI().getLoaded().contains(event.getPlayer().getName())) {
             this.serverCore.getSyncAPI().savePlayer(event.getPlayer());
+
+            this.serverCore.getQuestAPI().checkIfQuestIsExpired(event.getPlayer().getName());
+            this.serverCore.getQuestAPI().updateQuestPlayerData(event.getPlayer().getName());
         }
     }
 

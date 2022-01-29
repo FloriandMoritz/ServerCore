@@ -33,12 +33,36 @@ public class QuestSystemCommand extends Command {
     public boolean execute(@NotNull CommandSender sender, @NotNull String s, @NotNull String[] args) {
         if (!sender.hasPermission(this.getPermission())) return true;
         if (sender instanceof Player player) {
-            final SimpleWindow window = new SimpleWindow.Builder("§7» §8GiftkeySystem", "\n\n")
-                    .addButton("§8» §fQuest erstellen", this::openCreateQuestWindow)
-                    .addButton("§8» §fQuest bearbeiten", this::openSelectEditQuestWindow)
-                    .addButton("§8» §fErweitert", this::openSettingsWindow)
-                    .build();
-            window.send(player);
+            if (args.length == 1 && args[0].equalsIgnoreCase("pos1")) {
+                this.pos1.put(player.getName(), player.getLocation());
+                player.sendMessage("Position 1 wurde gesetzt.");
+            } else if (args.length == 1 && args[0].equalsIgnoreCase("pos2")) {
+                this.pos2.put(player.getName(), player.getLocation());
+                player.sendMessage("Position 2 wurde gesetzt.");
+            } else if (args.length == 2 && args[0].equalsIgnoreCase("take")) {
+                final String questNameId = args[1];
+                this.serverCore.getQuestAPI().getQuest(questNameId, quest -> {
+                    if (quest == null) {
+                        player.sendMessage("Diese Quest existiert nicht.");
+                        return;
+                    }
+                    if (!this.serverCore.getQuestAPI().playerIsInQuest(player.getName(), questNameId)) {
+                        this.serverCore.getQuestAPI().setQuestOnPlayer(player.getName(), questNameId);
+                        player.sendMessage("Du hast die Quest " + quest.getDisplayName() + " §rangenommen.");
+                        quest.getData().forEach(e -> player.sendMessage(e.getDescription()));
+                    } else {
+                        this.serverCore.getQuestAPI().removeQuestFromPlayer(player.getName(), questNameId);
+                        player.sendMessage("Du hast die Quest abgebrochen.");
+                    }
+                });
+            } else {
+                final SimpleWindow window = new SimpleWindow.Builder("§7» §8GiftkeySystem", "\n\n")
+                        .addButton("§8» §fQuest erstellen", this::openCreateQuestWindow)
+                        .addButton("§8» §fQuest bearbeiten", this::openSelectEditQuestWindow)
+                        .addButton("§8» §fErweitert", this::openSettingsWindow)
+                        .build();
+                window.send(player);
+            }
         }
         return true;
     }

@@ -13,10 +13,7 @@ import net.eltown.servercore.components.api.intern.*;
 import net.eltown.servercore.components.language.Language;
 import net.eltown.servercore.components.roleplay.shops.ShopRoleplay;
 import net.eltown.servercore.components.tinyrabbit.TinyRabbit;
-import net.eltown.servercore.listeners.ChestShopListener;
-import net.eltown.servercore.listeners.EventListener;
-import net.eltown.servercore.listeners.FurnaceListener;
-import net.eltown.servercore.listeners.LevelListener;
+import net.eltown.servercore.listeners.*;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -111,6 +108,7 @@ public class ServerCore extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new EventListener(this), this);
         this.getServer().getPluginManager().registerEvents(new FurnaceListener(this), this);
         this.getServer().getPluginManager().registerEvents(new LevelListener(this, this.getConfig().getBoolean("settings.farmxp")), this);
+        this.getServer().getPluginManager().registerEvents(new QuestListener(this), this);
 
         /*
          * Commands
