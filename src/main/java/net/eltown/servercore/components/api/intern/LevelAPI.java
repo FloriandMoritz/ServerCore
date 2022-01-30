@@ -14,10 +14,28 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.function.Consumer;
 
 public record LevelAPI(ServerCore serverCore) {
 
     public static final HashMap<String, Level> cachedData = new HashMap<>();
+
+    public void getLevelReward(final int level, final Consumer<LevelReward> levelRewardConsumer) {
+        this.serverCore.getTinyRabbit().sendAndReceive(delivery -> {
+            switch (LevelCalls.valueOf(delivery.getKey().toUpperCase())) {
+                case CALLBACK_LEVEL_REWARD -> levelRewardConsumer.accept(new LevelReward(Integer.parseInt(delivery.getData()[1]), delivery.getData()[2], delivery.getData()[3]));
+                case CALLBACK_NULL -> levelRewardConsumer.accept(null);
+            }
+        }, Queue.LEVEL_CALLBACK, LevelCalls.REQUEST_LEVEL_REWARD.name(), String.valueOf(level));
+    }
+
+    public void updateReward(final int level, final String description, final String data) {
+        this.serverCore.getTinyRabbit().send(Queue.LEVEL_RECEIVE, LevelCalls.REQUEST_UPDATE_REWARD.name(), String.valueOf(level), description, data);
+    }
+
+    public void deleteReward(final int level) {
+        this.serverCore.getTinyRabbit().send(Queue.LEVEL_RECEIVE, LevelCalls.REQUEST_REMOVE_REWARD.name(), String.valueOf(level));
+    }
 
     public void addExperience(final Player player, final double experience) {
         final Level level = cachedData.get(player.getName());
