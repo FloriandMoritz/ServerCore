@@ -4,6 +4,7 @@ import com.google.common.net.HttpHeaders;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import net.eltown.servercore.commands.administrative.*;
+import net.eltown.servercore.commands.defaults.SpawnCommand;
 import net.eltown.servercore.commands.feature.ChestShopCommand;
 import net.eltown.servercore.commands.feature.FriendCommand;
 import net.eltown.servercore.commands.feature.QuestCommand;
@@ -125,7 +126,10 @@ public class ServerCore extends JavaPlugin {
         this.getServer().getCommandMap().register("sys", new NpcCommand(this));
         this.getServer().getCommandMap().register("sys", new PrintItemCommand(this));
         this.getServer().getCommandMap().register("sys", new QuestSystemCommand(this));
+        this.getServer().getCommandMap().register("sys", new SetSpawnCommand(this));
         this.getServer().getCommandMap().register("sys", new SpeedCommand(this));
+
+        this.getServer().getCommandMap().register("sys", new SpawnCommand(this));
 
         if (this.serverName.equals("server-1")) this.getServer().getCommandMap().register("sys", new ChestShopCommand(this));
         this.getServer().getCommandMap().register("sys", new FriendCommand(this));
