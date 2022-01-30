@@ -4,6 +4,7 @@ import com.google.common.net.HttpHeaders;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import net.eltown.servercore.commands.administrative.*;
+import net.eltown.servercore.commands.defaults.PluginsCommand;
 import net.eltown.servercore.commands.defaults.SpawnCommand;
 import net.eltown.servercore.commands.feature.ChestShopCommand;
 import net.eltown.servercore.commands.feature.FriendCommand;
@@ -129,6 +130,7 @@ public class ServerCore extends JavaPlugin {
         this.getServer().getCommandMap().register("sys", new SetSpawnCommand(this));
         this.getServer().getCommandMap().register("sys", new SpeedCommand(this));
 
+        this.getServer().getCommandMap().register("sys", new PluginsCommand(this));
         this.getServer().getCommandMap().register("sys", new SpawnCommand(this));
 
         if (this.serverName.equals("server-1")) this.getServer().getCommandMap().register("sys", new ChestShopCommand(this));
