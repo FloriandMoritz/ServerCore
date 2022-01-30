@@ -30,6 +30,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.VillagerCareerChangeEvent;
+import org.bukkit.event.player.PlayerCommandSendEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.permissions.PermissionAttachment;
@@ -230,6 +231,17 @@ public record EventListener(ServerCore serverCore) implements Listener {
                 if (event.getTo().getX() != event.getFrom().getX() || event.getTo().getY() != event.getFrom().getY() || event.getTo().getZ() != event.getFrom().getZ()) {
                     event.setCancelled(true);
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    public void on(final PlayerCommandSendEvent event) {
+        final List<String> list = new ArrayList<>(event.getCommands());
+
+        for (final String command : list) {
+            if (command.contains(":") || command.contains("/")) {
+                event.getCommands().remove(command);
             }
         }
     }
