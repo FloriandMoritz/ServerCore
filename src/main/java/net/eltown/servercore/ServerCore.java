@@ -114,6 +114,7 @@ public class ServerCore extends JavaPlugin {
         /*
          * Commands
          */
+        this.getServer().getCommandMap().register("sys", new FlyCommand(this));
         this.getServer().getCommandMap().register("sys", new GiftkeySystemCommand(this));
         this.getServer().getCommandMap().register("sys", new GiveFurnaceCommand(this));
         this.getServer().getCommandMap().register("sys", new HologramCommand(this));
