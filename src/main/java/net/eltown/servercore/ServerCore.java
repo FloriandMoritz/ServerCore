@@ -62,6 +62,7 @@ public class ServerCore extends JavaPlugin {
     private FriendAPI friendAPI;
     private GiftKeyAPI giftKeyAPI;
     private EconomyAPI economyAPI;
+    private ShopAPI shopAPI;
 
     private ShopRoleplay shopRoleplay;
 
@@ -109,6 +110,7 @@ public class ServerCore extends JavaPlugin {
         this.friendAPI = new FriendAPI(this);
         this.giftKeyAPI = new GiftKeyAPI(this);
         this.economyAPI = new EconomyAPI(this);
+        this.shopAPI = new ShopAPI(this);
 
         /*
          * Listeners
