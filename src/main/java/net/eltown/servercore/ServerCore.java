@@ -63,6 +63,7 @@ public class ServerCore extends JavaPlugin {
     private GiftKeyAPI giftKeyAPI;
     private EconomyAPI economyAPI;
     private ShopAPI shopAPI;
+    private BankAPI bankAPI;
 
     private ShopRoleplay shopRoleplay;
 
@@ -111,6 +112,7 @@ public class ServerCore extends JavaPlugin {
         this.giftKeyAPI = new GiftKeyAPI(this);
         this.economyAPI = new EconomyAPI(this);
         this.shopAPI = new ShopAPI(this);
+        this.bankAPI = new BankAPI(this);
 
         /*
          * Listeners
