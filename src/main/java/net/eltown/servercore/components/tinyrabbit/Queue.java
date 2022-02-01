@@ -23,6 +23,7 @@ public class Queue {
     public static final String REWARDS_CALLBACK = "api.rewards.callback";
     public static final String QUESTS_RECEIVE = "api.quests.receive";
     public static final String QUESTS_CALLBACK = "api.quests.callback";
+    public static final String BANK_RECEIVE = "api.bank.receive";
     public static final String BANK_CALLBACK = "api.bank.callback";
     public static final String FRIEND_RECEIVE = "api.friends.receive";
     public static final String FRIEND_CALLBACK = "api.friends.callback";
@@ -32,5 +33,9 @@ public class Queue {
     public static final String CRATES_CALLBACK = "api.crates.callback";
     public static final String CHESTSHOP_RECEIVE = "api.chestshops.receive";
     public static final String CHESTSHOP_CALLBACK = "api.chestshops.callback";
+    public static final String ECONOMY_RECEIVE = "api.economy.receive";
+    public static final String ECONOMY_CALLBACK = "api.economy.callback";
+    public static final String SHOPS_RECEIVE = "api.shops.receive";
+    public static final String SHOPS_CALLBACK = "api.shops.callback";
 
 }
