@@ -3,7 +3,6 @@ package net.eltown.servercore.components.data.bank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import net.eltown.economy.components.bank.data.BankLog;
 
 import java.util.List;
 

@@ -1,9 +1,9 @@
 package net.eltown.servercore.components.api.intern;
 
-import net.eltown.economy.components.bank.data.BankAccount;
-import net.eltown.economy.components.bank.data.BankCalls;
-import net.eltown.economy.components.bank.data.BankLog;
 import net.eltown.servercore.ServerCore;
+import net.eltown.servercore.components.data.bank.BankAccount;
+import net.eltown.servercore.components.data.bank.BankCalls;
+import net.eltown.servercore.components.data.bank.BankLog;
 import net.eltown.servercore.components.tinyrabbit.Queue;
 
 import java.util.ArrayList;
