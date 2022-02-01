@@ -29,7 +29,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Currency;
 import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
@@ -59,8 +61,11 @@ public class ServerCore extends JavaPlugin {
     private CoreAPI coreAPI;
     private FriendAPI friendAPI;
     private GiftKeyAPI giftKeyAPI;
+    private EconomyAPI economyAPI;
 
     private ShopRoleplay shopRoleplay;
+
+    private DecimalFormat moneyFormat;
 
     @Override
     public void onLoad() {
@@ -103,6 +108,7 @@ public class ServerCore extends JavaPlugin {
         this.coreAPI = new CoreAPI(this);
         this.friendAPI = new FriendAPI(this);
         this.giftKeyAPI = new GiftKeyAPI(this);
+        this.economyAPI = new EconomyAPI(this);
 
         /*
          * Listeners
@@ -162,6 +168,9 @@ public class ServerCore extends JavaPlugin {
          * Other
          */
         this.shopRoleplay = new ShopRoleplay(this);
+
+        this.moneyFormat = new DecimalFormat();
+        this.moneyFormat.setMaximumFractionDigits(2);
     }
 
     @Override

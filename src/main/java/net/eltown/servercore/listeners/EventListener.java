@@ -52,6 +52,13 @@ public record EventListener(ServerCore serverCore) implements Listener {
         this.serverCore.getSyncAPI().loadPlayer(player, (loaded) -> {
             if (loaded) {
                 /*
+                 * Economy
+                 */
+                this.serverCore.getEconomyAPI().hasAccount(player.getName(), has -> {
+                    if (!has) this.serverCore.getEconomyAPI().createAccount(player.getName());
+                });
+
+                /*
                  * Teleportation
                  */
                 this.serverCore.getTeleportationAPI().handleCachedData(player);
