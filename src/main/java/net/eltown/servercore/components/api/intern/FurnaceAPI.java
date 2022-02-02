@@ -21,14 +21,14 @@ public class FurnaceAPI {
         this.serverCore = instance;
         this.configuration = new Config(instance.getDataFolder() + "/components/furnace.yml", Config.YAML);
 
-        this.cachedFurnaceLevel.put(0, new Furnace.FurnaceLevel(0,0, 0, 0, 0, 0));
-        this.cachedFurnaceLevel.put(1, new Furnace.FurnaceLevel(1,1000, 3, 9, 7, 15));
-        this.cachedFurnaceLevel.put(2, new Furnace.FurnaceLevel(2,2000, 6, 18, 14, 30));
-        this.cachedFurnaceLevel.put(3, new Furnace.FurnaceLevel(3,2000, 9, 27, 21, 45));
-        this.cachedFurnaceLevel.put(4, new Furnace.FurnaceLevel(4,4000, 12, 36, 28, 60));
-        this.cachedFurnaceLevel.put(5, new Furnace.FurnaceLevel(5,4000, 15, 45, 35, 75));
-        this.cachedFurnaceLevel.put(6, new Furnace.FurnaceLevel(6,6000, 18, 54, 42, 90));
-        this.cachedFurnaceLevel.put(7, new Furnace.FurnaceLevel(7,6000, 21, 63, 49, 105));
+        this.cachedFurnaceLevel.put(0, new Furnace.FurnaceLevel(0, 0, 0, 0, 0, 0));
+        this.cachedFurnaceLevel.put(1, new Furnace.FurnaceLevel(1, 1000, 3, 9, 7, 15));
+        this.cachedFurnaceLevel.put(2, new Furnace.FurnaceLevel(2, 2000, 6, 18, 14, 30));
+        this.cachedFurnaceLevel.put(3, new Furnace.FurnaceLevel(3, 2000, 9, 27, 21, 45));
+        this.cachedFurnaceLevel.put(4, new Furnace.FurnaceLevel(4, 4000, 12, 36, 28, 60));
+        this.cachedFurnaceLevel.put(5, new Furnace.FurnaceLevel(5, 4000, 15, 45, 35, 75));
+        this.cachedFurnaceLevel.put(6, new Furnace.FurnaceLevel(6, 6000, 18, 54, 42, 90));
+        this.cachedFurnaceLevel.put(7, new Furnace.FurnaceLevel(7, 6000, 21, 63, 49, 105));
 
         for (final String owner : this.configuration.getSection("furnace").getKeys(false)) {
             for (final String id : this.configuration.getSection("furnace." + owner).getKeys(false)) {

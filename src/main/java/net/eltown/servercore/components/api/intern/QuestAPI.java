@@ -1,6 +1,5 @@
 package net.eltown.servercore.components.api.intern;
 
-import net.eltown.economy.Economy;
 import net.eltown.servercore.ServerCore;
 import net.eltown.servercore.components.data.giftkeys.GiftkeyCalls;
 import net.eltown.servercore.components.data.quests.Quest;
@@ -200,7 +199,7 @@ public record QuestAPI(ServerCore serverCore) {
                             player.sendMessage(Language.get("quest.reward.xp", reward[1]));
                         }
                         case "money" -> {
-                            Economy.getAPI().addMoney(player, Double.parseDouble(reward[1]));
+                            this.serverCore.getEconomyAPI().addMoney(player.getName(), Double.parseDouble(reward[1]));
                             player.sendMessage(Language.get("quest.reward.money", reward[1]));
                         }
                         case "item" -> {

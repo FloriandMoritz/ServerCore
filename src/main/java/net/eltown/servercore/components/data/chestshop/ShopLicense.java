@@ -19,9 +19,7 @@ public class ShopLicense {
         SMALL_BUSINESS("Kleingewerbe", 40, 299.95),
         BUSINESS("Gewerbe", 80, 749.95),
         BIG_BUSINESS("Großgewerbe", 150, 2499.95),
-        COMPANY("Unternehmen", 300, 7999.95)
-
-        ;
+        COMPANY("Unternehmen", 300, 7999.95);
 
         private final String displayName;
         private final int maxPossibleShops;

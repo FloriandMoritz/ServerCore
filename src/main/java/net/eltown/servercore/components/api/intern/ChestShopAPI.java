@@ -1,7 +1,6 @@
 package net.eltown.servercore.components.api.intern;
 
 import lombok.SneakyThrows;
-import net.eltown.economy.Economy;
 import net.eltown.servercore.ServerCore;
 import net.eltown.servercore.components.data.chestshop.ChestShop;
 import net.eltown.servercore.components.data.chestshop.ChestshopCalls;
@@ -127,12 +126,12 @@ public class ChestShopAPI {
         if (chestShop.getShopType() == ChestShop.ShopType.BUY) {
             sign.line(0, Component.text("§a[§2ChestShop§a]"));
             sign.line(1, Component.text("§0Kaufe: §2" + update + "x"));
-            sign.line(2, Component.text("§f$" + Economy.getAPI().getMoneyFormat().format(chestShop.getShopPrice())));
+            sign.line(2, Component.text("§f$" + this.serverCore.getMoneyFormat().format(chestShop.getShopPrice())));
             sign.line(3, Component.text("§2" + chestShop.getOwner()));
         } else {
             sign.line(0, Component.text("§a[§2ChestShop§a]"));
             sign.line(1, Component.text("§0Verkaufe: §2" + update + "x"));
-            sign.line(2, Component.text("§f$" + Economy.getAPI().getMoneyFormat().format(chestShop.getShopPrice())));
+            sign.line(2, Component.text("§f$" + this.serverCore.getMoneyFormat().format(chestShop.getShopPrice())));
             sign.line(3, Component.text("§2" + chestShop.getOwner()));
         }
         sign.update(true);
@@ -147,12 +146,12 @@ public class ChestShopAPI {
         if (chestShop.getShopType() == ChestShop.ShopType.BUY) {
             sign.line(0, Component.text("§a[§2ChestShop§a]"));
             sign.line(1, Component.text("§0Kaufe: §2" + chestShop.getShopCount() + "x"));
-            sign.line(2, Component.text("§f$" + Economy.getAPI().getMoneyFormat().format(price)));
+            sign.line(2, Component.text("§f$" + this.serverCore.getMoneyFormat().format(price)));
             sign.line(3, Component.text("§2" + chestShop.getOwner()));
         } else {
             sign.line(0, Component.text("§a[§2ChestShop§a]"));
             sign.line(1, Component.text("§0Verkaufe: §2" + chestShop.getShopCount() + "x"));
-            sign.line(2, Component.text("§f$" + Economy.getAPI().getMoneyFormat().format(price)));
+            sign.line(2, Component.text("§f$" + this.serverCore.getMoneyFormat().format(price)));
             sign.line(3, Component.text("§2" + chestShop.getOwner()));
         }
         sign.update(true);

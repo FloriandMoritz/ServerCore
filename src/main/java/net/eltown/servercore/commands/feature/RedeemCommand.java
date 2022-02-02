@@ -1,6 +1,5 @@
 package net.eltown.servercore.commands.feature;
 
-import net.eltown.economy.Economy;
 import net.eltown.servercore.ServerCore;
 import net.eltown.servercore.components.api.intern.SyncAPI;
 import net.eltown.servercore.components.forms.custom.CustomWindow;
@@ -70,7 +69,7 @@ public class RedeemCommand extends Command {
                                                         }
                                                         case "money" -> {
                                                             final double money = Double.parseDouble(rawReward[1]);
-                                                            Economy.getAPI().addMoney(player.getName(), money);
+                                                            this.serverCore.getEconomyAPI().addMoney(player.getName(), money);
                                                             player.sendMessage(Language.get("giftkey.reward.money", money));
                                                         }
                                                         case "levelxp" -> {
@@ -91,7 +90,8 @@ public class RedeemCommand extends Command {
                                         }
                                     });
                                 })
-                                .onNo(e -> {})
+                                .onNo(e -> {
+                                })
                                 .build();
                         confirmWindow.send(player);
                     }

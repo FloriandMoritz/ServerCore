@@ -1,6 +1,5 @@
 package net.eltown.servercore.listeners;
 
-import net.eltown.economy.Economy;
 import net.eltown.servercore.ServerCore;
 import net.eltown.servercore.components.data.furnace.Furnace;
 import net.eltown.servercore.components.forms.modal.ModalWindow;
@@ -24,7 +23,6 @@ import org.bukkit.event.inventory.FurnaceStartSmeltEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.tags.ItemTagType;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
@@ -179,7 +177,7 @@ public record FurnaceListener(ServerCore serverCore) implements Listener {
                 "§8» §cXP-Boost: §f" + nextLevel.getXpBoost() + " Prozent\n" +
                 "\n" +
                 "§8» §cBenötigtes Level: §f" + nextLevel.getNeededLevel() + "\n" +
-                "§8» §cKosten: §f$" + Economy.getAPI().getMoneyFormat().format(nextLevel.getPrice()) + "\n";
+                "§8» §cKosten: §f$" + this.serverCore.getMoneyFormat().format(nextLevel.getPrice()) + "\n";
     }
 
     private String furnaceDashboard(final Furnace furnace) {
@@ -197,13 +195,13 @@ public record FurnaceListener(ServerCore serverCore) implements Listener {
             return;
         }
 
-        final ModalWindow confirmBuyWindow = new ModalWindow.Builder("§7» §8Upgrade kaufen", "§fMöchtest du diesen Ofen wirklich für §9$" + Economy.getAPI().getMoneyFormat().format(level.getPrice()) + " §f"
+        final ModalWindow confirmBuyWindow = new ModalWindow.Builder("§7» §8Upgrade kaufen", "§fMöchtest du diesen Ofen wirklich für §9$" + this.serverCore.getMoneyFormat().format(level.getPrice()) + " §f"
                 + "auf §9Level " + level.getLevel() + " §fupgraden?\n\n§8[§c!§8] §cDiese Aktion kann unter keinen Umständen rückgängig gemacht werden!",
                 "§8» §aUpgrade durchführen", "§8» §cAbbrechen")
                 .onYes(e -> {
-                    Economy.getAPI().getMoney(player, money -> {
+                    this.serverCore.getEconomyAPI().getMoney(player.getName(), money -> {
                         if (money >= level.getPrice()) {
-                            Economy.getAPI().reduceMoney(player, level.getPrice());
+                            this.serverCore.getEconomyAPI().reduceMoney(player.getName(), level.getPrice());
                             this.serverCore.getFurnaceAPI().upgradeFurnace(furnace, level);
                             player.sendMessage(Language.get("furnace.upgrade.success", level.getLevel()));
                         } else {
@@ -211,7 +209,8 @@ public record FurnaceListener(ServerCore serverCore) implements Listener {
                         }
                     });
                 })
-                .onNo(e -> {})
+                .onNo(e -> {
+                })
                 .build();
         confirmBuyWindow.send(player);
     }

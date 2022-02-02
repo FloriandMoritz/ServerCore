@@ -3,7 +3,6 @@ package net.eltown.servercore.components.api.intern;
 import net.eltown.servercore.ServerCore;
 import net.eltown.servercore.components.data.groupmanager.GroupCalls;
 import net.eltown.servercore.components.tinyrabbit.Queue;
-import net.eltown.servercore.listeners.EventListener;
 import org.bukkit.permissions.PermissionAttachment;
 
 import java.util.Arrays;

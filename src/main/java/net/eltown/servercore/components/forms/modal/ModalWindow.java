@@ -5,7 +5,6 @@ import org.geysermc.cumulus.impl.ModalFormImpl;
 import org.geysermc.cumulus.response.ModalFormResponse;
 import org.geysermc.floodgate.api.FloodgateApi;
 import org.geysermc.floodgate.api.player.FloodgatePlayer;
-import org.geysermc.floodgate.crypto.FloodgateCipher;
 
 import java.util.function.Consumer;
 

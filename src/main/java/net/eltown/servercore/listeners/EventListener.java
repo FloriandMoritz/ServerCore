@@ -1,8 +1,6 @@
 package net.eltown.servercore.listeners;
 
 import io.papermc.paper.event.entity.EntityMoveEvent;
-import net.eltown.economy.Economy;
-import net.eltown.economy.components.economy.event.MoneyChangeEvent;
 import net.eltown.servercore.ServerCore;
 import net.eltown.servercore.commands.administrative.NpcCommand;
 import net.eltown.servercore.components.api.intern.GroupAPI;
@@ -17,6 +15,7 @@ import net.eltown.servercore.components.data.quests.QuestCalls;
 import net.eltown.servercore.components.data.quests.QuestPlayer;
 import net.eltown.servercore.components.data.settings.AccountSettings;
 import net.eltown.servercore.components.data.settings.SettingsCalls;
+import net.eltown.servercore.components.event.MoneyChangeEvent;
 import net.eltown.servercore.components.tinyrabbit.Queue;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -35,7 +34,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.scoreboard.*;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
 import java.util.*;
 
@@ -105,14 +107,14 @@ public record EventListener(ServerCore serverCore) implements Listener {
                 /*
                  * Scoreboard
                  */
-                Economy.getAPI().getMoney(player.getName(), money -> Bukkit.getScheduler().runTask(this.serverCore, () -> {
+                this.serverCore.getEconomyAPI().getMoney(player.getName(), money -> Bukkit.getScheduler().runTask(this.serverCore, () -> {
                     final Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
                     final Objective boardObjective = scoreboard.registerNewObjective("eltown", "dummy", Component.text("   §2§lEltown.net  "));
                     boardObjective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
                     final Team economyTeam = scoreboard.registerNewTeam("economy");
                     economyTeam.addEntry("§3");
-                    economyTeam.setPrefix("   §f$" + Economy.getAPI().getMoneyFormat().format(money));
+                    economyTeam.setPrefix("   §f$" + this.serverCore.getMoneyFormat().format(money));
 
                     final Team levelTeam = scoreboard.registerNewTeam("level");
                     levelTeam.addEntry("§6");
@@ -184,7 +186,7 @@ public record EventListener(ServerCore serverCore) implements Listener {
     @EventHandler
     public void on(final MoneyChangeEvent event) {
         final Player player = event.getPlayer();
-        Objects.requireNonNull(player.getScoreboard().getTeam("economy")).setPrefix("   §f$" + Economy.getAPI().getMoneyFormat().format(event.getMoney()));
+        Objects.requireNonNull(player.getScoreboard().getTeam("economy")).setPrefix("   §f$" + this.serverCore.getMoneyFormat().format(event.getMoney()));
     }
 
     @EventHandler

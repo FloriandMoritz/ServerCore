@@ -1,6 +1,5 @@
 package net.eltown.servercore.commands.feature;
 
-import net.eltown.economy.Economy;
 import net.eltown.servercore.ServerCore;
 import net.eltown.servercore.components.api.intern.SettingsAPI;
 import net.eltown.servercore.components.data.CoreCalls;
@@ -160,7 +159,7 @@ public class FriendCommand extends Command {
     private void openManageFriend(final Player player, final String friend) {
         final StringBuilder content = new StringBuilder("§8» §fHier kannst du deinen Freund oder deine Freundin §9" + friend + " §fverwalten. Schau dir die Informationen an oder interagiere mit den folgenden Möglichkeiten.\n\n");
 
-        Economy.getAPI().getMoney(friend, money -> {
+        this.serverCore.getEconomyAPI().getMoney(friend, money -> {
             this.serverCore.getSettingsAPI().getEntry(friend, "friend/level", "true", value -> {
                 if (value.equals("true")) {
                     content.append("§8» §9Level: §f").append(this.serverCore.getLevelAPI().getLevel(friend).getLevel()).append("\n");
@@ -169,7 +168,7 @@ public class FriendCommand extends Command {
 
             this.serverCore.getSettingsAPI().getEntry(friend, "friend/money", "true", value -> {
                 if (value.equals("true")) {
-                    content.append("§8» §9Bargeld: §f$").append(Economy.getAPI().getMoneyFormat().format(money)).append("\n");
+                    content.append("§8» §9Bargeld: §f$").append(this.serverCore.getMoneyFormat().format(money)).append("\n");
                 }
             });
 

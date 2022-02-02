@@ -1,9 +1,8 @@
 package net.eltown.servercore.listeners;
 
-import net.eltown.economy.Economy;
-import net.eltown.economy.components.bank.data.BankAccount;
 import net.eltown.servercore.ServerCore;
 import net.eltown.servercore.components.api.intern.SyncAPI;
+import net.eltown.servercore.components.data.bank.BankAccount;
 import net.eltown.servercore.components.data.chestshop.ChestShop;
 import net.eltown.servercore.components.data.chestshop.ShopLicense;
 import net.eltown.servercore.components.forms.custom.CustomWindow;
@@ -11,7 +10,10 @@ import net.eltown.servercore.components.forms.modal.ModalWindow;
 import net.eltown.servercore.components.language.Language;
 import net.eltown.servercore.components.roleplay.Cooldown;
 import net.kyori.adventure.text.Component;
-import org.bukkit.*;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
@@ -20,7 +22,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.*;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -43,12 +48,12 @@ public record ChestShopListener(ServerCore serverCore) implements Listener {
             if (chestShop.getShopType() == ChestShop.ShopType.BUY) {
                 event.line(0, Component.text("§c[§4ChestShop§c]"));
                 event.line(1, Component.text("§cKaufe: §4" + chestShop.getShopCount() + "x"));
-                event.line(2, Component.text("§c$§4" + Economy.getAPI().getMoneyFormat().format(chestShop.getShopPrice())));
+                event.line(2, Component.text("§c$§4" + this.serverCore.getMoneyFormat().format(chestShop.getShopPrice())));
                 event.line(3, Component.text("§4" + player.getName()));
             } else {
                 event.line(0, Component.text("§c[§4ChestShop§c]"));
                 event.line(1, Component.text("§cVerkaufe: §4" + chestShop.getShopCount() + "x"));
-                event.line(2, Component.text("§c$§4" + Economy.getAPI().getMoneyFormat().format(chestShop.getShopPrice())));
+                event.line(2, Component.text("§c$§4" + this.serverCore.getMoneyFormat().format(chestShop.getShopPrice())));
                 event.line(3, Component.text("§4" + player.getName()));
             }
         }
@@ -88,12 +93,12 @@ public record ChestShopListener(ServerCore serverCore) implements Listener {
                                         if (type == ChestShop.ShopType.BUY) {
                                             sign.line(0, Component.text("§c[§4ChestShop§c]"));
                                             sign.line(1, Component.text("§cKaufe: §4" + amount + "x"));
-                                            sign.line(2, Component.text("§c$§4" + Economy.getAPI().getMoneyFormat().format(price)));
+                                            sign.line(2, Component.text("§c$§4" + this.serverCore.getMoneyFormat().format(price)));
                                             sign.line(3, Component.text("§4" + player.getName()));
                                         } else if (type == ChestShop.ShopType.SELL) {
                                             sign.line(0, Component.text("§c[§4ChestShop§c]"));
                                             sign.line(1, Component.text("§cVerkaufe: §4" + amount + "x"));
-                                            sign.line(2, Component.text("§c$§4" + Economy.getAPI().getMoneyFormat().format(price)));
+                                            sign.line(2, Component.text("§c$§4" + this.serverCore.getMoneyFormat().format(price)));
                                             sign.line(3, Component.text("§4" + player.getName()));
                                         }
                                         sign.setGlowingText(true);
@@ -139,7 +144,7 @@ public record ChestShopListener(ServerCore serverCore) implements Listener {
                         if (item.getType() == Material.PAPER) {
                             if (item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(this.serverCore, "bank_card"), PersistentDataType.STRING)) {
                                 final String account = item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(this.serverCore, "bank_card"), PersistentDataType.STRING);
-                                Economy.getBankAPI().getAccount(account, bankAccount -> {
+                                this.serverCore.getBankAPI().getAccount(account, bankAccount -> {
                                     if (bankAccount != null) {
                                         this.requestBankLogin(player, bankAccount, "Bitte gebe das Passwort des Kontos an, um eine neue Verknüpfung zu erstellen.", a -> {
                                             if (a) {
@@ -151,12 +156,12 @@ public record ChestShopListener(ServerCore serverCore) implements Listener {
                                                 if (chestShop.getShopType() == ChestShop.ShopType.BUY) {
                                                     sign.line(0, Component.text("§a[§2ChestShop§a]"));
                                                     sign.line(1, Component.text("§0Kaufe: §2" + chestShop.getShopCount() + "x"));
-                                                    sign.line(2, Component.text("§f$" + Economy.getAPI().getMoneyFormat().format(chestShop.getShopPrice())));
+                                                    sign.line(2, Component.text("§f$" + this.serverCore.getMoneyFormat().format(chestShop.getShopPrice())));
                                                     sign.line(3, Component.text("§2" + player.getName()));
                                                 } else if (chestShop.getShopType() == ChestShop.ShopType.SELL) {
                                                     sign.line(0, Component.text("§a[§2ChestShop§a]"));
                                                     sign.line(1, Component.text("§0Verkaufe: §2" + chestShop.getShopCount() + "x"));
-                                                    sign.line(2, Component.text("§f$" + Economy.getAPI().getMoneyFormat().format(chestShop.getShopPrice())));
+                                                    sign.line(2, Component.text("§f$" + this.serverCore.getMoneyFormat().format(chestShop.getShopPrice())));
                                                     sign.line(3, Component.text("§2" + player.getName()));
                                                 }
                                                 sign.setGlowingText(true);
@@ -197,7 +202,7 @@ public record ChestShopListener(ServerCore serverCore) implements Listener {
                                     editChestShopWindow.form()
                                             .label("§7» §fChestShopID: §9" + chestShop.getId())
                                             .input("§7» §fStückzahl bearbeiten:", "10", "" + chestShop.getShopCount())
-                                            .input("§7» §fPreis bearbeiten:", "29.95", "" + Economy.getAPI().getMoneyFormat().format(chestShop.getShopPrice()))
+                                            .input("§7» §fPreis bearbeiten:", "29.95", "" + this.serverCore.getMoneyFormat().format(chestShop.getShopPrice()))
                                             .toggle("§7» §fDas Item in deiner Hand als neues Kauf- oder Verkaufsitem setzen.", false);
 
                                     editChestShopWindow.onSubmit((g, h) -> {
@@ -253,7 +258,7 @@ public record ChestShopListener(ServerCore serverCore) implements Listener {
                                         buyItem.setAmount(chestShop.getShopCount());
                                         if (item.getType() == Material.PAPER && item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(this.serverCore, "bank_card"), PersistentDataType.STRING)) {
                                             final String account = item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(this.serverCore, "bank_card"), PersistentDataType.STRING);
-                                            Economy.getBankAPI().getAccount(account, bankAccount -> {
+                                            this.serverCore.getBankAPI().getAccount(account, bankAccount -> {
                                                 if (bankAccount != null) {
                                                     if (cachedBankAccounts.containsKey(player.getName())) {
                                                         if (!cachedBankAccounts.get(player.getName()).equals(bankAccount.getAccount())) {
@@ -270,15 +275,15 @@ public record ChestShopListener(ServerCore serverCore) implements Listener {
                                                         }
                                                         if (bankAccount.getBalance() >= chestShop.getShopPrice()) {
                                                             if (this.serverCore.canAddItem(player.getInventory(), buyItem)) {
-                                                                Economy.getBankAPI().withdrawMoney(bankAccount.getAccount(), chestShop.getShopPrice());
-                                                                Economy.getBankAPI().depositMoney(chestShop.getBankAccount(), chestShop.getShopPrice());
+                                                                this.serverCore.getBankAPI().withdrawMoney(bankAccount.getAccount(), chestShop.getShopPrice());
+                                                                this.serverCore.getBankAPI().depositMoney(chestShop.getBankAccount(), chestShop.getShopPrice());
 
                                                                 chest.getInventory().removeItem(buyItem);
                                                                 chest.update(true);
                                                                 player.getInventory().addItem(buyItem);
 
                                                                 if (!messageCooldown.hasCooldown(player.getName() + "/" + chestShop.getId()))
-                                                                    player.sendMessage(Language.get("chestshop.interact.bought.bank", buyItem.getI18NDisplayName(), chestShop.getShopCount(), Economy.getAPI().getMoneyFormat().format(chestShop.getShopPrice()), bankAccount.getDisplayName()));
+                                                                    player.sendMessage(Language.get("chestshop.interact.bought.bank", buyItem.getI18NDisplayName(), chestShop.getShopCount(), this.serverCore.getMoneyFormat().format(chestShop.getShopPrice()), bankAccount.getDisplayName()));
                                                                 player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
                                                                 chestShop.getChestLocation().getWorld().spawnParticle(Particle.BLOCK_CRACK, chestShop.getSignLocation().clone().add(0, 1, 0), 20, Material.EMERALD_BLOCK.createBlockData());
                                                             } else {
@@ -310,17 +315,17 @@ public record ChestShopListener(ServerCore serverCore) implements Listener {
 
                                             });
                                         } else {
-                                            Economy.getAPI().getMoney(player.getName(), money -> {
+                                            this.serverCore.getEconomyAPI().getMoney(player.getName(), money -> {
                                                 if (money >= chestShop.getShopPrice()) {
                                                     if (this.serverCore.canAddItem(player.getInventory(), buyItem)) {
-                                                        Economy.getAPI().reduceMoney(player.getName(), chestShop.getShopPrice());
-                                                        Economy.getBankAPI().depositMoney(chestShop.getBankAccount(), chestShop.getShopPrice());
+                                                        this.serverCore.getEconomyAPI().reduceMoney(player.getName(), chestShop.getShopPrice());
+                                                        this.serverCore.getBankAPI().depositMoney(chestShop.getBankAccount(), chestShop.getShopPrice());
 
                                                         chest.getInventory().removeItem(buyItem);
                                                         chest.update(true);
                                                         player.getInventory().addItem(buyItem);
 
-                                                        if (!messageCooldown.hasCooldown(player.getName() + "/" + chestShop.getId())) player.sendMessage(Language.get("chestshop.interact.bought", buyItem.getI18NDisplayName(), chestShop.getShopCount(), Economy.getAPI().getMoneyFormat().format(chestShop.getShopPrice())));
+                                                        if (!messageCooldown.hasCooldown(player.getName() + "/" + chestShop.getId())) player.sendMessage(Language.get("chestshop.interact.bought", buyItem.getI18NDisplayName(), chestShop.getShopCount(), this.serverCore.getMoneyFormat().format(chestShop.getShopPrice())));
                                                         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
                                                         chestShop.getChestLocation().getWorld().spawnParticle(Particle.BLOCK_CRACK, chestShop.getSignLocation().clone().add(0, 1, 0), 20, Material.EMERALD_BLOCK.createBlockData());
                                                     } else {
@@ -356,8 +361,8 @@ public record ChestShopListener(ServerCore serverCore) implements Listener {
                                         buyItem.setAmount(chestShop.getShopCount());
                                         if (item.getType() == Material.PAPER && item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(this.serverCore, "bank_card"), PersistentDataType.STRING)) {
                                             final String account = item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(this.serverCore, "bank_card"), PersistentDataType.STRING);
-                                            Economy.getBankAPI().getAccount(account, sellAccount -> {
-                                                Economy.getBankAPI().getAccount(chestShop.getBankAccount(), chestAccount -> {
+                                            this.serverCore.getBankAPI().getAccount(account, sellAccount -> {
+                                                this.serverCore.getBankAPI().getAccount(chestShop.getBankAccount(), chestAccount -> {
                                                     if (sellAccount != null && chestAccount != null) {
                                                         if (cachedBankAccounts.containsKey(player.getName())) {
                                                             if (!cachedBankAccounts.get(player.getName()).equals(sellAccount.getAccount())) {
@@ -374,15 +379,15 @@ public record ChestShopListener(ServerCore serverCore) implements Listener {
                                                             }
                                                             if (chestAccount.getBalance() >= chestShop.getShopPrice()) {
                                                                 if (this.serverCore.canAddItem(chest.getInventory(), buyItem)) {
-                                                                    Economy.getBankAPI().withdrawMoney(chestAccount.getAccount(), chestShop.getShopPrice());
-                                                                    Economy.getBankAPI().depositMoney(sellAccount.getAccount(), chestShop.getShopPrice());
+                                                                    this.serverCore.getBankAPI().withdrawMoney(chestAccount.getAccount(), chestShop.getShopPrice());
+                                                                    this.serverCore.getBankAPI().depositMoney(sellAccount.getAccount(), chestShop.getShopPrice());
 
                                                                     chest.getInventory().addItem(buyItem);
                                                                     chest.update(true);
                                                                     player.getInventory().removeItem(buyItem);
 
                                                                     if (!messageCooldown.hasCooldown(player.getName() + "/" + chestShop.getId()))
-                                                                        player.sendMessage(Language.get("chestshop.interact.sold.bank", buyItem.getI18NDisplayName(), chestShop.getShopCount(), Economy.getAPI().getMoneyFormat().format(chestShop.getShopPrice()), sellAccount.getDisplayName()));
+                                                                        player.sendMessage(Language.get("chestshop.interact.sold.bank", buyItem.getI18NDisplayName(), chestShop.getShopCount(), this.serverCore.getMoneyFormat().format(chestShop.getShopPrice()), sellAccount.getDisplayName()));
                                                                     player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
                                                                     chestShop.getChestLocation().getWorld().spawnParticle(Particle.BLOCK_CRACK, chestShop.getSignLocation().clone().add(0, 1, 0), 20, Material.EMERALD_BLOCK.createBlockData());
                                                                 } else {
@@ -414,18 +419,18 @@ public record ChestShopListener(ServerCore serverCore) implements Listener {
                                                 });
                                             });
                                         } else {
-                                            Economy.getBankAPI().getAccount(chestShop.getBankAccount(), bankAccount -> {
+                                            this.serverCore.getBankAPI().getAccount(chestShop.getBankAccount(), bankAccount -> {
                                                 if (bankAccount.getBalance() >= chestShop.getShopPrice()) {
                                                     if (this.serverCore.canAddItem(chest.getInventory(), buyItem)) {
-                                                        Economy.getBankAPI().withdrawMoney(bankAccount.getAccount(), chestShop.getShopPrice());
-                                                        Economy.getAPI().addMoney(player.getName(), chestShop.getShopPrice());
+                                                        this.serverCore.getBankAPI().withdrawMoney(bankAccount.getAccount(), chestShop.getShopPrice());
+                                                        this.serverCore.getEconomyAPI().addMoney(player.getName(), chestShop.getShopPrice());
 
                                                         chest.getInventory().addItem(buyItem);
                                                         chest.update(true);
                                                         player.getInventory().removeItem(buyItem);
 
                                                         if (!messageCooldown.hasCooldown(player.getName() + "/" + chestShop.getId()))
-                                                            player.sendMessage(Language.get("chestshop.interact.sold", buyItem.getI18NDisplayName(), chestShop.getShopCount(), Economy.getAPI().getMoneyFormat().format(chestShop.getShopPrice())));
+                                                            player.sendMessage(Language.get("chestshop.interact.sold", buyItem.getI18NDisplayName(), chestShop.getShopCount(), this.serverCore.getMoneyFormat().format(chestShop.getShopPrice())));
                                                         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
                                                         chestShop.getChestLocation().getWorld().spawnParticle(Particle.BLOCK_CRACK, chestShop.getSignLocation().clone().add(0, 1, 0), 20, Material.EMERALD_BLOCK.createBlockData());
                                                     } else {
@@ -500,7 +505,7 @@ public record ChestShopListener(ServerCore serverCore) implements Listener {
                     if (e.getSignLocation().equals(block.getLocation())) {
                         if (e.getOwner().equals(player.getName()) || player.isOp()) {
                             final ModalWindow deleteConfirmWindow = new ModalWindow.Builder("§7» §8ChestShop entfernen", "§cMöchtest du wirklich deinen ChestShop entfernen? Diese Aktion kann nicht rückgängig gemacht werden!",
-                            "§8» §aEntfernen", "§8» §cAbbrechen")
+                                    "§8» §aEntfernen", "§8» §cAbbrechen")
                                     .onYes(b -> {
                                         this.serverCore.getChestShopAPI().removeChestShop(player, e.getSignLocation(), e.getId());
                                         player.sendMessage(Language.get("chestshop.break.sign"));

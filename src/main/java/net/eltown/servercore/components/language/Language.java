@@ -3,9 +3,7 @@ package net.eltown.servercore.components.language;
 import lombok.SneakyThrows;
 import net.eltown.servercore.ServerCore;
 import net.eltown.servercore.components.config.Config;
-import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 

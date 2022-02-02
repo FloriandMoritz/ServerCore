@@ -1,6 +1,5 @@
 package net.eltown.servercore.components.api.intern;
 
-import net.eltown.economy.Economy;
 import net.eltown.servercore.ServerCore;
 import net.eltown.servercore.components.data.giftkeys.GiftkeyCalls;
 import net.eltown.servercore.components.data.level.Level;
@@ -43,7 +42,7 @@ public record LevelAPI(ServerCore serverCore) {
 
         Objects.requireNonNull(player.getScoreboard().getTeam("level")).setPrefix("   §f" + this.getLevel(player.getName()).getLevel() + " §8[" + this.getLevelDisplay(player) + "§8]  ");
 
-        player.sendActionBar(Component.text("§a+ §2" + Economy.getAPI().getMoneyFormat().format(experience) + "XP"));
+        player.sendActionBar(Component.text("§a+ §2" + this.serverCore.getMoneyFormat().format(experience) + "XP"));
 
         this.checkForLevelUp(player);
     }

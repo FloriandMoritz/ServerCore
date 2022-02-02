@@ -111,6 +111,7 @@ public class SimpleWindow {
 
     }
 
-    private record ElementButton(String text, String image) { }
+    private record ElementButton(String text, String image) {
+    }
 
 }

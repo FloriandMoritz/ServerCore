@@ -46,7 +46,8 @@ public class TinyRabbitListener {
                 });
             }
 
-            channel.basicConsume("a2." + queue, true, deliverCallback, consumerTag -> { });
+            channel.basicConsume("a2." + queue, true, deliverCallback, consumerTag -> {
+            });
         } catch (final Exception ex) {
             if (this.throwExceptions) ex.printStackTrace();
         }

@@ -4,7 +4,6 @@ import net.eltown.servercore.components.data.crates.data.CrateReward;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Raffle {

@@ -43,7 +43,7 @@ public class FileUtils {
                 byte[] buffer = new byte[1024];
 
                 int length;
-                while((length = content.read(buffer)) != -1) {
+                while ((length = content.read(buffer)) != -1) {
                     stream.write(buffer, 0, length);
                 }
             } catch (Throwable var13) {
@@ -97,7 +97,7 @@ public class FileUtils {
         try {
             StringBuilder stringBuilder = new StringBuilder();
 
-            for(String temp = br.readLine(); temp != null; temp = br.readLine()) {
+            for (String temp = br.readLine(); temp != null; temp = br.readLine()) {
                 if (stringBuilder.length() != 0) {
                     stringBuilder.append("\n");
                 }
@@ -176,7 +176,7 @@ public class FileUtils {
         ThreadInfo[] var2 = threads;
         int var3 = threads.length;
 
-        for(int var4 = 0; var4 < var3; ++var4) {
+        for (int var4 = 0; var4 < var3; ++var4) {
             ThreadInfo info = var2[var4];
             builder.append('\n').append(info);
         }
@@ -218,7 +218,7 @@ public class FileUtils {
         String[] var2 = params;
         int var3 = params.length;
 
-        for(int var4 = 0; var4 < var3; ++var4) {
+        for (int var4 = 0; var4 < var3; ++var4) {
             String param = var2[var4];
             builder.append(param);
         }
@@ -231,7 +231,7 @@ public class FileUtils {
         byte[][] var2 = params;
         int var3 = params.length;
 
-        for(int var4 = 0; var4 < var3; ++var4) {
+        for (int var4 = 0; var4 < var3; ++var4) {
             byte[] param = var2[var4];
 
             try {
@@ -246,7 +246,7 @@ public class FileUtils {
 
     public static String rtrim(String s, char character) {
         int i;
-        for(i = s.length() - 1; i >= 0 && s.charAt(i) == character; --i) {
+        for (i = s.length() - 1; i >= 0 && s.charAt(i) == character; --i) {
         }
 
         return s.substring(0, i + 1);
@@ -256,7 +256,7 @@ public class FileUtils {
         byte[] var1 = array;
         int var2 = array.length;
 
-        for(int var3 = 0; var3 < var2; ++var3) {
+        for (int var3 = 0; var3 < var2; ++var3) {
             byte b = var1[var3];
             if (b != 0) {
                 return false;
@@ -275,9 +275,9 @@ public class FileUtils {
     }
 
     public static long toABGR(int argb) {
-        long result = (long)argb & 4278255360L;
-        result |= (long)(argb << 16) & 16711680L;
-        result |= (long)(argb >>> 16) & 255L;
+        long result = (long) argb & 4278255360L;
+        result |= (long) (argb << 16) & 16711680L;
+        result |= (long) (argb >>> 16) & 255L;
         return result & 4294967295L;
     }
 
@@ -289,7 +289,7 @@ public class FileUtils {
             int chunks = arrayToSplit.length / chunkSize + (rest > 0 ? 1 : 0);
             Object[][] arrays = new Object[chunks][];
 
-            for(int i = 0; i < (rest > 0 ? chunks - 1 : chunks); ++i) {
+            for (int i = 0; i < (rest > 0 ? chunks - 1 : chunks); ++i) {
                 arrays[i] = Arrays.copyOfRange(arrayToSplit, i * chunkSize, i * chunkSize + chunkSize);
             }
 
@@ -313,7 +313,7 @@ public class FileUtils {
 
         int left = 0;
 
-        for(int right = data.length - 1; left < right; --right) {
+        for (int right = data.length - 1; left < right; --right) {
             T temp = data[left];
             data[left] = data[right];
             data[right] = temp;
@@ -326,7 +326,7 @@ public class FileUtils {
     public static <T> T[][] clone2dArray(T[][] array) {
         T[][] newArray = Arrays.copyOf(array, array.length);
 
-        for(int i = 0; i < array.length; ++i) {
+        for (int i = 0; i < array.length; ++i) {
             newArray[i] = Arrays.copyOf(array[i], array[i].length);
         }
 
@@ -362,7 +362,7 @@ public class FileUtils {
     }
 
     public static int toInt(Object number) {
-        return number instanceof Integer ? (Integer)number : (int)Math.round((Double)number);
+        return number instanceof Integer ? (Integer) number : (int) Math.round((Double) number);
     }
 
     public static byte[] parseHexBinary(String s) {
@@ -372,14 +372,14 @@ public class FileUtils {
         } else {
             byte[] out = new byte[len / 2];
 
-            for(int i = 0; i < len; i += 2) {
+            for (int i = 0; i < len; i += 2) {
                 int h = hexToBin(s.charAt(i));
                 int l = hexToBin(s.charAt(i + 1));
                 if (h == -1 || l == -1) {
                     throw new IllegalArgumentException("contains illegal character for hexBinary: " + s);
                 }
 
-                out[i / 2] = (byte)(h * 16 + l);
+                out[i / 2] = (byte) (h * 16 + l);
             }
 
             return out;
