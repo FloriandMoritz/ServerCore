@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import net.eltown.servercore.commands.administrative.*;
 import net.eltown.servercore.commands.defaults.PluginsCommand;
 import net.eltown.servercore.commands.defaults.SpawnCommand;
+import net.eltown.servercore.commands.economy.*;
 import net.eltown.servercore.commands.feature.ChestShopCommand;
 import net.eltown.servercore.commands.feature.FriendCommand;
 import net.eltown.servercore.commands.feature.QuestCommand;
@@ -141,6 +142,13 @@ public class ServerCore extends JavaPlugin {
 
         this.getServer().getCommandMap().register("sys", new PluginsCommand(this));
         this.getServer().getCommandMap().register("sys", new SpawnCommand(this));
+
+        this.getServer().getCommandMap().register("sys", new AddMoneyCommand(this));
+        this.getServer().getCommandMap().register("sys", new MoneyCommand(this));
+        this.getServer().getCommandMap().register("sys", new PayCommand(this));
+        this.getServer().getCommandMap().register("sys", new ReduceMoneyCommand(this));
+        this.getServer().getCommandMap().register("sys", new SetMoneyCommand(this));
+        this.getServer().getCommandMap().register("sys", new TopMoneyCommand(this));
 
         if (this.serverName.equals("server-1")) this.getServer().getCommandMap().register("sys", new ChestShopCommand(this));
         this.getServer().getCommandMap().register("sys", new FriendCommand(this));
