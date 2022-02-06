@@ -3,9 +3,13 @@ package net.eltown.servercore.components.api.intern;
 import net.eltown.servercore.ServerCore;
 import net.eltown.servercore.components.data.giftkeys.Giftkey;
 import net.eltown.servercore.components.data.giftkeys.GiftkeyCalls;
+import net.eltown.servercore.components.language.Language;
 import net.eltown.servercore.components.tinyrabbit.Queue;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public record GiftKeyAPI(ServerCore serverCore) {
@@ -40,6 +44,24 @@ public record GiftKeyAPI(ServerCore serverCore) {
 
     public void deleteKey(final String key) {
         this.serverCore.getTinyRabbit().send(Queue.GIFTKEYS_RECEIVE, GiftkeyCalls.REQUEST_DELETE_KEY.name(), key);
+    }
+
+    public void getCodes(final String player, final Consumer<Set<String>> consumer) {
+        this.serverCore.getTinyRabbit().sendAndReceive(delivery -> {
+            switch (GiftkeyCalls.valueOf(delivery.getKey().toUpperCase())) {
+                case CALLBACK_NULL -> consumer.accept(null);
+                case CALLBACK_USER_CODES -> consumer.accept(new HashSet<>(Arrays.asList(delivery.getData()[1].split(">:<"))));
+            }
+        }, Queue.GIFTKEYS_CALLBACK, GiftkeyCalls.REQUEST_USER_CODES.name(), player);
+    }
+
+    public void addMark(final String key, final String target, final String player, final Consumer<Boolean> consumer) {
+        this.serverCore.getTinyRabbit().sendAndReceive(delivery -> {
+            switch (GiftkeyCalls.valueOf(delivery.getKey().toUpperCase())) {
+                case CALLBACK_MARK_ADDED -> consumer.accept(true);
+                default -> consumer.accept(false);
+            }
+        }, Queue.GIFTKEYS_CALLBACK, GiftkeyCalls.REQUEST_ADD_MARK.name(), key, target, player);
     }
 
 }

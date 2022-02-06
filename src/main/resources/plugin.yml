@@ -9,4 +9,3 @@ description: Kernfunktionen für Eltown
 depend:
   - Drivers
   - floodgate
-  - Economy

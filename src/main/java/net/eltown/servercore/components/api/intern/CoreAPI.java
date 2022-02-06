@@ -7,6 +7,7 @@ import net.eltown.servercore.components.tinyrabbit.Queue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public record CoreAPI(ServerCore serverCore) {
@@ -30,6 +31,12 @@ public record CoreAPI(ServerCore serverCore) {
                 list.accept(Arrays.stream(delivery.getData()[1].split("#")).toList());
             }
         }, Queue.CORE_CALLBACK, CoreCalls.REQUEST_GET_ONLINE_PLAYERS.name(), "null");
+    }
+
+    public void getPlayTime(final String player, final BiConsumer<Long, Long> consumer) {
+        this.serverCore.getTinyRabbit().sendAndReceive(delivery -> {
+            consumer.accept(Long.parseLong(delivery.getData()[1]), Long.parseLong(delivery.getData()[2]));
+        }, Queue.PROXY_PLAYTIME, "REQUEST_PLAYTIME", player);
     }
 
 }

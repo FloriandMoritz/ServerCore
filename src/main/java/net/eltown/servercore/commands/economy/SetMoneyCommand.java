@@ -17,6 +17,7 @@ public class SetMoneyCommand extends Command {
     public SetMoneyCommand(final ServerCore serverCore) {
         super("setmoney", "Setze den Bargeldstand eines Spielers", "", List.of("balset"));
         this.serverCore = serverCore;
+        this.setPermission("core.command.setmoney");
     }
 
     @Override

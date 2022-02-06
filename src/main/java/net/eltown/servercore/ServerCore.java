@@ -15,6 +15,7 @@ import net.eltown.servercore.commands.guardian.*;
 import net.eltown.servercore.commands.teleportation.*;
 import net.eltown.servercore.components.api.intern.*;
 import net.eltown.servercore.components.language.Language;
+import net.eltown.servercore.components.roleplay.feature.LolaRoleplay;
 import net.eltown.servercore.components.roleplay.shops.ShopRoleplay;
 import net.eltown.servercore.components.tinyrabbit.TinyRabbit;
 import net.eltown.servercore.listeners.*;
@@ -64,7 +65,9 @@ public class ServerCore extends JavaPlugin {
     private EconomyAPI economyAPI;
     private ShopAPI shopAPI;
     private BankAPI bankAPI;
+    private RewardAPI rewardAPI;
 
+    private LolaRoleplay lolaRoleplay;
     private ShopRoleplay shopRoleplay;
 
     private DecimalFormat moneyFormat;
@@ -113,6 +116,7 @@ public class ServerCore extends JavaPlugin {
         this.economyAPI = new EconomyAPI(this);
         this.shopAPI = new ShopAPI(this);
         this.bankAPI = new BankAPI(this);
+        this.rewardAPI = new RewardAPI(this);
 
         /*
          * Listeners
@@ -137,6 +141,7 @@ public class ServerCore extends JavaPlugin {
         this.getServer().getCommandMap().register("sys", new NpcCommand(this));
         this.getServer().getCommandMap().register("sys", new PrintItemCommand(this));
         this.getServer().getCommandMap().register("sys", new QuestSystemCommand(this));
+        this.getServer().getCommandMap().register("sys", new RewardSystemCommand(this));
         this.getServer().getCommandMap().register("sys", new SetSpawnCommand(this));
         this.getServer().getCommandMap().register("sys", new SpeedCommand(this));
 
@@ -178,6 +183,7 @@ public class ServerCore extends JavaPlugin {
         /*
          * Other
          */
+        this.lolaRoleplay = new LolaRoleplay(this);
         this.shopRoleplay = new ShopRoleplay(this);
 
         this.moneyFormat = new DecimalFormat();

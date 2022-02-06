@@ -17,6 +17,7 @@ public class ReduceMoneyCommand extends Command {
     public ReduceMoneyCommand(final ServerCore serverCore) {
         super("reducemoney", "Verringere das Bargeld eines Spielers", "", List.of("takemoney"));
         this.serverCore = serverCore;
+        this.setPermission("core.command.reducemoney");
     }
 
     @Override

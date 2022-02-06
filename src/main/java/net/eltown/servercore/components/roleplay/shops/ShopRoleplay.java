@@ -76,7 +76,7 @@ public record ShopRoleplay(ServerCore serverCore) {
                         new ChainMessage("Für gute Qualität muss man auch zahlen!", 3),
                         new ChainMessage("Rohstoffe wie diese braucht man immer, stimmts?", 3),
                         new ChainMessage("Ich habe so viel in meinem Sortiment wie noch nie!", 3),
-                        new ChainMessage("Eine true Kundschaft zahlt sich aus!", 2),
+                        new ChainMessage("Eine treue Kundschaft zahlt sich aus!", 2),
                         new ChainMessage("Hast du gekauft, so hast du gewonnen; verkaufe, und du wirst verlieren.", 3),
                         new ChainMessage("Schau dich ruhig um, ich habe Zeit!", 3)
                 ))
@@ -148,7 +148,7 @@ public record ShopRoleplay(ServerCore serverCore) {
                         new ChainMessage("Rot ist meine absolute Lieblingsfarbe!", 3)
                 ))
         ));
-        availableShops.put(RoleplayID.SHOP_MONSTERUNTER, new Shop("Amanda", "§5",
+        availableShops.put(RoleplayID.SHOP_MONSTERHUNTER, new Shop("Amanda", "§5",
                 new LinkedList<>(List.of(
                         Material.GUNPOWDER,
                         Material.ROTTEN_FLESH,

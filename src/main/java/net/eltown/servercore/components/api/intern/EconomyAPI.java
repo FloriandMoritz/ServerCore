@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public record EconomyAPI(ServerCore serverCore) {
@@ -25,29 +26,37 @@ public record EconomyAPI(ServerCore serverCore) {
     }
 
     public void getMoney(final String player, final Consumer<Double> callback) {
-        this.serverCore.getTinyRabbit().sendAndReceive(delivery -> {
-            callback.accept(Double.parseDouble(delivery.getData()[1]));
-        }, Queue.ECONOMY_CALLBACK, EconomyCalls.REQUEST_GETMONEY.name(), player);
+        CompletableFuture.runAsync(() -> {
+            this.serverCore.getTinyRabbit().sendAndReceive(delivery -> {
+                callback.accept(Double.parseDouble(delivery.getData()[1]));
+            }, Queue.ECONOMY_CALLBACK, EconomyCalls.REQUEST_GETMONEY.name(), player);
+        });
     }
 
     public void setMoney(final String player, final double set) {
-        this.serverCore.getTinyRabbit().send(Queue.ECONOMY_RECEIVE, EconomyCalls.REQUEST_SETMONEY.name(), player, String.valueOf(set));
-        this.callMoneyChangeEvent(player, set);
-    }
-
-    public void addMoney(final String player, final double add) {
-        this.getMoney(player, money -> {
-            final double set = money + add;
+        CompletableFuture.runAsync(() -> {
             this.serverCore.getTinyRabbit().send(Queue.ECONOMY_RECEIVE, EconomyCalls.REQUEST_SETMONEY.name(), player, String.valueOf(set));
             this.callMoneyChangeEvent(player, set);
         });
     }
 
+    public void addMoney(final String player, final double add) {
+        CompletableFuture.runAsync(() -> {
+            this.getMoney(player, money -> {
+                final double set = money + add;
+                this.serverCore.getTinyRabbit().send(Queue.ECONOMY_RECEIVE, EconomyCalls.REQUEST_SETMONEY.name(), player, String.valueOf(set));
+                this.callMoneyChangeEvent(player, set);
+            });
+        });
+    }
+
     public void reduceMoney(final String player, final double reduce) {
-        this.getMoney(player, money -> {
-            final double set = money - reduce;
-            this.serverCore.getTinyRabbit().send(Queue.ECONOMY_RECEIVE, EconomyCalls.REQUEST_SETMONEY.name(), player, String.valueOf(set));
-            this.callMoneyChangeEvent(player, set);
+        CompletableFuture.runAsync(() -> {
+            this.getMoney(player, money -> {
+                final double set = money - reduce;
+                this.serverCore.getTinyRabbit().send(Queue.ECONOMY_RECEIVE, EconomyCalls.REQUEST_SETMONEY.name(), player, String.valueOf(set));
+                this.callMoneyChangeEvent(player, set);
+            });
         });
     }
 
