@@ -81,7 +81,7 @@ public class RedeemCommand extends Command {
                                                             final String crate = rawReward[1];
                                                             final int i = Integer.parseInt(rawReward[2]);
                                                             this.serverCore.getCrateAPI().addCrate(player.getName(), crate, i);
-                                                            player.sendMessage(Language.get("giftkey.reward.crate", crate, i));
+                                                            player.sendMessage(Language.get("giftkey.reward.crate", this.serverCore.getCrateAPI().convertToDisplay(crate), i));
                                                         }
                                                         default -> player.sendMessage("§cBeim Einlösen des Gutscheins §8[§7" + giftkey.getKey() + "§8] §ctrat ein Fehler auf. §7[§f" + player.getName() + ", " + rawReward[0] + "§7]");
                                                     }

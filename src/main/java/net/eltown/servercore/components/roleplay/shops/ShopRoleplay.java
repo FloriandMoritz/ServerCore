@@ -10,19 +10,11 @@ import net.eltown.servercore.components.roleplay.ChainExecution;
 import net.eltown.servercore.components.roleplay.ChainMessage;
 import net.eltown.servercore.components.roleplay.Cooldown;
 import net.eltown.servercore.components.roleplay.RoleplayID;
+import net.eltown.servercore.listeners.RoleplayListener;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Villager;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,11 +27,10 @@ import java.util.function.Consumer;
 
 public record ShopRoleplay(ServerCore serverCore) {
 
-    static HashMap<RoleplayID, Shop> availableShops = new HashMap<>();
+    public static HashMap<RoleplayID, Shop> availableShops = new HashMap<>();
 
     public ShopRoleplay(final ServerCore serverCore) {
         this.serverCore = serverCore;
-        this.serverCore.getServer().getPluginManager().registerEvents(new ShopRoleplayListener(this), this.serverCore);
 
         availableShops.put(RoleplayID.SHOP_LUMBERJACK, new Shop("Darick", "§a",
                 new LinkedList<>(List.of(
@@ -205,7 +196,7 @@ public record ShopRoleplay(ServerCore serverCore) {
                         })
                         .append(message.seconds(), () -> {
                             this.openShopItems(player, shop);
-                            openQueue.remove(player.getName());
+                            RoleplayListener.openQueue.remove(player.getName());
                         })
                         .build().start();
             }
@@ -368,7 +359,6 @@ public record ShopRoleplay(ServerCore serverCore) {
         itemShopWindow.build().send(player);
     }
 
-    static final List<String> openQueue = new ArrayList<>();
     static final Cooldown playerTalks = new Cooldown(TimeUnit.MINUTES.toMillis(15));
     static final Cooldown talkCooldown = new Cooldown(TimeUnit.SECONDS.toMillis(20));
 
@@ -383,52 +373,7 @@ public record ShopRoleplay(ServerCore serverCore) {
             int index = ThreadLocalRandom.current().nextInt(1, messages.size());
             message.accept(messages.get(index));
         }
-        openQueue.add(player.getName());
-    }
-
-
-    public record ShopRoleplayListener(ShopRoleplay shopRoleplay) implements Listener {
-
-        @EventHandler
-        public void on(final PlayerInteractEntityEvent event) {
-            final Player player = event.getPlayer();
-            final Entity entity = event.getRightClicked();
-            if (entity.getType() == EntityType.VILLAGER) {
-                final Villager villager = (Villager) entity;
-                if (villager.getPersistentDataContainer().has(new NamespacedKey(this.shopRoleplay.serverCore, "npc.key"), PersistentDataType.STRING)) {
-                    final String key = villager.getPersistentDataContainer().get(new NamespacedKey(this.shopRoleplay.serverCore, "npc.key"), PersistentDataType.STRING);
-                    if (!ShopRoleplay.openQueue.contains(player.getName())) {
-                        try {
-                            final RoleplayID id = RoleplayID.valueOf(key);
-                            this.shopRoleplay.interact(player, ShopRoleplay.availableShops.get(id));
-                        } catch (final Exception ignored) {
-                        }
-                    }
-                    event.setCancelled(true);
-                }
-            }
-        }
-
-        @EventHandler
-        public void on(final EntityDamageByEntityEvent event) {
-            final Entity entity = event.getEntity();
-            if (entity.getType() == EntityType.VILLAGER) {
-                final Villager villager = (Villager) entity;
-                if (villager.getPersistentDataContainer().has(new NamespacedKey(this.shopRoleplay.serverCore, "npc.key"), PersistentDataType.STRING)) {
-                    final String key = villager.getPersistentDataContainer().get(new NamespacedKey(this.shopRoleplay.serverCore, "npc.key"), PersistentDataType.STRING);
-                    if (event.getDamager() instanceof final Player player) {
-                        if (!ShopRoleplay.openQueue.contains(player.getName())) {
-                            try {
-                                final RoleplayID id = RoleplayID.valueOf(key);
-                                this.shopRoleplay.interact(player, ShopRoleplay.availableShops.get(id));
-                            } catch (final Exception ignored) {
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
+        RoleplayListener.openQueue.add(player.getName());
     }
 
     public record Shop(String name, String color, LinkedList<Material> items, LinkedList<ChainMessage> messages) {

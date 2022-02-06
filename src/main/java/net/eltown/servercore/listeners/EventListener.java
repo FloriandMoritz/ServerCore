@@ -29,6 +29,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.VillagerCareerChangeEvent;
+import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerCommandSendEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -252,6 +253,13 @@ public record EventListener(ServerCore serverCore) implements Listener {
             if (command.contains(":") || command.contains("/")) {
                 event.getCommands().remove(command);
             }
+        }
+    }
+
+    @EventHandler
+    public void on(final PlayerArmorStandManipulateEvent event) {
+        if (event.getRightClicked().getPersistentDataContainer().has(new NamespacedKey(ServerCore.getServerCore(), "container.hologram"), PersistentDataType.INTEGER)) {
+            event.setCancelled(true);
         }
     }
 

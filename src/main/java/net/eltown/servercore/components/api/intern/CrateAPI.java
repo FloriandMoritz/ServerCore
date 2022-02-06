@@ -81,4 +81,14 @@ public record CrateAPI(ServerCore serverCore) {
         }, Queue.CRATES_CALLBACK, CratesCalls.REQUEST_PLAYER_DATA.name(), player);
     }
 
+    public String convertToDisplay(final String crate) {
+        return switch (crate) {
+            case "common" -> "§7§lGewöhnliche §r§7Truhe§r";
+            case "uncommon" -> "§1§lUngewöhnliche §r§1Truhe§r";
+            case "epic" -> "§5§lEpische §r§5Truhe§r";
+            case "legendary" -> "§g§lLegendäre §r§gTruhe§r";
+            default -> "null";
+        };
+    }
+
 }

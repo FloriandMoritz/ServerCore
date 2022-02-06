@@ -15,6 +15,7 @@ import net.eltown.servercore.commands.guardian.*;
 import net.eltown.servercore.commands.teleportation.*;
 import net.eltown.servercore.components.api.intern.*;
 import net.eltown.servercore.components.language.Language;
+import net.eltown.servercore.components.roleplay.feature.JohnRoleplay;
 import net.eltown.servercore.components.roleplay.feature.LolaRoleplay;
 import net.eltown.servercore.components.roleplay.shops.ShopRoleplay;
 import net.eltown.servercore.components.tinyrabbit.TinyRabbit;
@@ -67,6 +68,7 @@ public class ServerCore extends JavaPlugin {
     private BankAPI bankAPI;
     private RewardAPI rewardAPI;
 
+    private JohnRoleplay johnRoleplay;
     private LolaRoleplay lolaRoleplay;
     private ShopRoleplay shopRoleplay;
 
@@ -126,10 +128,12 @@ public class ServerCore extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new FurnaceListener(this), this);
         this.getServer().getPluginManager().registerEvents(new LevelListener(this, this.getConfig().getBoolean("settings.farmxp")), this);
         this.getServer().getPluginManager().registerEvents(new QuestListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new RoleplayListener(this), this);
 
         /*
          * Commands
          */
+        this.getServer().getCommandMap().register("sys", new CrateSystemCommand(this));
         this.getServer().getCommandMap().register("sys", new FlyCommand(this));
         this.getServer().getCommandMap().register("sys", new GamemodeCommand(this));
         this.getServer().getCommandMap().register("sys", new GiftkeySystemCommand(this));
@@ -183,6 +187,7 @@ public class ServerCore extends JavaPlugin {
         /*
          * Other
          */
+        this.johnRoleplay = new JohnRoleplay(this);
         this.lolaRoleplay = new LolaRoleplay(this);
         this.shopRoleplay = new ShopRoleplay(this);
 

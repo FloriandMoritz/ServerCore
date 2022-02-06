@@ -12,17 +12,9 @@ import net.eltown.servercore.components.roleplay.ChainExecution;
 import net.eltown.servercore.components.roleplay.ChainMessage;
 import net.eltown.servercore.components.roleplay.Cooldown;
 import net.eltown.servercore.components.roleplay.RoleplayID;
-import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
+import net.eltown.servercore.listeners.RoleplayListener;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Villager;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -31,12 +23,6 @@ import java.util.function.Consumer;
 
 public record LolaRoleplay(ServerCore serverCore) {
 
-    public LolaRoleplay(final ServerCore serverCore) {
-        this.serverCore = serverCore;
-        this.serverCore.getServer().getPluginManager().registerEvents(new LolaRoleplayListener(this), this.serverCore);
-    }
-
-    static final List<String> openQueue = new ArrayList<>();
     static final Cooldown playerTalks = new Cooldown(TimeUnit.MINUTES.toMillis(15));
     static final Cooldown talkCooldown = new Cooldown(TimeUnit.SECONDS.toMillis(20));
 
@@ -50,7 +36,7 @@ public record LolaRoleplay(ServerCore serverCore) {
     ));
 
     public void openLolaByNpc(final Player player) {
-        this.smallTalk(rewardTalks, RoleplayID.FEATURE_LOLA.name(), player, message -> {
+        this.smallTalk(RoleplayID.FEATURE_LOLA.name(), player, message -> {
             if (message == null) {
                 this.openLola(player);
             } else {
@@ -60,7 +46,7 @@ public record LolaRoleplay(ServerCore serverCore) {
                         })
                         .append(message.seconds(), () -> {
                             this.openLola(player);
-                            openQueue.remove(player.getName());
+                            RoleplayListener.openQueue.remove(player.getName());
                         })
                         .build().start();
             }
@@ -257,7 +243,7 @@ public record LolaRoleplay(ServerCore serverCore) {
                                                         final String crate = rawReward[1];
                                                         final int i = Integer.parseInt(rawReward[2]);
                                                         this.serverCore.getCrateAPI().addCrate(player.getName(), crate, i);
-                                                        player.sendMessage(Language.get("giftkey.reward.crate", crate, i));
+                                                        player.sendMessage(Language.get("giftkey.reward.crate", this.serverCore.getCrateAPI().convertToDisplay(crate), i));
                                                     }
                                                     default -> player.sendMessage("§cBeim Einlösen des Gutscheins §8[§7" + giftkey.getKey() + "§8] §ctrat ein Fehler auf. §7[§f" + player.getName() + ", " + rawReward[0] + "§7]");
                                                 }
@@ -322,67 +308,18 @@ public record LolaRoleplay(ServerCore serverCore) {
         player.sendMessage(Language.get("reward.received", reward.description(), reward.day()));
     }
 
-    private void smallTalk(final List<ChainMessage> messages, final String npc, final Player player, final Consumer<ChainMessage> message) {
+    private void smallTalk(final String npc, final Player player, final Consumer<ChainMessage> message) {
         if (talkCooldown.hasCooldown(npc + "//" + player.getName())) {
             message.accept(null);
             return;
         }
         if (!playerTalks.hasCooldown(npc + "//" + player.getName())) {
-            message.accept(messages.get(0));
+            message.accept(LolaRoleplay.rewardTalks.get(0));
         } else {
-            int index = ThreadLocalRandom.current().nextInt(1, messages.size());
-            message.accept(messages.get(index));
+            int index = ThreadLocalRandom.current().nextInt(1, LolaRoleplay.rewardTalks.size());
+            message.accept(LolaRoleplay.rewardTalks.get(index));
         }
-        openQueue.add(player.getName());
-    }
-
-
-    public record LolaRoleplayListener(LolaRoleplay lolaRoleplay) implements Listener {
-
-        @EventHandler
-        public void on(final PlayerInteractEntityEvent event) {
-            final Player player = event.getPlayer();
-            final Entity entity = event.getRightClicked();
-            if (entity.getType() == EntityType.VILLAGER) {
-                final Villager villager = (Villager) entity;
-                if (villager.getPersistentDataContainer().has(new NamespacedKey(this.lolaRoleplay.serverCore, "npc.key"), PersistentDataType.STRING)) {
-                    final String key = villager.getPersistentDataContainer().get(new NamespacedKey(this.lolaRoleplay.serverCore, "npc.key"), PersistentDataType.STRING);
-                    if (!LolaRoleplay.openQueue.contains(player.getName())) {
-                        try {
-                            final RoleplayID id = RoleplayID.valueOf(key);
-                            if (id == RoleplayID.FEATURE_LOLA) {
-                                this.lolaRoleplay.openLolaByNpc(player);
-                            }
-                        } catch (final Exception ignored) {
-                        }
-                    }
-                    event.setCancelled(true);
-                }
-            }
-        }
-
-        @EventHandler
-        public void on(final EntityDamageByEntityEvent event) {
-            final Entity entity = event.getEntity();
-            if (entity.getType() == EntityType.VILLAGER) {
-                final Villager villager = (Villager) entity;
-                if (villager.getPersistentDataContainer().has(new NamespacedKey(this.lolaRoleplay.serverCore, "npc.key"), PersistentDataType.STRING)) {
-                    final String key = villager.getPersistentDataContainer().get(new NamespacedKey(this.lolaRoleplay.serverCore, "npc.key"), PersistentDataType.STRING);
-                    if (event.getDamager() instanceof final Player player) {
-                        if (!LolaRoleplay.openQueue.contains(player.getName())) {
-                            try {
-                                final RoleplayID id = RoleplayID.valueOf(key);
-                                if (id == RoleplayID.FEATURE_LOLA) {
-                                    this.lolaRoleplay.openLolaByNpc(player);
-                                }
-                            } catch (final Exception ignored) {
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
+        RoleplayListener.openQueue.add(player.getName());
     }
 
 }
