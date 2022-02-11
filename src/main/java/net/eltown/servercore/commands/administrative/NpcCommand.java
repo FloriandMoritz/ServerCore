@@ -6,6 +6,7 @@ import net.eltown.servercore.components.forms.simple.SimpleWindow;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
@@ -35,11 +36,25 @@ public class NpcCommand extends Command {
     public boolean execute(@NotNull CommandSender sender, @NotNull String s, @NotNull String[] args) {
         if (!sender.hasPermission(this.getPermission())) return true;
         if (sender instanceof Player player) {
-            final SimpleWindow mainWindow = new SimpleWindow.Builder("§7» §8NPC", "\n\n")
-                    .addButton("§8» §fNPC erstellen", this::openCreateNpc)
-                    .addButton("§8» §fNPC bearbeiten", this::openEditNpc)
-                    .build();
-            mainWindow.send(player);
+            if (args.length == 2) {
+                if (args[0].equals("fnpc")) {
+                    final ArmorStand armorStand = (ArmorStand) player.getLocation().getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
+                    armorStand.getPersistentDataContainer().set(new NamespacedKey(ServerCore.getServerCore(), "fnpc.key"), PersistentDataType.STRING, args[1]);
+                    armorStand.setGravity(false);
+                    armorStand.setCanPickupItems(false);
+                    armorStand.setCustomNameVisible(false);
+                    armorStand.setVisible(false);
+                    armorStand.setCanMove(false);
+                    armorStand.setInvulnerable(true);
+                    player.sendMessage("§8» §fCore §8| §7Der FNPC wurde erstellt.");
+                }
+            } else {
+                final SimpleWindow mainWindow = new SimpleWindow.Builder("§7» §8NPC", "\n\n")
+                        .addButton("§8» §fNPC erstellen", this::openCreateNpc)
+                        .addButton("§8» §fNPC bearbeiten", this::openEditNpc)
+                        .build();
+                mainWindow.send(player);
+            }
         }
         return true;
     }

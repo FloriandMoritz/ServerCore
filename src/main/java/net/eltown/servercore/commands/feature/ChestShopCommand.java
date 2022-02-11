@@ -30,25 +30,14 @@ public class ChestShopCommand extends Command {
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String s, @NotNull String[] args) {
         if (sender instanceof Player player) {
-            if (args.length == 1) {
-                if (args[0].equals("bank")) {
-                    final ItemStack bankCard = new ItemStack(Material.PAPER, 1);
-                    final ItemMeta meta = bankCard.getItemMeta();
-                    meta.getPersistentDataContainer().set(new NamespacedKey(this.serverCore, "bank_card"), PersistentDataType.STRING, "A-9P44DWA-03");
-                    meta.displayName(Component.text("§8» §bBankkarte"));
-                    bankCard.setItemMeta(meta);
-                    player.getInventory().addItem(bankCard);
-                }
-                return true;
-            }
-
             final ItemStack itemStack = player.getInventory().getItemInMainHand().clone();
             itemStack.setAmount(1);
 
-            /*if (this.serverCore.getLevelAPI().getLevel(player.getName()).getLevel() < 2) {
+            if (this.serverCore.getLevelAPI().getLevel(player.getName()).getLevel() < 2) {
                 player.sendMessage(Language.get("chestshop.create.invalid.level"));
                 return true;
-            }*/
+            }
+
             if (itemStack.getType() == Material.AIR) {
                 player.sendMessage(Language.get("chestshop.create.invalid.item"));
                 return true;

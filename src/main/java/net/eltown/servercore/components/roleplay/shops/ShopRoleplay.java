@@ -16,7 +16,6 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -165,7 +164,7 @@ public record ShopRoleplay(ServerCore serverCore) {
                         new ChainMessage("Man sagt, ich besäße besondere Kräfte...", 3)
                 ))
         ));
-        availableShops.put(RoleplayID.FARMER, new Shop("Sofi", "§3",
+        availableShops.put(RoleplayID.JOB_FARMER, new Shop("Sofi", "§3",
                 new LinkedList<>(List.of(
                         Material.BEETROOT,
                         Material.CARROT,

@@ -6,10 +6,7 @@ import net.eltown.servercore.components.roleplay.shops.ShopRoleplay;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Villager;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -38,7 +35,23 @@ public record RoleplayListener(ServerCore serverCore) implements Listener {
                         switch (id) {
                             case FEATURE_LOLA -> this.serverCore.getLolaRoleplay().openLolaByNpc(player);
                             case FEATURE_JOHN -> this.serverCore.getJohnRoleplay().openJohnByNpc(player);
+                            case JOB_BANKER -> this.serverCore.getBankRoleplay().openBankManagerByNpc(player);
                             default -> this.serverCore.getShopRoleplay().interact(player, ShopRoleplay.availableShops.get(id));
+                        }
+                    } catch (final Exception ignored) {
+                    }
+                }
+                event.setCancelled(true);
+            }
+        } else if (entity.getType() == EntityType.ARMOR_STAND) {
+            final ArmorStand armorStand = (ArmorStand) entity;
+            if (armorStand.getPersistentDataContainer().has(new NamespacedKey(this.serverCore, "fnpc.key"), PersistentDataType.STRING)) {
+                final String key = armorStand.getPersistentDataContainer().get(new NamespacedKey(this.serverCore, "fnpc.key"), PersistentDataType.STRING);
+                if (!openQueue.contains(player.getName())) {
+                    try {
+                        final RoleplayID id = RoleplayID.valueOf(key);
+                        switch (id) {
+                            case UTIL_ATM -> this.serverCore.getBankRoleplay().openBankLogin(player);
                         }
                     } catch (final Exception ignored) {
                     }
@@ -62,11 +75,29 @@ public record RoleplayListener(ServerCore serverCore) implements Listener {
                             switch (id) {
                                 case FEATURE_LOLA -> this.serverCore.getLolaRoleplay().openLolaByNpc(player);
                                 case FEATURE_JOHN -> this.serverCore.getJohnRoleplay().openJohnByNpc(player);
+                                case JOB_BANKER -> this.serverCore.getBankRoleplay().openBankManagerByNpc(player);
                                 default -> this.serverCore.getShopRoleplay().interact(player, ShopRoleplay.availableShops.get(id));
                             }
                         } catch (final Exception ignored) {
                         }
                     }
+                }
+            }
+        } else if (entity.getType() == EntityType.ARMOR_STAND) {
+            final ArmorStand armorStand = (ArmorStand) entity;
+            if (armorStand.getPersistentDataContainer().has(new NamespacedKey(this.serverCore, "fnpc.key"), PersistentDataType.STRING)) {
+                final String key = armorStand.getPersistentDataContainer().get(new NamespacedKey(this.serverCore, "fnpc.key"), PersistentDataType.STRING);
+                if (event.getDamager() instanceof final Player player) {
+                    if (!openQueue.contains(player.getName())) {
+                        try {
+                            final RoleplayID id = RoleplayID.valueOf(key);
+                            switch (id) {
+                                case UTIL_ATM -> this.serverCore.getBankRoleplay().openBankLogin(player);
+                            }
+                        } catch (final Exception ignored) {
+                        }
+                    }
+                    event.setCancelled(true);
                 }
             }
         }

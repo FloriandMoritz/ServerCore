@@ -8,11 +8,12 @@ public enum RoleplayID {
     SHOP_LUMBERJACK,
     SHOP_MONSTERHUNTER,
     SHOP_BLACKSMITH,
+    SHOP_FISHERMAN,
 
-    BANKER,
-    CRYPTO,
-    COOK,
-    FARMER,
+    JOB_BANKER,
+    JOB_CRYPTO,
+    JOB_COOK,
+    JOB_FARMER,
 
     TOWNHALL_RECEPTION,
     TOWNHALL_TAXES,
@@ -28,6 +29,8 @@ public enum RoleplayID {
     FEATURE_ROB,
     FEATURE_ANNA,
     FEATURE_CARLA,
+
+    UTIL_ATM
 
     ;
 

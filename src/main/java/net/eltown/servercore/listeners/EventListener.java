@@ -19,12 +19,10 @@ import net.eltown.servercore.components.event.MoneyChangeEvent;
 import net.eltown.servercore.components.tinyrabbit.Queue;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Villager;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -229,6 +227,16 @@ public record EventListener(ServerCore serverCore) implements Listener {
                     }
                 }
             }
+        } else if (entity.getType() == EntityType.ARMOR_STAND) {
+            final ArmorStand armorStand = (ArmorStand) entity;
+            if (armorStand.getPersistentDataContainer().has(new NamespacedKey(this.serverCore, "fnpc.key"), PersistentDataType.STRING)) {
+                if (event.getDamager() instanceof final Player player) {
+                    if (player.isOp() && player.getInventory().getItemInMainHand().getType() == Material.BARRIER) {
+                        armorStand.remove();
+                        player.sendMessage("§8» §fCore §8| §7Der FNPC wurde entfernt.");
+                    } else event.setCancelled(true);
+                } else event.setCancelled(true);
+            }
         }
     }
 
@@ -258,7 +266,8 @@ public record EventListener(ServerCore serverCore) implements Listener {
 
     @EventHandler
     public void on(final PlayerArmorStandManipulateEvent event) {
-        if (event.getRightClicked().getPersistentDataContainer().has(new NamespacedKey(ServerCore.getServerCore(), "container.hologram"), PersistentDataType.INTEGER)) {
+        if (event.getRightClicked().getPersistentDataContainer().has(new NamespacedKey(ServerCore.getServerCore(), "container.hologram"), PersistentDataType.INTEGER) ||
+                event.getRightClicked().getPersistentDataContainer().has(new NamespacedKey(ServerCore.getServerCore(), "fnpc.key"), PersistentDataType.INTEGER)) {
             event.setCancelled(true);
         }
     }

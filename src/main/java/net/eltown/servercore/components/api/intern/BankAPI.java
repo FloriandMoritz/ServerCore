@@ -6,8 +6,7 @@ import net.eltown.servercore.components.data.bank.BankCalls;
 import net.eltown.servercore.components.data.bank.BankLog;
 import net.eltown.servercore.components.tinyrabbit.Queue;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -61,6 +60,13 @@ public record BankAPI(ServerCore serverCore) {
 
     public void changeDisplayName(final String account, final String displayName) {
         this.serverCore.getTinyRabbit().send(Queue.BANK_RECEIVE, BankCalls.REQUEST_CHANGE_DISPLAY_NAME.name(), account, displayName);
+    }
+
+    public void getBankAccountsByPlayer(final String player, final Consumer<List<String>> consumer) {
+        this.serverCore.getTinyRabbit().sendAndReceive(delivery -> {
+            if (delivery.getData()[1].equals("null")) consumer.accept(null);
+            else consumer.accept(Arrays.asList(delivery.getData()[1].split("#")));
+        }, Queue.BANK_CALLBACK, BankCalls.REQUEST_BANKACCOUNTS_BY_PLAYER.name(), player);
     }
 
 }
