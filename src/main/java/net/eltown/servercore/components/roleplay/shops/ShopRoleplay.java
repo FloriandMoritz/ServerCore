@@ -182,6 +182,27 @@ public record ShopRoleplay(ServerCore serverCore) {
                         new ChainMessage("Ich ernte nur die besten Früchte!", 3)
                 ))
         ));
+        availableShops.put(RoleplayID.SHOP_FISHERMAN, new Shop("Harvey", "§6",
+                new LinkedList<>(List.of(
+                        Material.COD,
+                        Material.SALMON,
+                        Material.TROPICAL_FISH,
+                        Material.PUFFERFISH,
+                        Material.SEAGRASS,
+                        Material.KELP,
+                        Material.DRIED_KELP,
+                        Material.SEA_PICKLE
+                )),
+                new LinkedList<>(List.of(
+                        new ChainMessage("Ahoi, §a%p§7! Ich verkaufe nur den besten Fisch!", 3),
+                        new ChainMessage("Duuu Landratte!", 2),
+                        new ChainMessage("Mein alter Kutter heißt Maja!", 3),
+                        new ChainMessage("Meine Fischernetze sind immer randvoll.", 3),
+                        new ChainMessage("Alternativ verkaufe ich auch Seetang!", 3),
+                        new ChainMessage("Günstigere Fische gibt es nicht!", 3),
+                        new ChainMessage("Ich begrüße eine treue Kundschaft sehr!", 3)
+                ))
+        ));
     }
 
     public void interact(final Player player, final Shop shop) {
@@ -203,7 +224,7 @@ public record ShopRoleplay(ServerCore serverCore) {
     }
 
     private void openShopItems(final Player player, final Shop shop) {
-        final SimpleWindow.Builder shopItemsWindow = new SimpleWindow.Builder("§7» §8Händler " + shop.name(), "§7Wähle eines der aufgelisteten Items aus, welches du kaufen oder verkaufen möchtest.\n\n");
+        final SimpleWindow.Builder shopItemsWindow = new SimpleWindow.Builder("§7» §8Händler " + shop.name(), "§8» §7Wähle eines der aufgelisteten Items aus, welches du kaufen oder verkaufen möchtest.\n\n");
         shop.items().forEach(material -> {
             this.serverCore.getShopAPI().getItemPrice(material.name(), 1, (buy, sell) -> {
                 shopItemsWindow.addButton(new ItemStack(material).getI18NDisplayName() + "\n" + shop.color() + "§l1x   §r§a+ §r§f$" + this.serverCore.getMoneyFormat().format(buy) + " §8| §c- §r§f$" + this.serverCore.getMoneyFormat().format(sell), "http://45.138.50.23:3000/img/shopitems/" + material.name().toUpperCase() + ".png", e -> {
@@ -215,7 +236,7 @@ public record ShopRoleplay(ServerCore serverCore) {
     }
 
     private void openItemShop(final Player player, final Shop shop, final Material material, final double buy, final double sell) {
-        final SimpleWindow.Builder itemShopWindow = new SimpleWindow.Builder("§7» §8" + new ItemStack(material).getI18NDisplayName(), "§7Bitte wähle, ob du das Item kaufen oder verkaufen möchtest.\n\n");
+        final SimpleWindow.Builder itemShopWindow = new SimpleWindow.Builder("§7» §8" + new ItemStack(material).getI18NDisplayName(), "§8» §7Bitte wähle, ob du das Item kaufen oder verkaufen möchtest.\n\n");
 
         itemShopWindow.addButton("§8» §aKaufen\n§f$" + this.serverCore.getMoneyFormat().format(buy) + " §8pro Item", "", e -> {
             final CustomWindow selectWindow = new CustomWindow("§7» §8" + new ItemStack(material).getI18NDisplayName());
