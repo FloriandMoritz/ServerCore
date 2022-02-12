@@ -18,6 +18,7 @@ import net.eltown.servercore.components.language.Language;
 import net.eltown.servercore.components.roleplay.feature.JohnRoleplay;
 import net.eltown.servercore.components.roleplay.feature.LolaRoleplay;
 import net.eltown.servercore.components.roleplay.jobs.BankRoleplay;
+import net.eltown.servercore.components.roleplay.jobs.CookRoleplay;
 import net.eltown.servercore.components.roleplay.shops.ShopRoleplay;
 import net.eltown.servercore.components.tinyrabbit.TinyRabbit;
 import net.eltown.servercore.listeners.*;
@@ -72,6 +73,7 @@ public class ServerCore extends JavaPlugin {
     private JohnRoleplay johnRoleplay;
     private LolaRoleplay lolaRoleplay;
     private BankRoleplay bankRoleplay;
+    private CookRoleplay cookRoleplay;
     private ShopRoleplay shopRoleplay;
 
     private DecimalFormat moneyFormat;
@@ -192,6 +194,7 @@ public class ServerCore extends JavaPlugin {
         this.johnRoleplay = new JohnRoleplay(this);
         this.lolaRoleplay = new LolaRoleplay(this);
         this.bankRoleplay = new BankRoleplay(this);
+        this.cookRoleplay = new CookRoleplay(this);
         this.shopRoleplay = new ShopRoleplay(this);
 
         this.moneyFormat = new DecimalFormat();

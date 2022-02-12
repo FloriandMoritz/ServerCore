@@ -36,6 +36,7 @@ public record RoleplayListener(ServerCore serverCore) implements Listener {
                             case FEATURE_LOLA -> this.serverCore.getLolaRoleplay().openLolaByNpc(player);
                             case FEATURE_JOHN -> this.serverCore.getJohnRoleplay().openJohnByNpc(player);
                             case JOB_BANKER -> this.serverCore.getBankRoleplay().openBankManagerByNpc(player);
+                            case JOB_COOK -> this.serverCore.getCookRoleplay().openCookByNpc(player);
                             default -> this.serverCore.getShopRoleplay().interact(player, ShopRoleplay.availableShops.get(id));
                         }
                     } catch (final Exception ignored) {
@@ -76,6 +77,7 @@ public record RoleplayListener(ServerCore serverCore) implements Listener {
                                 case FEATURE_LOLA -> this.serverCore.getLolaRoleplay().openLolaByNpc(player);
                                 case FEATURE_JOHN -> this.serverCore.getJohnRoleplay().openJohnByNpc(player);
                                 case JOB_BANKER -> this.serverCore.getBankRoleplay().openBankManagerByNpc(player);
+                                case JOB_COOK -> this.serverCore.getCookRoleplay().openCookByNpc(player);
                                 default -> this.serverCore.getShopRoleplay().interact(player, ShopRoleplay.availableShops.get(id));
                             }
                         } catch (final Exception ignored) {
