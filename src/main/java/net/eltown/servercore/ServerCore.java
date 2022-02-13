@@ -17,6 +17,7 @@ import net.eltown.servercore.components.api.intern.*;
 import net.eltown.servercore.components.language.Language;
 import net.eltown.servercore.components.roleplay.feature.JohnRoleplay;
 import net.eltown.servercore.components.roleplay.feature.LolaRoleplay;
+import net.eltown.servercore.components.roleplay.government.TownhallRoleplay;
 import net.eltown.servercore.components.roleplay.jobs.BankRoleplay;
 import net.eltown.servercore.components.roleplay.jobs.CookRoleplay;
 import net.eltown.servercore.components.roleplay.shops.ShopRoleplay;
@@ -27,6 +28,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.bukkit.Location;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -72,6 +74,7 @@ public class ServerCore extends JavaPlugin {
 
     private JohnRoleplay johnRoleplay;
     private LolaRoleplay lolaRoleplay;
+    private TownhallRoleplay townhallRoleplay;
     private BankRoleplay bankRoleplay;
     private CookRoleplay cookRoleplay;
     private ShopRoleplay shopRoleplay;
@@ -193,6 +196,7 @@ public class ServerCore extends JavaPlugin {
          */
         this.johnRoleplay = new JohnRoleplay(this);
         this.lolaRoleplay = new LolaRoleplay(this);
+        this.townhallRoleplay = new TownhallRoleplay(this);
         this.bankRoleplay = new BankRoleplay(this);
         this.cookRoleplay = new CookRoleplay(this);
         this.shopRoleplay = new ShopRoleplay(this);
@@ -360,6 +364,17 @@ public class ServerCore extends JavaPlugin {
             }
         }
         return free.get() >= itemStack.getAmount();
+    }
+
+    public boolean isInArea(final Location location, final Location pos1, final Location pos2) {
+        if (!location.getWorld().getName().equals(pos1.getWorld().getName())) return false;
+        double minX = Math.min(pos1.getX(), pos2.getX());
+        double maxX = Math.max(pos1.getX(), pos2.getX());
+        double minY = Math.min(pos1.getY(), pos2.getY());
+        double maxY = Math.max(pos1.getY(), pos2.getY());
+        double minZ = Math.min(pos1.getZ(), pos2.getZ());
+        double maxZ = Math.max(pos1.getZ(), pos2.getZ());
+        return location.getX() >= minX && location.getX() <= maxX && location.getY() >= minY && location.getY() <= maxY && location.getZ() >= minZ && location.getZ() <= maxZ;
     }
 
     public static ServerCore getServerCore() {

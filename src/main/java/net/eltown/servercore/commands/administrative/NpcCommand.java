@@ -102,6 +102,7 @@ public class NpcCommand extends Command {
                     .dropdown("§8» §fTyp", this.type.toArray(new String[0]))
                     .dropdown("§8» §fBeruf", this.professions.toArray(new String[0]))
                     .toggle("§8» §fTyp und Beruf aktualisieren", false)
+                    .toggle("§8» §fAn meine Position teleportieren", false)
                     .toggle("§8» §cNPC löschen", false);
 
             editWindow.onSubmit((g, h) -> {
@@ -110,7 +111,8 @@ public class NpcCommand extends Command {
                 final String type = this.type.get(h.getDropdown(2));
                 final String profession = this.professions.get(h.getDropdown(3));
                 final boolean updateTypeAndProfession = h.getToggle(4);
-                final boolean delete = h.getToggle(5);
+                final boolean teleport = h.getToggle(5);
+                final boolean delete = h.getToggle(6);
 
                 if (!delete) {
                     if (!key.isEmpty() && !key.equals(villager.getPersistentDataContainer().get(new NamespacedKey(this.serverCore, "npc.key"), PersistentDataType.STRING))) {
@@ -127,6 +129,11 @@ public class NpcCommand extends Command {
                         villager.setVillagerType(Villager.Type.valueOf(type));
                         villager.setProfession(Villager.Profession.valueOf(profession));
                         player.sendMessage("§8» §fCore §8| §7Der Typ und Beruf wurde aktualisiert.");
+                    }
+
+                    if (teleport) {
+                        villager.teleport(player);
+                        player.sendMessage("§8» §fCore §8| §7Die Position wurde aktualisiert.");
                     }
                 } else {
                     villager.setHealth(0);

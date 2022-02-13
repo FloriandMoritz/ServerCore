@@ -79,7 +79,7 @@ public record QuestListener(ServerCore serverCore) implements Listener {
                 final Location pos1 = new Location(this.serverCore.getServer().getWorld(d1[3]), Double.parseDouble(d1[0]), Double.parseDouble(d1[1]), Double.parseDouble(d1[2]));
                 final Location pos2 = new Location(this.serverCore.getServer().getWorld(d2[3]), Double.parseDouble(d2[0]), Double.parseDouble(d2[1]), Double.parseDouble(d2[2]));
 
-                if (this.isInArea(player.getLocation(), pos1, pos2)) {
+                if (this.serverCore.isInArea(player.getLocation(), pos1, pos2)) {
                     this.serverCore.getQuestAPI().addQuestProgress(player, questData.getQuestNameId(), questData.getQuestSubId(), 1);
                 }
             }
@@ -113,17 +113,6 @@ public record QuestListener(ServerCore serverCore) implements Listener {
                 }
             }
         });
-    }
-
-    private boolean isInArea(final Location location, final Location pos1, final Location pos2) {
-        if (!location.getWorld().getName().equals(pos1.getWorld().getName())) return false;
-        double minX = Math.min(pos1.getX(), pos2.getX());
-        double maxX = Math.max(pos1.getX(), pos2.getX());
-        double minY = Math.min(pos1.getY(), pos2.getY());
-        double maxY = Math.max(pos1.getY(), pos2.getY());
-        double minZ = Math.min(pos1.getZ(), pos2.getZ());
-        double maxZ = Math.max(pos1.getZ(), pos2.getZ());
-        return location.getX() >= minX && location.getX() <= maxX && location.getY() >= minY && location.getY() <= maxY && location.getZ() >= minZ && location.getZ() <= maxZ;
     }
 
 }
