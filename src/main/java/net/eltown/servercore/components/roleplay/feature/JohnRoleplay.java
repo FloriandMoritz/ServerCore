@@ -78,7 +78,7 @@ public record JohnRoleplay(ServerCore serverCore) {
 
     private void openJohn(final Player player) {
         final SimpleWindow window = new SimpleWindow.Builder("§7» §8John", "§8» §fJohn §8| §7Schön, dass du hier bist! Welche Truhe möchtest du heute kaufen? Lass dir gerne Zeit und suche dir eine aus!")
-                .addButton("§8» §7§lGewöhnliche §r§7Truhe\n§f§oAb: §r§f$49.95", "http://45.138.50.23:3000/img/ui/crates/common-display.png", e -> {
+                .addButton("§8» §7§lGewöhnliche §r§7Truhe\n§f§oAb: §r§f$49.95", "http://eltown.net:3000/img/ui/crates/common-display.png", e -> {
                     final CustomWindow selectOfferWindow = new CustomWindow("§7» §8Angebot wählen");
                     selectOfferWindow.form()
                             .stepSlider("§8» §fJohn §8| §7Ich habe einige gute Angebote! Suche dir gerne eins aus, wenn du möchtest, um Rabatte zu erhalten",
@@ -97,7 +97,7 @@ public record JohnRoleplay(ServerCore serverCore) {
                     });
                     selectOfferWindow.send(player);
                 })
-                .addButton("§8» §1§lUngewöhnliche §r§1Truhe\n§f§oAb: §r§f$199.95", "http://45.138.50.23:3000/img/ui/crates/uncommon-display.png", e -> {
+                .addButton("§8» §1§lUngewöhnliche §r§1Truhe\n§f§oAb: §r§f$199.95", "http://eltown.net:3000/img/ui/crates/uncommon-display.png", e -> {
                     final CustomWindow selectOfferWindow = new CustomWindow("§7» §8Angebot wählen");
                     selectOfferWindow.form()
                             .stepSlider("§8» §fJohn §8| §7Ich habe einige gute Angebote! Suche dir gerne eins aus, wenn du möchtest, um Rabatte zu erhalten",
@@ -116,7 +116,7 @@ public record JohnRoleplay(ServerCore serverCore) {
                     });
                     selectOfferWindow.send(player);
                 })
-                .addButton("§8» §5§lEpische §r§5Truhe\n§f§oAb: §r§f$399.95", "http://45.138.50.23:3000/img/ui/crates/epic-display.png", e -> {
+                .addButton("§8» §5§lEpische §r§5Truhe\n§f§oAb: §r§f$399.95", "http://eltown.net:3000/img/ui/crates/epic-display.png", e -> {
                     final CustomWindow selectOfferWindow = new CustomWindow("§7» §8Angebot wählen");
                     selectOfferWindow.form()
                             .stepSlider("§8» §fJohn §8| §7Ich habe einige gute Angebote! Suche dir gerne eins aus, wenn du möchtest, um Rabatte zu erhalten",
@@ -135,7 +135,7 @@ public record JohnRoleplay(ServerCore serverCore) {
                     });
                     selectOfferWindow.send(player);
                 })
-                .addButton("§8» §g§lLegendäre §r§gTruhe\n§f§oAb: §r§f$799.95", "http://45.138.50.23:3000/img/ui/crates/legendary-display.png", e -> {
+                .addButton("§8» §g§lLegendäre §r§gTruhe\n§f§oAb: §r§f$799.95", "http://eltown.net:3000/img/ui/crates/legendary-display.png", e -> {
                     final CustomWindow selectOfferWindow = new CustomWindow("§7» §8Angebot wählen");
                     selectOfferWindow.form()
                             .stepSlider("§8» §fJohn §8| §7Ich habe einige gute Angebote! Suche dir gerne eins aus, wenn du möchtest, um Rabatte zu erhalten",
@@ -198,7 +198,7 @@ public record JohnRoleplay(ServerCore serverCore) {
         player.playSound(player.getLocation(), "random.enderchestopen", 2, 3);
         this.serverCore.getCrateAPI().getPlayerData(player.getName(), map -> {
             final SimpleWindow window = new SimpleWindow.Builder("§7» §8Glückstruhen", "§8» §fWähle eine Truhe aus, um diese zu öffnen. Du kannst dir bei John Truhen kaufen. Manchmal hat er sogar spezielle Angebote!\n\n")
-                    .addButton("§8» §7§lGewöhnliche §r§7Truhe\n§f§oVerfügbar: §r§8[§f" + map.getOrDefault("common", 0) + "§8]", "http://45.138.50.23:3000/img/ui/crates/common-display.png", e -> {
+                    .addButton("§8» §7§lGewöhnliche §r§7Truhe\n§f§oVerfügbar: §r§8[§f" + map.getOrDefault("common", 0) + "§8]", "http://eltown.net:3000/img/ui/crates/common-display.png", e -> {
                         if (crateInUse) {
                             player.sendMessage(Language.get("crate.already.in.use"));
                             return;
@@ -209,7 +209,7 @@ public record JohnRoleplay(ServerCore serverCore) {
                             player.sendMessage(Language.get("crate.no.crates"));
                         }
                     })
-                    .addButton("§8» §1§lUngewöhnliche §r§1Truhe\n§f§oVerfügbar: §r§8[§f" + map.getOrDefault("uncommon", 0) + "§8]", "http://45.138.50.23:3000/img/ui/crates/uncommon-display.png", e -> {
+                    .addButton("§8» §1§lUngewöhnliche §r§1Truhe\n§f§oVerfügbar: §r§8[§f" + map.getOrDefault("uncommon", 0) + "§8]", "http://eltown.net:3000/img/ui/crates/uncommon-display.png", e -> {
                         if (crateInUse) {
                             player.sendMessage(Language.get("crate.already.in.use"));
                             return;
@@ -220,7 +220,7 @@ public record JohnRoleplay(ServerCore serverCore) {
                             player.sendMessage(Language.get("crate.no.crates"));
                         }
                     })
-                    .addButton("§8» §5§lEpische §r§5Truhe\n§f§oVerfügbar: §r§8[§f" + map.getOrDefault("epic", 0) + "§8]", "http://45.138.50.23:3000/img/ui/crates/epic-display.png", e -> {
+                    .addButton("§8» §5§lEpische §r§5Truhe\n§f§oVerfügbar: §r§8[§f" + map.getOrDefault("epic", 0) + "§8]", "http://eltown.net:3000/img/ui/crates/epic-display.png", e -> {
                         if (crateInUse) {
                             player.sendMessage(Language.get("crate.already.in.use"));
                             return;
@@ -231,7 +231,7 @@ public record JohnRoleplay(ServerCore serverCore) {
                             player.sendMessage(Language.get("crate.no.crates"));
                         }
                     })
-                    .addButton("§8» §g§lLegendäre §r§gTruhe\n§f§oVerfügbar: §r§8[§f" + map.getOrDefault("legendary", 0) + "§8]", "http://45.138.50.23:3000/img/ui/crates/legendary-display.png", e -> {
+                    .addButton("§8» §g§lLegendäre §r§gTruhe\n§f§oVerfügbar: §r§8[§f" + map.getOrDefault("legendary", 0) + "§8]", "http://eltown.net:3000/img/ui/crates/legendary-display.png", e -> {
                         if (crateInUse) {
                             player.sendMessage(Language.get("crate.already.in.use"));
                             return;

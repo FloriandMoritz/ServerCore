@@ -54,19 +54,19 @@ public record CookRoleplay(ServerCore serverCore) {
                 .addButton("Kartoffeln und Steak mit Beilage\n§3§lMenü 1   §r§a$9.95", "http://45.138.50.23:3000/img/job/cook/01.png", e -> {
                     this.order(player, 9.95, new ItemStack(Material.COOKED_BEEF, 1), new ItemStack(Material.BAKED_POTATO, 2), new ItemStack(Material.CARROT, 1));
                 })
-                .addButton("Gemüseteller\n§3§lMenü 2   §r§a$6,95", "http://45.138.50.23:3000/img/job/cook/02.png", e -> {
+                .addButton("Gemüseteller\n§3§lMenü 2   §r§a$6,95", "http://eltown.net:3000/img/job/cook/02.png", e -> {
                     this.order(player, 6.95, new ItemStack(Material.BEETROOT, 1), new ItemStack(Material.BAKED_POTATO, 2), new ItemStack(Material.CARROT, 1));
                 })
-                .addButton("Pilzsuppe mit Brot\n§3§lMenü 3   §r§a$7,95", "http://45.138.50.23:3000/img/job/cook/03.png", e -> {
+                .addButton("Pilzsuppe mit Brot\n§3§lMenü 3   §r§a$7,95", "http://eltown.net:3000/img/job/cook/03.png", e -> {
                     this.order(player, 7.95, new ItemStack(Material.MUSHROOM_STEW, 1), new ItemStack(Material.BREAD, 2));
                 })
-                .addButton("Rote Beete Suppe mit Brot\n§3§lMenü 4   §r§a$7,95", "http://45.138.50.23:3000/img/job/cook/04.png", e -> {
+                .addButton("Rote Beete Suppe mit Brot\n§3§lMenü 4   §r§a$7,95", "http://eltown.net:3000/img/job/cook/04.png", e -> {
                     this.order(player, 7.95, new ItemStack(Material.BEETROOT_SOUP, 1), new ItemStack(Material.BREAD, 2));
                 })
-                .addButton("Haseneintopf mit Brot\n§3§lMenü 5   §r§a$8,49", "http://45.138.50.23:3000/img/job/cook/05.png", e -> {
+                .addButton("Haseneintopf mit Brot\n§3§lMenü 5   §r§a$8,49", "http://eltown.net:3000/img/job/cook/05.png", e -> {
                     this.order(player, 8.95, new ItemStack(Material.RABBIT_STEW, 1), new ItemStack(Material.BREAD, 2));
                 })
-                .addButton("Wasser 0,33l\n§3§lGetränk   §r§a$2,49", "http://45.138.50.23:3000/img/job/cook/06.png", e -> {
+                .addButton("Wasser 0,33l\n§3§lGetränk   §r§a$2,49", "http://eltown.net:3000/img/job/cook/06.png", e -> {
                     this.order(player, 2.49, new ItemStack(Material.POTION, 1));
                 })
                 .build();

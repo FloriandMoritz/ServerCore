@@ -72,10 +72,10 @@ public record TownhallRoleplay(ServerCore serverCore) {
 
     private void openReception(final Player player) {
         final SimpleWindow window = new SimpleWindow.Builder("§7» §8Rezeptionist", "§8» §fHerr Kaufmann §8| §7Mit welcher Verwaltungskraft möchten Sie sprechen?")
-                .addButton("§8» §eBauamt\n§fHerr Keppel §8| §9Zimmer 10, 1. OG", "http://45.138.50.23:3000/img/job/rathaus/receptionist_building.png", e -> {
+                .addButton("§8» §eBauamt\n§fHerr Keppel §8| §9Zimmer 10, 1. OG", "http://eltown.net:3000/img/job/rathaus/receptionist_building.png", e -> {
                     this.openConfirmAppointment(player, cachedAgencies.get(10), "Zimmer 10, 1. OG");
                 })
-                /*.addButton("§8» §eSteuern\n§fFrau Bärwald §8| §9Zimmer 13, 1. OG", "http://45.138.50.23:3000/img/job/rathaus/receptionist_taxes.png", e -> {
+                /*.addButton("§8» §eSteuern\n§fFrau Bärwald §8| §9Zimmer 13, 1. OG", "http://eltown.net:3000/img/job/rathaus/receptionist_taxes.png", e -> {
                     this.openConfirmAppointment(player, cachedAgencies.get(13), "Zimmer 13, 1. OG");
                 })*/
                 .build();
@@ -102,7 +102,7 @@ public record TownhallRoleplay(ServerCore serverCore) {
     public void openHerrKeppel(final Player player, final Agency agency) {
         final SimpleWindow window = new SimpleWindow.Builder("§7» §8" + agency.getName(), "§8» §f" + player.getName() + " §8| §7Hallo, ich habe einen Termin bei Ihnen!\n\n" +
                 "§8» §f" + agency.getName() + " §8| §7Hallo, §a" + player.getName() + "§7! Schön, dass Sie da sind. Was kann ich für Sie tun?")
-                .addButton("§8» §eGrundstücke\n§8- §fBaurechte §8-", "http://45.138.50.23:3000/img/job/rathaus/building_build_permissions.png", e -> {
+                .addButton("§8» §eGrundstücke\n§8- §fBaurechte §8-", "http://eltown.net:3000/img/job/rathaus/building_build_permissions.png", e -> {
                     final int plot = this.getNextPlot(player);
                     final String nextPlot = plot != 0 ? "§8» §f" + agency.getName() + " §8| §7Das klingt gut! Ich könnte Ihnen weitere Grundstücksrechte anbieten." : "§8» §f" + agency.getName() + " §8| §7Aktuell kann ich Ihnen leider kein weiteres Grundstück anbieten. Vielleicht stehen bald wieder welche zur Verfügung.";
 
@@ -132,7 +132,7 @@ public record TownhallRoleplay(ServerCore serverCore) {
                     }
                     selectWindow.build().send(player);
                 })
-                .addButton("§8» §cTermin beenden", "http://45.138.50.23:3000/img/ui/cancel.png", e -> {
+                .addButton("§8» §cTermin beenden", "http://eltown.net:3000/img/ui/cancel.png", e -> {
                     this.endAppointment(player, cachedAgencies.get(10));
                 })
                 .build();
@@ -142,7 +142,7 @@ public record TownhallRoleplay(ServerCore serverCore) {
     public void openAdviceBureau(final Player player, final AdviceBureau adviceBureau) {
         final SimpleWindow window = new SimpleWindow.Builder("§7» §8" + adviceBureau.getName(), "§8» §f" + player.getName() + " §8| §7Guten Tag! Ich hätte da ein Anliegen...\n\n" +
                 "§8» §f" + adviceBureau.getName() + " §8| §7Guten Tag, §a" + player.getName() + "§7! Was kann ich für Sie tun?")
-                .addButton("§8» §eChestShop\n§8- §fLizenz beantragen §8-", "http://45.138.50.23:3000/img/job/rathaus/taxes_chestshop_license.png", e -> {
+                .addButton("§8» §eChestShop\n§8- §fLizenz beantragen §8-", "http://eltown.net:3000/img/job/rathaus/taxes_chestshop_license.png", e -> {
                     final ShopLicense shopLicense = this.serverCore.getChestShopAPI().getPlayerLicense(e.getName());
                     final ShopLicense nextShopLicense = this.getNextLicense(e.getName());
                     final String nextLevel = nextShopLicense != null ? "Ich kann Ihnen eine bessere Lizenz anbieten, sofern Sie möchten." : "Da Sie bereits die beste Lizenz besitzen, " +
@@ -153,7 +153,7 @@ public record TownhallRoleplay(ServerCore serverCore) {
                             "erstellbaren Shops.\n§7" + nextLevel);
                     if (nextShopLicense != null) {
                         licenseWindow.addButton("§8» §9" + nextShopLicense.getLicense().displayName() + "-Lizenz\n§a$" +
-                                this.serverCore.getMoneyFormat().format(nextShopLicense.getLicense().money()), "http://45.138.50.23:3000/img/job/rathaus/taxes_chestshop_license_upgrade.png", g -> {
+                                this.serverCore.getMoneyFormat().format(nextShopLicense.getLicense().money()), "http://eltown.net:3000/img/job/rathaus/taxes_chestshop_license_upgrade.png", g -> {
                             final ModalWindow confirmWindow = new ModalWindow.Builder("§7» §8" + adviceBureau.getName(), "§8» §f" + player.getName() + " §8| §7Das klingt interessant...\n\n" +
                                     "§8» §f" + adviceBureau.getName() + " §8| §7Möchten Sie diese Lizenz für eine einmalige Zahlung von §a$" + this.serverCore.getMoneyFormat().format(nextShopLicense.getLicense().money()) + "§7 kaufen?",
                                     "§8» §aLizenz kaufen", "§8» §cAbbrechen")
@@ -177,7 +177,7 @@ public record TownhallRoleplay(ServerCore serverCore) {
                     }
                     licenseWindow.build().send(player);
                 })
-                .addButton("§8» §cGespräch beenden", "http://45.138.50.23:3000/img/ui/cancel.png", e -> {
+                .addButton("§8» §cGespräch beenden", "http://eltown.net:3000/img/ui/cancel.png", e -> {
                     this.endAdviceBureauAppointment(player, cachedAdviceBureau.get(adviceBureau.getHolder()));
                 })
                 .build();

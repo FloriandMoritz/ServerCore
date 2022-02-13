@@ -227,7 +227,7 @@ public record ShopRoleplay(ServerCore serverCore) {
         final SimpleWindow.Builder shopItemsWindow = new SimpleWindow.Builder("§7» §8Händler " + shop.name(), "§8» §7Wähle eines der aufgelisteten Items aus, welches du kaufen oder verkaufen möchtest.\n\n");
         shop.items().forEach(material -> {
             this.serverCore.getShopAPI().getItemPrice(material.name(), 1, (buy, sell) -> {
-                shopItemsWindow.addButton(new ItemStack(material).getI18NDisplayName() + "\n" + shop.color() + "§l1x   §r§a+ §r§f$" + this.serverCore.getMoneyFormat().format(buy) + " §8| §c- §r§f$" + this.serverCore.getMoneyFormat().format(sell), "http://45.138.50.23:3000/img/shopitems/" + material.name().toUpperCase() + ".png", e -> {
+                shopItemsWindow.addButton(new ItemStack(material).getI18NDisplayName() + "\n" + shop.color() + "§l1x   §r§a+ §r§f$" + this.serverCore.getMoneyFormat().format(buy) + " §8| §c- §r§f$" + this.serverCore.getMoneyFormat().format(sell), "http://eltown.net:3000/img/shopitems/" + material.name().toUpperCase() + ".png", e -> {
                     this.openItemShop(player, shop, material, buy, sell);
                 });
             });

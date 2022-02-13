@@ -66,7 +66,7 @@ public record LolaRoleplay(ServerCore serverCore) {
             calendarReward.setTimeZone(TimeZone.getTimeZone("Europe/Berlin"));
 
             if ((calendarReward.get(Calendar.DAY_OF_YEAR) == calendarNow.get(Calendar.DAY_OF_YEAR)) && calendarReward.get(Calendar.YEAR) == calendarNow.get(Calendar.YEAR)) {
-                window.addButton("§8» §1Tägliche Belohnung", "http://45.138.50.23:3000/img/ui/rewards/daily-reward.png", e -> {
+                window.addButton("§8» §1Tägliche Belohnung", "http://eltown.net:3000/img/ui/rewards/daily-reward.png", e -> {
                     final int nextDay = data.day() + 1;
                     if (!(nextDay > 14)) {
                         this.serverCore.getRewardAPI().getRewards(nextDay, dailyRewards -> {
@@ -85,7 +85,7 @@ public record LolaRoleplay(ServerCore serverCore) {
 
             if (((calendarReward.get(Calendar.DAY_OF_YEAR) + 1) == calendarNow.get(Calendar.DAY_OF_YEAR)) && (calendarReward.get(Calendar.YEAR) == calendarNow.get(Calendar.YEAR)) && !(data.day() >= 14)) {
                 this.serverCore.getRewardAPI().getRewards(data.day() + 1, dailyRewards -> {
-                    window.addButton("§8» §1Tägliche Belohnung §8[§c§l!§r§8]", "http://45.138.50.23:3000/img/ui/rewards/daily-reward.png", e -> {
+                    window.addButton("§8» §1Tägliche Belohnung §8[§c§l!§r§8]", "http://eltown.net:3000/img/ui/rewards/daily-reward.png", e -> {
                         final StringBuilder text = new StringBuilder("§8» §fLola §8| §7Herzlichen Glückwunsch! Du bist bei Tag §9" + (data.day() + 1) + " §7angelangt. Hier unten sind deine heutigen Belohnungen aufgelistet, von denen du eine erhälst.\n\n");
                         dailyRewards.forEach(p -> {
                             text.append("§8» §r").append(p.description()).append("\n").append("§1Chance: §f").append(p.chance()).append(" Prozent").append("\n\n");
@@ -112,7 +112,7 @@ public record LolaRoleplay(ServerCore serverCore) {
             } else if (data.day() >= 14) {
                 this.serverCore.getRewardAPI().resetStreak(player.getName());
                 this.serverCore.getRewardAPI().getRewards(1, dailyRewards -> {
-                    window.addButton("§8» §1Tägliche Belohnung §8[§c§l!§r§8]", "http://45.138.50.23:3000/img/ui/rewards/daily-reward.png", e -> {
+                    window.addButton("§8» §1Tägliche Belohnung §8[§c§l!§r§8]", "http://eltown.net:3000/img/ui/rewards/daily-reward.png", e -> {
                         final StringBuilder text = new StringBuilder("§8» §fLola §8| §7Da du deinen §914-Tage-Streak §7vollendet hast, startest du wieder von vorn. Viel Glück bei den nächsten 14 Tagen!\n\n");
                         dailyRewards.forEach(p -> {
                             text.append("§8» §r").append(p.description()).append("\n").append("§1Chance: §f").append(p.chance()).append(" Prozent").append("\n\n");
@@ -139,7 +139,7 @@ public record LolaRoleplay(ServerCore serverCore) {
             } else {
                 this.serverCore.getRewardAPI().resetStreak(player.getName());
                 this.serverCore.getRewardAPI().getRewards(1, dailyRewards -> {
-                    window.addButton("§8» §1Tägliche Belohnung §8[§c§l!§r§8]", "http://45.138.50.23:3000/img/ui/rewards/daily-reward.png", e -> {
+                    window.addButton("§8» §1Tägliche Belohnung §8[§c§l!§r§8]", "http://eltown.net:3000/img/ui/rewards/daily-reward.png", e -> {
                         final StringBuilder text = new StringBuilder("§8» §fLola §8| §7Du hast leider einen Tag verpasst, daher startest du wieder bei §9Tag 1§7. Komm jeden Tag vorbei, um deine Belohnungen abzuholen. Es lohnt sich!\n\n");
                         dailyRewards.forEach(p -> {
                             text.append("§8» §r").append(p.description()).append("\n").append("§1Chance: §f").append(p.chance()).append(" Prozent").append("\n\n");
@@ -168,11 +168,11 @@ public record LolaRoleplay(ServerCore serverCore) {
 
         this.serverCore.getGiftKeyAPI().getCodes(player.getName(), codes -> {
             if (codes == null) {
-                window.addButton("§8» §1Gutscheine §8[§c0§8]", "http://45.138.50.23:3000/img/ui/rewards/giftkeys.png", e -> {
+                window.addButton("§8» §1Gutscheine §8[§c0§8]", "http://eltown.net:3000/img/ui/rewards/giftkeys.png", e -> {
                     player.sendMessage("§8» §fLola §8| §7Oh, anscheinend hast du keine ausstehenden Gutscheine. Spieler können dir Gutscheine schenken oder du kannst welche bei Events erhalten.");
                 });
             } else {
-                window.addButton("§8» §1Gutscheine §8[§c" + codes.size() + "§8]", "http://45.138.50.23:3000/img/ui/rewards/giftkeys.png", e -> {
+                window.addButton("§8» §1Gutscheine §8[§c" + codes.size() + "§8]", "http://eltown.net:3000/img/ui/rewards/giftkeys.png", e -> {
                     this.openPlayerGiftKeys(player, codes);
                 });
             }
@@ -189,7 +189,7 @@ public record LolaRoleplay(ServerCore serverCore) {
                 });
             });
         });
-        window.addButton("§8» §cZurück", "http://45.138.50.23:3000/img/ui/back.png", this::openLola);
+        window.addButton("§8» §cZurück", "http://eltown.net:3000/img/ui/back.png", this::openLola);
         window.build().send(player);
     }
 
@@ -197,7 +197,7 @@ public record LolaRoleplay(ServerCore serverCore) {
         final String remainingTime = giftkey.getDuration() == -1 ? "§8» §1Zeitlicher Ablauf: §fKeiner" : "§8» §1Zeitlicher Ablauf in: §f" + this.serverCore.getRemainingTimeFuture(giftkey.getDuration());
         final SimpleWindow.Builder window = new SimpleWindow.Builder("§7» §8Gutschein Information", "§8» §1Gutschein: §f" + giftkey.getKey() + "\n" +
                 "§8» §1Eingelöst: §f" + (giftkey.getUses().size() - 1) + "/" + giftkey.getMaxUses() + "\n§8» §1Belohnungen: §f" + giftkey.getRewards().size() + "\n" + remainingTime + "\n\n");
-        window.addButton("§8» §aJetzt einlösen", "http://45.138.50.23:3000/img/ui/rewards/giftkey-redeem.png", e -> {
+        window.addButton("§8» §aJetzt einlösen", "http://eltown.net:3000/img/ui/rewards/giftkey-redeem.png", e -> {
             this.serverCore.getGiftKeyAPI().getKey(giftkey.getKey(), giftkey1 -> {
                 if (giftkey1 == null) {
                     player.sendMessage(Language.get("giftkey.invalid.key", giftkey1.getKey()));
@@ -258,7 +258,7 @@ public record LolaRoleplay(ServerCore serverCore) {
                 }
             });
         });
-        window.addButton("§8» §9Gutschein verschenken", "http://45.138.50.23:3000/img/ui/rewards/giftkey-donate.png", e -> {
+        window.addButton("§8» §9Gutschein verschenken", "http://eltown.net:3000/img/ui/rewards/giftkey-donate.png", e -> {
             final CustomWindow customWindow = new CustomWindow("§7» §8Gutschein verschenken");
             customWindow.form()
                     .label("§8» §fLola §8| §7Du kannst Gutscheine einfach an einen anderen Spieler verschenken. Dieser wird dann in seinem Gutschein-Menü angezeigt und bei dir verschwindet der Gutschein. " +
@@ -278,13 +278,13 @@ public record LolaRoleplay(ServerCore serverCore) {
             });
             customWindow.send(player);
         });
-        if (codes != null) window.addButton("§8» §cZurück", "http://45.138.50.23:3000/img/ui/back.png", e -> this.openPlayerGiftKeys(player, codes));
+        if (codes != null) window.addButton("§8» §cZurück", "http://eltown.net:3000/img/ui/back.png", e -> this.openPlayerGiftKeys(player, codes));
         window.build().send(player);
     }
 
     private void openTextLola(final Player player, final String text) {
         final SimpleWindow window = new SimpleWindow.Builder("§7» §8Lola's Rewards", text)
-                .addButton("§8» §cZurück", "http://45.138.50.23:3000/img/ui/back.png", this::openLola)
+                .addButton("§8» §cZurück", "http://eltown.net:3000/img/ui/back.png", this::openLola)
                 .build();
         window.send(player);
     }

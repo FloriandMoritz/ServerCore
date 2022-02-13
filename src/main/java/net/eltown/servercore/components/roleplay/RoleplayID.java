@@ -14,6 +14,7 @@ public enum RoleplayID {
     JOB_CRYPTO,
     JOB_COOK,
     JOB_FARMER,
+    JOB_TAILOR,
 
     TOWNHALL_RECEPTION,
     TOWNHALL_TAXES,

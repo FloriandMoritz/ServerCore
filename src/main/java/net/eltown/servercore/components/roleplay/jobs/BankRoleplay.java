@@ -66,8 +66,8 @@ public record BankRoleplay(ServerCore serverCore) {
     public void openBankAccount(final Player player, final String account) {
         this.serverCore.getBankAPI().getAccount(account, bankAccount -> {
             final SimpleWindow window = new SimpleWindow.Builder("§7» §8Bankkonto", "§8» §fKonto: §9" + account + "\n§8» §fName: §9" + bankAccount.getDisplayName() + "\n§8» §fInhaber: §9" + bankAccount.getOwner() + "\n\n§8» §fGuthaben: §a$" + this.serverCore.getMoneyFormat().format(bankAccount.getBalance()) + "\n")
-                    .addButton("§8» §3Guthaben einzahlen", "http://45.138.50.23:3000/img/job/banker/deposit.png", e -> this.openAccountDeposit(e, bankAccount.getAccount()))
-                    .addButton("§8» §3Guthaben abheben", "http://45.138.50.23:3000/img/job/banker/withdraw.png", e -> this.openAccountWithdraw(e, bankAccount.getAccount()))
+                    .addButton("§8» §3Guthaben einzahlen", "http://eltown.net:3000/img/job/banker/deposit.png", e -> this.openAccountDeposit(e, bankAccount.getAccount()))
+                    .addButton("§8» §3Guthaben abheben", "http://eltown.net:3000/img/job/banker/withdraw.png", e -> this.openAccountWithdraw(e, bankAccount.getAccount()))
                     .build();
             window.send(player);
         });
@@ -160,9 +160,9 @@ public record BankRoleplay(ServerCore serverCore) {
 
     public void openBankManager(final Player player) {
         final SimpleWindow window = new SimpleWindow.Builder("§7» §8Banker James", "\n\n")
-                .addButton("§8» §fNeues Konto eröffnen", "http://45.138.50.23:3000/img/job/banker/create_account.png", this::openCreateBankAccount)
-                .addButton("§8» §fBankkonto Beratung", "http://45.138.50.23:3000/img/job/banker/manage-account.png", this::openBankManagerService)
-                .addButton("§8» §fBankkarte verloren", "http://45.138.50.23:3000/img/job/banker/forgot-password.png", this::openNewBankCard)
+                .addButton("§8» §fNeues Konto eröffnen", "http://eltown.net:3000/img/job/banker/create_account.png", this::openCreateBankAccount)
+                .addButton("§8» §fBankkonto Beratung", "http://eltown.net:3000/img/job/banker/manage-account.png", this::openBankManagerService)
+                .addButton("§8» §fBankkarte verloren", "http://eltown.net:3000/img/job/banker/forgot-password.png", this::openNewBankCard)
                 .build();
         window.send(player);
     }
@@ -197,9 +197,9 @@ public record BankRoleplay(ServerCore serverCore) {
                     if (bankAccount != null) {
                         if (bankAccount.getOwner().equals(player.getName())) {
                             final SimpleWindow window = new SimpleWindow.Builder("§7» §8Service wählen", "Bitte suche dir eines der folgenden Aktionen aus, um fortzufahren.\n\n§8» §fKonto: §9" + bankAccount.getAccount() + "\n§8» §fName: §9" + bankAccount.getDisplayName())
-                                    .addButton("§8» §9Kontoaktivität", "http://45.138.50.23:3000/img/job/banker/manage-account-log.png", e -> this.openBankManagerAccountLog(player, bankAccount))
-                                    .addButton("§8» §9Bankkarte", "http://45.138.50.23:3000/img/job/banker/manage-account.png", e -> this.openBankManagerAccountNewCard(player, bankAccount))
-                                    .addButton("§8» §9Einstellungen", "http://45.138.50.23:3000/img/job/banker/manage-account-settings.png", e -> this.openBankManagerAccountSettings(player, bankAccount))
+                                    .addButton("§8» §9Kontoaktivität", "http://eltown.net:3000/img/job/banker/manage-account-log.png", e -> this.openBankManagerAccountLog(player, bankAccount))
+                                    .addButton("§8» §9Bankkarte", "http://eltown.net:3000/img/job/banker/manage-account.png", e -> this.openBankManagerAccountNewCard(player, bankAccount))
+                                    .addButton("§8» §9Einstellungen", "http://eltown.net:3000/img/job/banker/manage-account-settings.png", e -> this.openBankManagerAccountSettings(player, bankAccount))
                                     .build();
                             window.send(player);
                         } else {
@@ -225,13 +225,13 @@ public record BankRoleplay(ServerCore serverCore) {
                 final SimpleWindow logWindow = new SimpleWindow.Builder("§7» §8Kontoaktivität", "§fKonto: §9" + bankAccount.getAccount() + "\n§fName: §9" + bankAccount.getDisplayName() + "\n\n" +
                         "§fLogID: §1" + bankLog.getLogId() + "\n" + "§fAktion: §1" + bankLog.getTitle() + "\n" + "§fBeschreibung: §1" + bankLog.getDetails() + "\n" +
                         "§fDatum: §1" + bankLog.getDate() + "\n\n")
-                        .addButton("§8» §cZurück", "http://45.138.50.23:3000/img/ui/back.png", h -> this.openBankManagerAccountLog(player, bankAccount))
+                        .addButton("§8» §cZurück", "http://eltown.net:3000/img/ui/back.png", h -> this.openBankManagerAccountLog(player, bankAccount))
                         .build();
                 logWindow.send(player);
             });
         });
 
-        window.addButton("§8» §cZurück", "http://45.138.50.23:3000/img/ui/back.png", this::openBankManagerService);
+        window.addButton("§8» §cZurück", "http://eltown.net:3000/img/ui/back.png", this::openBankManagerService);
         window.build().send(player);
     }
 

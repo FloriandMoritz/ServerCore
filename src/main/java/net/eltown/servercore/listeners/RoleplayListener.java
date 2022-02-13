@@ -48,42 +48,7 @@ public record RoleplayListener(ServerCore serverCore) implements Listener {
             final Villager villager = (Villager) entity;
             if (villager.getPersistentDataContainer().has(new NamespacedKey(this.serverCore, "npc.key"), PersistentDataType.STRING)) {
                 final String key = villager.getPersistentDataContainer().get(new NamespacedKey(this.serverCore, "npc.key"), PersistentDataType.STRING);
-                if (!openQueue.contains(player.getName())) {
-                    try {
-                        final RoleplayID id = RoleplayID.valueOf(key);
-                        switch (id) {
-                            case FEATURE_LOLA -> this.serverCore.getLolaRoleplay().openLolaByNpc(player);
-                            case FEATURE_JOHN -> this.serverCore.getJohnRoleplay().openJohnByNpc(player);
-
-                            case JOB_BANKER -> this.serverCore.getBankRoleplay().openBankManagerByNpc(player);
-                            case JOB_COOK -> this.serverCore.getCookRoleplay().openCookByNpc(player);
-
-                            case TOWNHALL_RECEPTION -> this.serverCore.getTownhallRoleplay().openReceptionByNpc(player);
-                            case TOWNHALL_BUILDING -> {
-                                if (this.serverCore.getTownhallRoleplay().isInAppointment(player.getName(), 10)) {
-                                    this.serverCore.getTownhallRoleplay().openHerrKeppel(player, TownhallRoleplay.cachedAgencies.get(10));
-                                }
-                            }
-                            case TOWNHALL_ADVICE_BUREAU_1 -> {
-                                if (this.serverCore.getTownhallRoleplay().isInAdviceBureauAppointment(player.getName(), 1)) {
-                                    this.serverCore.getTownhallRoleplay().openAdviceBureau(player, TownhallRoleplay.cachedAdviceBureau.get(1));
-                                }
-                            }
-                            case TOWNHALL_ADVICE_BUREAU_2 -> {
-                                if (this.serverCore.getTownhallRoleplay().isInAdviceBureauAppointment(player.getName(), 2)) {
-                                    this.serverCore.getTownhallRoleplay().openAdviceBureau(player, TownhallRoleplay.cachedAdviceBureau.get(2));
-                                }
-                            }
-                            case TOWNHALL_ADVICE_BUREAU_3 -> {
-                                if (this.serverCore.getTownhallRoleplay().isInAdviceBureauAppointment(player.getName(), 3)) {
-                                    this.serverCore.getTownhallRoleplay().openAdviceBureau(player, TownhallRoleplay.cachedAdviceBureau.get(3));
-                                }
-                            }
-                            default -> this.serverCore.getShopRoleplay().interact(player, ShopRoleplay.availableShops.get(id));
-                        }
-                    } catch (final Exception ignored) {
-                    }
-                }
+                this.handleInteraction(key, player);
                 event.setCancelled(true);
             }
         } else if (entity.getType() == EntityType.ARMOR_STAND) {
@@ -112,42 +77,7 @@ public record RoleplayListener(ServerCore serverCore) implements Listener {
             if (villager.getPersistentDataContainer().has(new NamespacedKey(this.serverCore, "npc.key"), PersistentDataType.STRING)) {
                 final String key = villager.getPersistentDataContainer().get(new NamespacedKey(this.serverCore, "npc.key"), PersistentDataType.STRING);
                 if (event.getDamager() instanceof final Player player) {
-                    if (!openQueue.contains(player.getName())) {
-                        try {
-                            final RoleplayID id = RoleplayID.valueOf(key);
-                            switch (id) {
-                                case FEATURE_LOLA -> this.serverCore.getLolaRoleplay().openLolaByNpc(player);
-                                case FEATURE_JOHN -> this.serverCore.getJohnRoleplay().openJohnByNpc(player);
-
-                                case JOB_BANKER -> this.serverCore.getBankRoleplay().openBankManagerByNpc(player);
-                                case JOB_COOK -> this.serverCore.getCookRoleplay().openCookByNpc(player);
-
-                                case TOWNHALL_RECEPTION -> this.serverCore.getTownhallRoleplay().openReceptionByNpc(player);
-                                case TOWNHALL_BUILDING -> {
-                                    if (this.serverCore.getTownhallRoleplay().isInAppointment(player.getName(), 10)) {
-                                        this.serverCore.getTownhallRoleplay().openHerrKeppel(player, TownhallRoleplay.cachedAgencies.get(10));
-                                    }
-                                }
-                                case TOWNHALL_ADVICE_BUREAU_1 -> {
-                                    if (this.serverCore.getTownhallRoleplay().isInAdviceBureauAppointment(player.getName(), 1)) {
-                                        this.serverCore.getTownhallRoleplay().openAdviceBureau(player, TownhallRoleplay.cachedAdviceBureau.get(1));
-                                    }
-                                }
-                                case TOWNHALL_ADVICE_BUREAU_2 -> {
-                                    if (this.serverCore.getTownhallRoleplay().isInAdviceBureauAppointment(player.getName(), 2)) {
-                                        this.serverCore.getTownhallRoleplay().openAdviceBureau(player, TownhallRoleplay.cachedAdviceBureau.get(2));
-                                    }
-                                }
-                                case TOWNHALL_ADVICE_BUREAU_3 -> {
-                                    if (this.serverCore.getTownhallRoleplay().isInAdviceBureauAppointment(player.getName(), 3)) {
-                                        this.serverCore.getTownhallRoleplay().openAdviceBureau(player, TownhallRoleplay.cachedAdviceBureau.get(3));
-                                    }
-                                }
-                                default -> this.serverCore.getShopRoleplay().interact(player, ShopRoleplay.availableShops.get(id));
-                            }
-                        } catch (final Exception ignored) {
-                        }
-                    }
+                    this.handleInteraction(key, player);
                 }
             }
         } else if (entity.getType() == EntityType.ARMOR_STAND) {
@@ -166,6 +96,46 @@ public record RoleplayListener(ServerCore serverCore) implements Listener {
                     }
                     event.setCancelled(true);
                 }
+            }
+        }
+    }
+
+    private void handleInteraction(final String key, final Player player) {
+        if (!openQueue.contains(player.getName())) {
+            try {
+                final RoleplayID id = RoleplayID.valueOf(key);
+                switch (id) {
+                    case FEATURE_LOLA -> this.serverCore.getLolaRoleplay().openLolaByNpc(player);
+                    case FEATURE_JOHN -> this.serverCore.getJohnRoleplay().openJohnByNpc(player);
+
+                    case JOB_BANKER -> this.serverCore.getBankRoleplay().openBankManagerByNpc(player);
+                    case JOB_COOK -> this.serverCore.getCookRoleplay().openCookByNpc(player);
+                    case JOB_TAILOR -> this.serverCore.getTailorRoleplay().openKarlByNpc(player);
+
+                    case TOWNHALL_RECEPTION -> this.serverCore.getTownhallRoleplay().openReceptionByNpc(player);
+                    case TOWNHALL_BUILDING -> {
+                        if (this.serverCore.getTownhallRoleplay().isInAppointment(player.getName(), 10)) {
+                            this.serverCore.getTownhallRoleplay().openHerrKeppel(player, TownhallRoleplay.cachedAgencies.get(10));
+                        }
+                    }
+                    case TOWNHALL_ADVICE_BUREAU_1 -> {
+                        if (this.serverCore.getTownhallRoleplay().isInAdviceBureauAppointment(player.getName(), 1)) {
+                            this.serverCore.getTownhallRoleplay().openAdviceBureau(player, TownhallRoleplay.cachedAdviceBureau.get(1));
+                        }
+                    }
+                    case TOWNHALL_ADVICE_BUREAU_2 -> {
+                        if (this.serverCore.getTownhallRoleplay().isInAdviceBureauAppointment(player.getName(), 2)) {
+                            this.serverCore.getTownhallRoleplay().openAdviceBureau(player, TownhallRoleplay.cachedAdviceBureau.get(2));
+                        }
+                    }
+                    case TOWNHALL_ADVICE_BUREAU_3 -> {
+                        if (this.serverCore.getTownhallRoleplay().isInAdviceBureauAppointment(player.getName(), 3)) {
+                            this.serverCore.getTownhallRoleplay().openAdviceBureau(player, TownhallRoleplay.cachedAdviceBureau.get(3));
+                        }
+                    }
+                    default -> this.serverCore.getShopRoleplay().interact(player, ShopRoleplay.availableShops.get(id));
+                }
+            } catch (final Exception ignored) {
             }
         }
     }

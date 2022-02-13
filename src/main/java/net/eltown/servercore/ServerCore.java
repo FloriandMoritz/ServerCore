@@ -20,6 +20,7 @@ import net.eltown.servercore.components.roleplay.feature.LolaRoleplay;
 import net.eltown.servercore.components.roleplay.government.TownhallRoleplay;
 import net.eltown.servercore.components.roleplay.jobs.BankRoleplay;
 import net.eltown.servercore.components.roleplay.jobs.CookRoleplay;
+import net.eltown.servercore.components.roleplay.jobs.TailorRoleplay;
 import net.eltown.servercore.components.roleplay.shops.ShopRoleplay;
 import net.eltown.servercore.components.tinyrabbit.TinyRabbit;
 import net.eltown.servercore.listeners.*;
@@ -77,6 +78,7 @@ public class ServerCore extends JavaPlugin {
     private TownhallRoleplay townhallRoleplay;
     private BankRoleplay bankRoleplay;
     private CookRoleplay cookRoleplay;
+    private TailorRoleplay tailorRoleplay;
     private ShopRoleplay shopRoleplay;
 
     private DecimalFormat moneyFormat;
@@ -135,12 +137,12 @@ public class ServerCore extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new FurnaceListener(this), this);
         this.getServer().getPluginManager().registerEvents(new LevelListener(this, this.getConfig().getBoolean("settings.farmxp")), this);
         this.getServer().getPluginManager().registerEvents(new QuestListener(this), this);
-        this.getServer().getPluginManager().registerEvents(new RoleplayListener(this), this);
+        if (this.serverName.equals("server-1")) this.getServer().getPluginManager().registerEvents(new RoleplayListener(this), this);
 
         /*
          * Commands
          */
-        this.getServer().getCommandMap().register("sys", new CrateSystemCommand(this));
+        if (this.serverName.equals("server-1")) this.getServer().getCommandMap().register("sys", new CrateSystemCommand(this));
         this.getServer().getCommandMap().register("sys", new FlyCommand(this));
         this.getServer().getCommandMap().register("sys", new GamemodeCommand(this));
         this.getServer().getCommandMap().register("sys", new GiftkeySystemCommand(this));
@@ -194,12 +196,15 @@ public class ServerCore extends JavaPlugin {
         /*
          * Other
          */
-        this.johnRoleplay = new JohnRoleplay(this);
-        this.lolaRoleplay = new LolaRoleplay(this);
-        this.townhallRoleplay = new TownhallRoleplay(this);
-        this.bankRoleplay = new BankRoleplay(this);
-        this.cookRoleplay = new CookRoleplay(this);
-        this.shopRoleplay = new ShopRoleplay(this);
+        if (this.serverName.equals("server-1")) {
+            this.johnRoleplay = new JohnRoleplay(this);
+            this.lolaRoleplay = new LolaRoleplay(this);
+            this.townhallRoleplay = new TownhallRoleplay(this);
+            this.bankRoleplay = new BankRoleplay(this);
+            this.cookRoleplay = new CookRoleplay(this);
+            this.tailorRoleplay = new TailorRoleplay(this);
+            this.shopRoleplay = new ShopRoleplay(this);
+        }
 
         this.moneyFormat = new DecimalFormat();
         this.moneyFormat.setMaximumFractionDigits(2);
