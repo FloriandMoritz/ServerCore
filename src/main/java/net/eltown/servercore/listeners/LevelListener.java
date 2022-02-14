@@ -3,6 +3,7 @@ package net.eltown.servercore.listeners;
 import net.eltown.servercore.ServerCore;
 import net.eltown.servercore.components.data.level.Level;
 import net.eltown.servercore.components.data.level.LevelCalls;
+import net.eltown.servercore.components.enchantments.CustomEnchantments;
 import net.eltown.servercore.components.tinyrabbit.Queue;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -51,8 +52,6 @@ public class LevelListener implements Listener {
         this.blockXp.put(Material.DIAMOND_ORE, 8.5);
         this.blockXp.put(Material.COPPER_ORE, 3.1);
         this.blockXp.put(Material.DEEPSLATE_COPPER_ORE, 3.4);
-        this.blockXp.put(Material.EMERALD_ORE, 25.0);
-        this.blockXp.put(Material.DEEPSLATE_EMERALD_ORE, 50.0);
         this.blockXp.put(Material.DEEPSLATE_DIAMOND_ORE, 9.75);
         this.blockXp.put(Material.ANCIENT_DEBRIS, 21.8);
         this.blockXp.put(Material.GLOWSTONE, 2.5);
@@ -139,7 +138,21 @@ public class LevelListener implements Listener {
             final ItemStack item = player.getInventory().getItemInMainHand();
             final Block block = event.getBlock();
             if (this.blockXp.containsKey(block.getType())) {
-                this.serverCore.getLevelAPI().addExperience(player, this.blockXp.get(block.getType()));
+                if (SpawnProtectionListener.isInRadius(block.getLocation().toVector())) {
+                    event.setCancelled(true);
+                    return;
+                }
+                if (this.serverCore.getCustomEnchantments().hasEnchantment(item, CustomEnchantments.Enchantment.EXPERIENCE)) {
+                    final int level = this.serverCore.getCustomEnchantments().getLevel(item, CustomEnchantments.Enchantment.EXPERIENCE);
+                    double experience = this.blockXp.get(block.getType());
+                    switch (level) {
+                        case 1 -> experience = experience * 1.25;
+                        case 2 -> experience = experience * 1.75;
+                        case 3 -> experience = experience * 2.25;
+                        case 4 -> experience = experience * 2.75;
+                    }
+                    this.serverCore.getLevelAPI().addExperience(player, experience);
+                } else this.serverCore.getLevelAPI().addExperience(player, this.blockXp.get(block.getType()));
             }
         }
     }
@@ -152,7 +165,17 @@ public class LevelListener implements Listener {
             if (player != null) {
                 final ItemStack item = player.getInventory().getItemInMainHand();
                 if (this.entityXp.containsKey(entity.getType())) {
-                    this.serverCore.getLevelAPI().addExperience(player, this.entityXp.get(entity.getType()));
+                    if (this.serverCore.getCustomEnchantments().hasEnchantment(item, CustomEnchantments.Enchantment.EXPERIENCE)) {
+                        final int level = this.serverCore.getCustomEnchantments().getLevel(item, CustomEnchantments.Enchantment.EXPERIENCE);
+                        double experience = this.entityXp.get(entity.getType());
+                        switch (level) {
+                            case 1 -> experience = experience * 1.25;
+                            case 2 -> experience = experience * 1.75;
+                            case 3 -> experience = experience * 2.25;
+                            case 4 -> experience = experience * 2.75;
+                        }
+                        this.serverCore.getLevelAPI().addExperience(player, experience);
+                    } else this.serverCore.getLevelAPI().addExperience(player, this.entityXp.get(entity.getType()));
                 }
             }
         }

@@ -14,6 +14,7 @@ import net.eltown.servercore.commands.feature.RedeemCommand;
 import net.eltown.servercore.commands.guardian.*;
 import net.eltown.servercore.commands.teleportation.*;
 import net.eltown.servercore.components.api.intern.*;
+import net.eltown.servercore.components.enchantments.CustomEnchantments;
 import net.eltown.servercore.components.language.Language;
 import net.eltown.servercore.components.roleplay.feature.JohnRoleplay;
 import net.eltown.servercore.components.roleplay.feature.LolaRoleplay;
@@ -81,6 +82,8 @@ public class ServerCore extends JavaPlugin {
     private TailorRoleplay tailorRoleplay;
     private ShopRoleplay shopRoleplay;
 
+    private CustomEnchantments customEnchantments;
+
     private DecimalFormat moneyFormat;
 
     @Override
@@ -138,11 +141,13 @@ public class ServerCore extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new LevelListener(this, this.getConfig().getBoolean("settings.farmxp")), this);
         this.getServer().getPluginManager().registerEvents(new QuestListener(this), this);
         if (this.serverName.equals("server-1")) this.getServer().getPluginManager().registerEvents(new RoleplayListener(this), this);
+        this.getServer().getPluginManager().registerEvents(new SpawnProtectionListener(this), this);
 
         /*
          * Commands
          */
         if (this.serverName.equals("server-1")) this.getServer().getCommandMap().register("sys", new CrateSystemCommand(this));
+        this.getServer().getCommandMap().register("sys", new CustomEnchantmentCommand(this));
         this.getServer().getCommandMap().register("sys", new FlyCommand(this));
         this.getServer().getCommandMap().register("sys", new GamemodeCommand(this));
         this.getServer().getCommandMap().register("sys", new GiftkeySystemCommand(this));
@@ -156,6 +161,7 @@ public class ServerCore extends JavaPlugin {
         this.getServer().getCommandMap().register("sys", new QuestSystemCommand(this));
         this.getServer().getCommandMap().register("sys", new RewardSystemCommand(this));
         this.getServer().getCommandMap().register("sys", new SetSpawnCommand(this));
+        this.getServer().getCommandMap().register("sys", new SpawnProtectionCommand(this));
         this.getServer().getCommandMap().register("sys", new SpeedCommand(this));
 
         this.getServer().getCommandMap().register("sys", new PluginsCommand(this));
@@ -205,6 +211,8 @@ public class ServerCore extends JavaPlugin {
             this.tailorRoleplay = new TailorRoleplay(this);
             this.shopRoleplay = new ShopRoleplay(this);
         }
+
+        this.customEnchantments = new CustomEnchantments(this);
 
         this.moneyFormat = new DecimalFormat();
         this.moneyFormat.setMaximumFractionDigits(2);

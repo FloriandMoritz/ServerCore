@@ -10,6 +10,7 @@ import net.eltown.servercore.components.roleplay.Cooldown;
 import net.eltown.servercore.components.roleplay.RoleplayID;
 import net.eltown.servercore.listeners.RoleplayListener;
 import net.eltown.servercore.utils.Sound;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -72,6 +73,7 @@ public record TailorRoleplay(ServerCore serverCore) {
             final ItemStack itemStack = new ItemStack(material, 1);
             final LeatherArmorMeta meta = (LeatherArmorMeta) itemStack.getItemMeta();
             meta.setColor(this.getColor(colors.get(h.getDropdown(1))));
+            meta.lore(new ArrayList<>(List.of(Component.text("§6Karl's §fOriginal"))));
             itemStack.setItemMeta(meta);
             this.openConfirmBuy(player, itemStack, price);
         });
@@ -81,7 +83,7 @@ public record TailorRoleplay(ServerCore serverCore) {
     public void openConfirmBuy(final Player player, final ItemStack itemStack, final double price) {
         final ModalWindow window = new ModalWindow.Builder("§7» §8Schneider Karl", "§8» §fKarl §8| §7Möchtest du dieses Meisterwerk für §9$" + this.serverCore.getMoneyFormat().format(price) + " §7kaufen?" +
                 "\n\n§cDieser Artikel ist vom Umtausch ausgeschlossen!",
-                "§8» §2Kaufen", "§8» §cAbbrechen")
+                "§8» §aKaufen", "§8» §cAbbrechen")
                 .onYes(e -> {
                     if (this.serverCore.canAddItem(player.getInventory(), itemStack)) {
                         this.serverCore.getEconomyAPI().getMoney(player.getName(), money -> {

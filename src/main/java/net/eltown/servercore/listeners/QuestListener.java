@@ -27,21 +27,21 @@ public record QuestListener(ServerCore serverCore) implements Listener {
     public void on(final BlockBreakEvent event) {
         final Player player = event.getPlayer();
         final Block block = event.getBlock();
-        //if (!SpawnProtectionListener.isInRadius(event.getPlayer())) {
-        if (!this.serverCore.getServerName().equals("server-1")) {
-            if (!placed.contains(block)) {
-                final QuestPlayer questPlayer = QuestAPI.cachedQuestPlayer.get(player.getName());
-                questPlayer.getQuestPlayerData().forEach(questData -> {
-                    if (questData.getData().startsWith("collect")) {
-                        final ItemStack itemStack = SyncAPI.ItemAPI.itemStackFromBase64(questData.getData().split("#")[1]);
-                        if (block.getType() == itemStack.getType()) {
-                            this.serverCore.getQuestAPI().addQuestProgress(player, questData.getQuestNameId(), questData.getQuestSubId(), 1);
+        if (!SpawnProtectionListener.isInRadius(event.getPlayer())) {
+            if (!this.serverCore.getServerName().equals("server-1")) {
+                if (!placed.contains(block)) {
+                    final QuestPlayer questPlayer = QuestAPI.cachedQuestPlayer.get(player.getName());
+                    questPlayer.getQuestPlayerData().forEach(questData -> {
+                        if (questData.getData().startsWith("collect")) {
+                            final ItemStack itemStack = SyncAPI.ItemAPI.itemStackFromBase64(questData.getData().split("#")[1]);
+                            if (block.getType() == itemStack.getType()) {
+                                this.serverCore.getQuestAPI().addQuestProgress(player, questData.getQuestNameId(), questData.getQuestSubId(), 1);
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         }
-        //}
     }
 
     @EventHandler
@@ -49,21 +49,21 @@ public record QuestListener(ServerCore serverCore) implements Listener {
         final Player player = event.getPlayer();
         final Block block = event.getBlock();
 
-        //if (!SpawnProtectionListener.isInRadius(event.getPlayer())) {
-        if (!this.serverCore.getServerName().equals("server-1")) {
-            placed.add(block);
-        }
-
-        final QuestPlayer questPlayer = QuestAPI.cachedQuestPlayer.get(player.getName());
-        questPlayer.getQuestPlayerData().forEach(questData -> {
-            if (questData.getData().startsWith("place")) {
-                final ItemStack itemStack = SyncAPI.ItemAPI.itemStackFromBase64(questData.getData().split("#")[1]);
-                if (block.getType() == itemStack.getType()) {
-                    this.serverCore.getQuestAPI().addQuestProgress(player, questData.getQuestNameId(), questData.getQuestSubId(), 1);
-                }
+        if (!SpawnProtectionListener.isInRadius(event.getPlayer())) {
+            if (!this.serverCore.getServerName().equals("server-1")) {
+                placed.add(block);
             }
-        });
-        //}
+
+            final QuestPlayer questPlayer = QuestAPI.cachedQuestPlayer.get(player.getName());
+            questPlayer.getQuestPlayerData().forEach(questData -> {
+                if (questData.getData().startsWith("place")) {
+                    final ItemStack itemStack = SyncAPI.ItemAPI.itemStackFromBase64(questData.getData().split("#")[1]);
+                    if (block.getType() == itemStack.getType()) {
+                        this.serverCore.getQuestAPI().addQuestProgress(player, questData.getQuestNameId(), questData.getQuestSubId(), 1);
+                    }
+                }
+            });
+        }
     }
 
     @EventHandler
