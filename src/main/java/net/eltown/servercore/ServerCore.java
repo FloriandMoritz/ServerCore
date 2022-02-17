@@ -7,10 +7,7 @@ import net.eltown.servercore.commands.administrative.*;
 import net.eltown.servercore.commands.defaults.PluginsCommand;
 import net.eltown.servercore.commands.defaults.SpawnCommand;
 import net.eltown.servercore.commands.economy.*;
-import net.eltown.servercore.commands.feature.ChestShopCommand;
-import net.eltown.servercore.commands.feature.FriendCommand;
-import net.eltown.servercore.commands.feature.QuestCommand;
-import net.eltown.servercore.commands.feature.RedeemCommand;
+import net.eltown.servercore.commands.feature.*;
 import net.eltown.servercore.commands.guardian.*;
 import net.eltown.servercore.commands.teleportation.*;
 import net.eltown.servercore.components.api.intern.*;
@@ -180,6 +177,7 @@ public class ServerCore extends JavaPlugin {
         this.getServer().getCommandMap().register("sys", new FriendCommand(this));
         this.getServer().getCommandMap().register("sys", new QuestCommand(this));
         this.getServer().getCommandMap().register("sys", new RedeemCommand(this));
+        this.getServer().getCommandMap().register("sys", new VoteCommand(this));
 
         this.getServer().getCommandMap().register("sys", new BanCommand(this));
         this.getServer().getCommandMap().register("sys", new BanlogCommand(this));
