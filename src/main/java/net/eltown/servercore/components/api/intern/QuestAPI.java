@@ -5,6 +5,7 @@ import net.eltown.servercore.components.data.giftkeys.GiftkeyCalls;
 import net.eltown.servercore.components.data.quests.Quest;
 import net.eltown.servercore.components.data.quests.QuestCalls;
 import net.eltown.servercore.components.data.quests.QuestPlayer;
+import net.eltown.servercore.components.event.PlayerQuestCompleteEvent;
 import net.eltown.servercore.components.language.Language;
 import net.eltown.servercore.components.tinyrabbit.Queue;
 import org.bukkit.entity.Player;
@@ -216,14 +217,15 @@ public record QuestAPI(ServerCore serverCore) {
                             this.serverCore.getGroupAPI().addPlayerPermission(player.getName(), reward[1]);
                             player.sendMessage(Language.get("quest.reward.permission", reward[2]));
                         }
-                        case "crate" -> this.serverCore.getCrateAPI().addCrate(player.getName(), reward[1], Integer.parseInt(reward[2]));
-
-                        //player.sendMessage(Language.get("quest.reward.crate", this.serverCore.getFeatureRoleplay().convertToDisplay(reward[1]), Integer.parseInt(reward[2])));
+                        case "crate" -> {
+                            this.serverCore.getCrateAPI().addCrate(player.getName(), reward[1], Integer.parseInt(reward[2]));
+                            player.sendMessage(Language.get("quest.reward.crate", this.serverCore.getCrateAPI().convertToDisplay(reward[1]), Integer.parseInt(reward[2])));
+                        }
                     }
                 });
                 player.sendMessage(" ");
 
-                //this.serverCore.getServer().getPluginManager().callEvent(new QuestCompleteEvent(player, quest, questPlayerData));
+                this.serverCore.getServer().getPluginManager().callEvent(new PlayerQuestCompleteEvent(player, quest));
                 this.updateQuestPlayerData(player.getName());
             }
         });
