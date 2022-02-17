@@ -109,6 +109,7 @@ public record RoleplayListener(ServerCore serverCore) implements Listener {
                     case FEATURE_JOHN -> this.serverCore.getJohnRoleplay().openJohnByNpc(player);
 
                     case JOB_BANKER -> this.serverCore.getBankRoleplay().openBankManagerByNpc(player);
+                    case JOB_BLACKSMITH -> this.serverCore.getBlacksmithRoleplay().openBlacksmithShopByNpc(player);
                     case JOB_COOK -> this.serverCore.getCookRoleplay().openCookByNpc(player);
                     case JOB_TAILOR -> this.serverCore.getTailorRoleplay().openKarlByNpc(player);
 

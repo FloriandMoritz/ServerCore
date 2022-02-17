@@ -7,7 +7,6 @@ public enum RoleplayID {
     SHOP_EXPLORER,
     SHOP_LUMBERJACK,
     SHOP_MONSTERHUNTER,
-    SHOP_BLACKSMITH,
     SHOP_FISHERMAN,
 
     JOB_BANKER,
@@ -15,6 +14,7 @@ public enum RoleplayID {
     JOB_COOK,
     JOB_FARMER,
     JOB_TAILOR,
+    JOB_BLACKSMITH,
 
     TOWNHALL_RECEPTION,
     TOWNHALL_TAXES,

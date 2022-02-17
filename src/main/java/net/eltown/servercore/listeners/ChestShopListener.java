@@ -104,7 +104,7 @@ public record ChestShopListener(ServerCore serverCore) implements Listener {
                                         sign.setGlowingText(true);
                                         sign.update(true);
                                     }
-                                }, 20);
+                                }, 40);
                             } else {
                                 player.sendMessage(Language.get("chestshop.create.invalid.player"));
                                 event.setCancelled(true);

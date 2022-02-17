@@ -20,6 +20,7 @@ import net.eltown.servercore.components.roleplay.feature.JohnRoleplay;
 import net.eltown.servercore.components.roleplay.feature.LolaRoleplay;
 import net.eltown.servercore.components.roleplay.government.TownhallRoleplay;
 import net.eltown.servercore.components.roleplay.jobs.BankRoleplay;
+import net.eltown.servercore.components.roleplay.jobs.BlacksmithRoleplay;
 import net.eltown.servercore.components.roleplay.jobs.CookRoleplay;
 import net.eltown.servercore.components.roleplay.jobs.TailorRoleplay;
 import net.eltown.servercore.components.roleplay.shops.ShopRoleplay;
@@ -78,6 +79,7 @@ public class ServerCore extends JavaPlugin {
     private LolaRoleplay lolaRoleplay;
     private TownhallRoleplay townhallRoleplay;
     private BankRoleplay bankRoleplay;
+    private BlacksmithRoleplay blacksmithRoleplay;
     private CookRoleplay cookRoleplay;
     private TailorRoleplay tailorRoleplay;
     private ShopRoleplay shopRoleplay;
@@ -207,6 +209,7 @@ public class ServerCore extends JavaPlugin {
             this.lolaRoleplay = new LolaRoleplay(this);
             this.townhallRoleplay = new TownhallRoleplay(this);
             this.bankRoleplay = new BankRoleplay(this);
+            this.blacksmithRoleplay = new BlacksmithRoleplay(this);
             this.cookRoleplay = new CookRoleplay(this);
             this.tailorRoleplay = new TailorRoleplay(this);
             this.shopRoleplay = new ShopRoleplay(this);
