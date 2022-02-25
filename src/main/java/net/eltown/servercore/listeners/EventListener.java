@@ -19,7 +19,6 @@ import net.eltown.servercore.components.event.MoneyChangeEvent;
 import net.eltown.servercore.components.tinyrabbit.Queue;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.*;

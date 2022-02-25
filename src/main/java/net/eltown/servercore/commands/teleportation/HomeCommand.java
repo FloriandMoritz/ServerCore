@@ -51,7 +51,6 @@ public class HomeCommand extends Command {
         homes.forEach(e -> {
             form.addButton("§8» §f" + e.getName(), g -> {
                 this.serverCore.getTeleportationAPI().teleportToHome(player, e);
-                player.sendMessage(Language.get("home.teleported", e.getName()));
             });
         });
         form.build().send(player);

@@ -200,7 +200,7 @@ public record BlacksmithRoleplay(ServerCore serverCore) {
             final ModalWindow window = new ModalWindow.Builder("§7» §8Item reparieren", "§fLasse das Item in deiner Hand hier reparieren." +
                     "\n\n§fGrundgebühr: §a$60\n§fSchadensbehebung: §a$" + this.serverCore.getMoneyFormat().format(damageable.getDamage() * .29) + "\n§fBenötigte XP-Level: §a10" +
                     "\n\n§f§lZu zahlen: §r§a$" + this.serverCore.getMoneyFormat().format(costs) + " §fund §a10 XP-Level",
-                    "§7» §aJetzt reparieren", "§7» §cAbbrechen")
+                    "§8» §aJetzt reparieren", "§8» §cAbbrechen")
                     .onYes(e -> {
                         if (player.getLevel() >= 10) {
                             this.serverCore.getEconomyAPI().getMoney(player.getName(), money -> {

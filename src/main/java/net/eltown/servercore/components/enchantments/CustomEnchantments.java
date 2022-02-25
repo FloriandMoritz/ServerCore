@@ -6,6 +6,7 @@ import net.eltown.servercore.components.enchantments.listeners.EmeraldFarmerList
 import net.eltown.servercore.components.enchantments.listeners.LumberjackListener;
 import net.eltown.servercore.components.enchantments.listeners.VeinMiningListener;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -58,6 +59,7 @@ public record CustomEnchantments(ServerCore serverCore) {
     }
 
     public boolean hasEnchantment(final ItemStack itemStack, final Enchantment enchantment) {
+        if (itemStack.getType() == Material.AIR || itemStack.getItemMeta() == null) return false;
         return itemStack.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(this.serverCore, enchantment.name().toUpperCase()), PersistentDataType.INTEGER);
     }
 

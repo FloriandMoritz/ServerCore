@@ -154,6 +154,7 @@ public class ServerCore extends JavaPlugin {
         this.getServer().getCommandMap().register("sys", new HealCommand(this));
         this.getServer().getCommandMap().register("sys", new HologramCommand(this));
         this.getServer().getCommandMap().register("sys", new IdCommand(this));
+        if (this.serverName.equals("server-1")) this.getServer().getCommandMap().register("sys", new ImportChestCommand(this));
         this.getServer().getCommandMap().register("sys", new LevelSystemCommand(this));
         this.getServer().getCommandMap().register("sys", new NpcCommand(this));
         this.getServer().getCommandMap().register("sys", new PrintItemCommand(this));

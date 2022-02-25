@@ -13,12 +13,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class LevelListener implements Listener {
 
@@ -26,6 +29,7 @@ public class LevelListener implements Listener {
     private final boolean allowXp;
     private final HashMap<Material, Double> blockXp = new HashMap<>();
     private final HashMap<EntityType, Double> entityXp = new HashMap<>();
+    private final List<Block> placedBlocks = new ArrayList<>();
 
     public LevelListener(final ServerCore serverCore, final boolean allowXp) {
         this.serverCore = serverCore;
@@ -137,23 +141,33 @@ public class LevelListener implements Listener {
             final Player player = event.getPlayer();
             final ItemStack item = player.getInventory().getItemInMainHand();
             final Block block = event.getBlock();
-            if (this.blockXp.containsKey(block.getType())) {
-                if (SpawnProtectionListener.isInRadius(block.getLocation().toVector())) {
-                    event.setCancelled(true);
-                    return;
-                }
-                if (this.serverCore.getCustomEnchantments().hasEnchantment(item, CustomEnchantments.Enchantment.EXPERIENCE)) {
-                    final int level = this.serverCore.getCustomEnchantments().getLevel(item, CustomEnchantments.Enchantment.EXPERIENCE);
-                    double experience = this.blockXp.get(block.getType());
-                    switch (level) {
-                        case 1 -> experience = experience * 1.25;
-                        case 2 -> experience = experience * 1.75;
-                        case 3 -> experience = experience * 2.25;
-                        case 4 -> experience = experience * 2.75;
+            if (!this.placedBlocks.contains(block)) {
+                if (this.blockXp.containsKey(block.getType())) {
+                    if (SpawnProtectionListener.isInRadius(block.getLocation().toVector())) {
+                        event.setCancelled(true);
+                        return;
                     }
-                    this.serverCore.getLevelAPI().addExperience(player, experience);
-                } else this.serverCore.getLevelAPI().addExperience(player, this.blockXp.get(block.getType()));
+                    if (this.serverCore.getCustomEnchantments().hasEnchantment(item, CustomEnchantments.Enchantment.EXPERIENCE)) {
+                        final int level = this.serverCore.getCustomEnchantments().getLevel(item, CustomEnchantments.Enchantment.EXPERIENCE);
+                        double experience = this.blockXp.get(block.getType());
+                        switch (level) {
+                            case 1 -> experience = experience * 1.25;
+                            case 2 -> experience = experience * 1.75;
+                            case 3 -> experience = experience * 2.25;
+                            case 4 -> experience = experience * 2.75;
+                        }
+                        this.serverCore.getLevelAPI().addExperience(player, experience);
+                    } else this.serverCore.getLevelAPI().addExperience(player, this.blockXp.get(block.getType()));
+                }
             }
+        }
+    }
+
+    @EventHandler
+    public void on(final BlockPlaceEvent event) {
+        if (this.allowXp) {
+            final Block block = event.getBlock();
+            if (this.blockXp.containsKey(block.getType())) this.placedBlocks.add(block);
         }
     }
 
