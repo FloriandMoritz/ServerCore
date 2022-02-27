@@ -40,9 +40,9 @@ public record TeleportationAPI(ServerCore serverCore) {
     public void teleportToTpa(final Player player, final String target) {
         final Player targetPlayer = this.serverCore.getServer().getPlayer(target);
         if (targetPlayer != null) {
-            player.teleport(targetPlayer);
+            targetPlayer.teleport(player);
         } else {
-            this.serverCore.getTinyRabbit().send(Queue.TELEPORTATION_RECEIVE, TeleportationCalls.REQUEST_TELEPORT.name(), "tpa", player.getName(), target);
+            this.serverCore.getTinyRabbit().send(Queue.TELEPORTATION_RECEIVE, TeleportationCalls.REQUEST_TELEPORT.name(), "tpa", target, player.getName());
         }
     }
 

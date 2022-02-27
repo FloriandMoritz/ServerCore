@@ -10,6 +10,7 @@ import net.eltown.servercore.commands.economy.*;
 import net.eltown.servercore.commands.feature.*;
 import net.eltown.servercore.commands.guardian.*;
 import net.eltown.servercore.commands.teleportation.*;
+import net.eltown.servercore.commands.ticketsystem.TicketCommand;
 import net.eltown.servercore.components.api.intern.*;
 import net.eltown.servercore.components.enchantments.CustomEnchantments;
 import net.eltown.servercore.components.language.Language;
@@ -199,6 +200,8 @@ public class ServerCore extends JavaPlugin {
         this.getServer().getCommandMap().register("sys", new TpacceptCommand(this));
         this.getServer().getCommandMap().register("sys", new TpaCommand(this));
         this.getServer().getCommandMap().register("sys", new WarpCommand(this));
+
+        this.getServer().getCommandMap().register("sys", new TicketCommand(this));
 
         /*
          * Other

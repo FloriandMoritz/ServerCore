@@ -15,7 +15,7 @@ import java.util.List;
 
 public class PluginsCommand extends Command {
 
-    private final List<String> ignoredPlugins = List.of("FastAsyncWorldEdit", "floodgate");
+    private final List<String> ignoredPlugins = List.of("FastAsyncWorldEdit", "floodgate", "Images");
     private final ServerCore serverCore;
 
     public PluginsCommand(final ServerCore serverCore) {

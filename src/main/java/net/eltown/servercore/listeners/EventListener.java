@@ -3,6 +3,7 @@ package net.eltown.servercore.listeners;
 import io.papermc.paper.event.entity.EntityMoveEvent;
 import net.eltown.servercore.ServerCore;
 import net.eltown.servercore.commands.administrative.NpcCommand;
+import net.eltown.servercore.commands.defaults.SpawnCommand;
 import net.eltown.servercore.components.api.intern.GroupAPI;
 import net.eltown.servercore.components.api.intern.LevelAPI;
 import net.eltown.servercore.components.api.intern.QuestAPI;
@@ -16,7 +17,9 @@ import net.eltown.servercore.components.data.quests.QuestPlayer;
 import net.eltown.servercore.components.data.settings.AccountSettings;
 import net.eltown.servercore.components.data.settings.SettingsCalls;
 import net.eltown.servercore.components.event.MoneyChangeEvent;
+import net.eltown.servercore.components.forms.simple.SimpleWindow;
 import net.eltown.servercore.components.tinyrabbit.Queue;
+import net.eltown.servercore.utils.Sound;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -26,10 +29,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.VillagerCareerChangeEvent;
-import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
-import org.bukkit.event.player.PlayerCommandSendEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -48,6 +49,7 @@ public record EventListener(ServerCore serverCore) implements Listener {
     public void on(final PlayerJoinEvent event) {
         event.joinMessage(Component.text(""));
         final Player player = event.getPlayer();
+        player.setCustomNameVisible(false);
 
         this.serverCore.getSyncAPI().loadPlayer(player, (loaded) -> {
             if (loaded) {
@@ -177,8 +179,60 @@ public record EventListener(ServerCore serverCore) implements Listener {
                         e.printStackTrace();
                     }
                 }, Queue.QUESTS_CALLBACK, QuestCalls.REQUEST_PLAYER_DATA.name(), player.getName());
+
+                if (!player.hasPlayedBefore() && this.serverCore.getServerName().equals("server-1")) {
+                    player.teleport(SpawnCommand.spawnLocation);
+                    this.serverCore.getServer().getScheduler().runTaskLater(this.serverCore, () -> {
+                        this.openWelcomeWindow(player);
+                        this.serverCore.getEconomyAPI().addMoney(player.getName(), 50);
+                        player.getInventory().addItem(
+                                new ItemStack(Material.WOODEN_SWORD, 1),
+                                new ItemStack(Material.WOODEN_AXE, 1),
+                                new ItemStack(Material.WOODEN_PICKAXE, 1),
+                                new ItemStack(Material.BAKED_POTATO, 32),
+                                new ItemStack(Material.CHAINMAIL_CHESTPLATE, 1),
+                                new ItemStack(Material.CHAINMAIL_LEGGINGS, 1)
+                        );
+                    }, 90);
+                }
             }
         });
+    }
+
+    private void openWelcomeWindow(final Player player) {
+        final String content =
+                """
+                        §2§lHerzlich Willkommen auf §0§lEltown.net§2§l!§r
+                                                        
+                        §8» §fEin paar wichtige Informationen, die du wissen solltest:
+                                                        
+                        §7Auf §0Eltown §7gibt es §06 Marktstände§7, an denen Items §0ge- und verkauft §7werden können. Die Preise der einzelnen Märkte werden durch die Anzahl der ge- oder verkauften Items beeinflusst.
+                        §7Auch du kannst mit Items §0handeln§7! Dafür stehen dir die §0ChestShops §7zur Verfügung. Diese sind allerdings erst ab §0Level 2 §7freigeschaltet und du benötigst ein §0Bankkonto§7. Natürlich kann man auch ohne ChestShops handeln, aber dir könnten Betrüger über den Weg laufen. Also sei auf der Hut!
+                                                        
+                        §7In der Bank kannst du ein §0Bankkonto §7erstellen, um beispielsweise die ChestShops nutzen zu können oder um darin einkaufen zu können. Bankkonten bieten sich aber auch gut an, um mit §0Freunden §7oder §0Gemeinschaften §7Geld zu teilen. Geld kann mit der jeweiligen §0Bankkarte §7an den §0Geldautomaten §7ein- oder ausgezahlt werden.
+                                                        
+                        §7Im Rathaus kannst du §0Termine mit Mitarbeitern §7vereinbaren, um zum Beispiel eine neue §0ChestShop-Lizenz §7zu erwerben. Demnächst wird das Rathaus noch weiter in den Mittelpunkt rücken.
+                                                        
+                        §7Auf unserem §0Discord-Server §7kannst du bei §0Problemen oder Fragen §7auch ganz einfach ein Ticket öffnen, damit sich ein Teammitglied um dich kümmert. Falls du keinen Discord-Account hast, dann kannst du auch hier im Spiel ein Ticket öffnen mit §0/ticket §7oder mit §0/support§7.
+                                                        
+                        §fÜber kommende §0Updates §fwirst du auf unserem §0Discord-Server §finformiert. Du kannst diesen unter §9http://bit.ly/discord-et §fbeitreten.
+                                                        
+                                                        
+                        §8» §fDas war's auch schon! Du erhälst §950$ Startgeld und ein paar nützliche Items§f. Viel Spaß beim Erkunden und Spielen!
+                        """;
+        player.sendMessage(content);
+        final SimpleWindow window = new SimpleWindow.Builder("§7» §8Willkommen!", content.replace("%p", player.getName()))
+                .addButton("§8» §9Spiel starten", e -> {
+                    Sound.RANDOM_LEVELUP.playSound(player, 1, 2);
+                    player.sendMessage("§r");
+                    player.sendMessage("§r");
+                    player.sendMessage("§r");
+                    player.sendMessage("§8» §fCore §8| §7Unseren Discord-Server findest du unter §9http://bit.ly/discord-et§7.");
+                    player.sendMessage("§8» §fCore §8| §2Bei Fragen, melde dich einfach im Chat. Viel Spaß beim Erkunden und Spielen!");
+                })
+                .onClose(this::openWelcomeWindow)
+                .build();
+        window.send(player);
     }
 
     @EventHandler
@@ -257,8 +311,22 @@ public record EventListener(ServerCore serverCore) implements Listener {
         final List<String> list = new ArrayList<>(event.getCommands());
 
         for (final String command : list) {
-            if (command.contains(":") || command.contains("/")) {
+            if (command.contains(":") || command.contains("/") || command.toLowerCase().contains("ver") || command.toLowerCase().contains("version") || command.toLowerCase().contains("icanhasbukkit")
+                    || command.toLowerCase().contains("me") || command.toLowerCase().contains("teammsg")) {
                 event.getCommands().remove(command);
+            }
+        }
+    }
+
+    @EventHandler
+    public void on(final PlayerCommandPreprocessEvent event) {
+        final Player player = event.getPlayer();
+        final String message = event.getMessage();
+        if (!player.isOp()) {
+            if (message.toLowerCase().contains("bukkit") || message.toLowerCase().contains("spigot") || message.toLowerCase().contains("minecraft") || message.toLowerCase().contains("paper") ||
+                    message.toLowerCase().contains("ver") || message.toLowerCase().contains("version") || message.toLowerCase().contains("me") || message.toLowerCase().contains("tell") || message.toLowerCase().contains("teammsg")) {
+                player.sendMessage("§8» §fCore §8| §7Dieser Befehl existiert nicht.");
+                event.setCancelled(true);
             }
         }
     }

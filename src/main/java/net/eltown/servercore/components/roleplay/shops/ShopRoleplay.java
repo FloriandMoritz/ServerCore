@@ -55,7 +55,7 @@ public record ShopRoleplay(ServerCore serverCore) {
                         Material.COAL,
                         Material.IRON_INGOT,
                         Material.COPPER_INGOT,
-                        Material.GOLD_ORE,
+                        Material.GOLD_INGOT,
                         Material.REDSTONE,
                         Material.LAPIS_LAZULI,
                         Material.DIAMOND,
