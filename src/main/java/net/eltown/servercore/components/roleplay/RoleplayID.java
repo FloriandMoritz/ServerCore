@@ -27,7 +27,7 @@ public enum RoleplayID {
 
     FEATURE_LOLA,
     FEATURE_JOHN,
-    FEATURE_AINARA,
+    FEATURE_RUEDIGER,
     FEATURE_MIKE,
     FEATURE_BRIAN,
     FEATURE_ROB,

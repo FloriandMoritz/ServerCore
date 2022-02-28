@@ -95,7 +95,9 @@ public record QuestAPI(ServerCore serverCore) {
     }
 
     public void createSubQuest(final String questNameId, final String questSubId, final String description, final String data, final int required) {
-        cachedQuests.get(questNameId).getData().add(new Quest.QuestData(questNameId, questSubId, description, data, required));
+        final List<Quest.QuestData> questData = new ArrayList<>(cachedQuests.get(questNameId).getData());
+        questData.add(new Quest.QuestData(questNameId, questSubId, description, data, required));
+        cachedQuests.get(questNameId).setData(questData);
 
         this.serverCore.getTinyRabbit().send(Queue.QUESTS_RECEIVE, QuestCalls.REQUEST_CREATE_SUB_QUEST.name(), questNameId, questSubId, description, data, String.valueOf(required));
     }

@@ -107,6 +107,7 @@ public record RoleplayListener(ServerCore serverCore) implements Listener {
                 switch (id) {
                     case FEATURE_LOLA -> this.serverCore.getLolaRoleplay().openLolaByNpc(player);
                     case FEATURE_JOHN -> this.serverCore.getJohnRoleplay().openJohnByNpc(player);
+                    case FEATURE_RUEDIGER -> this.serverCore.getQuestRoleplay().openRuedigerByNpc(player);
 
                     case JOB_BANKER -> this.serverCore.getBankRoleplay().openBankManagerByNpc(player);
                     case JOB_BLACKSMITH -> this.serverCore.getBlacksmithRoleplay().openBlacksmithShopByNpc(player);

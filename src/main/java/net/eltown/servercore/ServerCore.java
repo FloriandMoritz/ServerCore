@@ -16,6 +16,7 @@ import net.eltown.servercore.components.enchantments.CustomEnchantments;
 import net.eltown.servercore.components.language.Language;
 import net.eltown.servercore.components.roleplay.feature.JohnRoleplay;
 import net.eltown.servercore.components.roleplay.feature.LolaRoleplay;
+import net.eltown.servercore.components.roleplay.feature.QuestRoleplay;
 import net.eltown.servercore.components.roleplay.government.TownhallRoleplay;
 import net.eltown.servercore.components.roleplay.jobs.BankRoleplay;
 import net.eltown.servercore.components.roleplay.jobs.BlacksmithRoleplay;
@@ -75,6 +76,7 @@ public class ServerCore extends JavaPlugin {
 
     private JohnRoleplay johnRoleplay;
     private LolaRoleplay lolaRoleplay;
+    private QuestRoleplay questRoleplay;
     private TownhallRoleplay townhallRoleplay;
     private BankRoleplay bankRoleplay;
     private BlacksmithRoleplay blacksmithRoleplay;
@@ -209,6 +211,7 @@ public class ServerCore extends JavaPlugin {
         if (this.serverName.equals("server-1")) {
             this.johnRoleplay = new JohnRoleplay(this);
             this.lolaRoleplay = new LolaRoleplay(this);
+            this.questRoleplay = new QuestRoleplay(this);
             this.townhallRoleplay = new TownhallRoleplay(this);
             this.bankRoleplay = new BankRoleplay(this);
             this.blacksmithRoleplay = new BlacksmithRoleplay(this);

@@ -39,6 +39,7 @@ public class ImportChestCommand extends Command implements Listener {
     @SneakyThrows
     public ImportChestCommand(final ServerCore serverCore) {
         super("importchest");
+        this.setPermission("core.command.importchest");
         this.serverCore = serverCore;
         this.redis = new Jedis();
 
@@ -54,6 +55,7 @@ public class ImportChestCommand extends Command implements Listener {
     @SneakyThrows
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String s, @NotNull String[] args) {
+        if (!sender.hasPermission(this.getPermission())) return true;
         if (sender instanceof Player player) {
             if (args.length == 1) {
                 final String id = args[0];

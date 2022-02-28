@@ -12,6 +12,7 @@ import net.eltown.servercore.components.roleplay.Cooldown;
 import net.eltown.servercore.components.roleplay.RoleplayID;
 import net.eltown.servercore.components.tasks.RaffleTask;
 import net.eltown.servercore.listeners.RoleplayListener;
+import net.eltown.servercore.utils.Sound;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.ArmorStand;
@@ -66,9 +67,11 @@ public record JohnRoleplay(ServerCore serverCore) {
                 new ChainExecution.Builder()
                         .append(0, () -> {
                             player.sendMessage("§8» §fJohn §8| §7" + message.message().replace("%p", player.getName()));
+                            Sound.MOB_VILLAGER_HAGGLE.playSound(player);
                         })
                         .append(message.seconds(), () -> {
                             this.openJohn(player);
+                            Sound.MOB_VILLAGER_HAGGLE.playSound(player);
                             RoleplayListener.openQueue.remove(player.getName());
                         })
                         .build().start();
@@ -180,8 +183,10 @@ public record JohnRoleplay(ServerCore serverCore) {
                             this.serverCore.getEconomyAPI().reduceMoney(player.getName(), price);
                             this.serverCore.getCrateAPI().addCrate(player.getName(), crate, amount);
                             player.sendMessage(Language.get("crate.bought", this.serverCore.getCrateAPI().convertToDisplay(crate), amount, price));
+                            Sound.RANDOM_ORB.playSound(player, 1, 2);
                         } else {
                             player.sendMessage(Language.get("crate.not.enough.money"));
+                            Sound.NOTE_BASS.playSound(player);
                         }
                     });
                 })
@@ -193,6 +198,7 @@ public record JohnRoleplay(ServerCore serverCore) {
     public void openCrate(final Player player) {
         if (crateInUse) {
             player.sendMessage(Language.get("crate.already.in.use"));
+            Sound.NOTE_BASS.playSound(player);
             return;
         }
         player.playSound(player.getLocation(), "random.enderchestopen", 2, 3);
@@ -201,45 +207,53 @@ public record JohnRoleplay(ServerCore serverCore) {
                     .addButton("§8» §7§lGewöhnliche §r§7Truhe\n§f§oVerfügbar: §r§8[§f" + map.getOrDefault("common", 0) + "§8]", "http://eltown.net:3000/img/ui/crates/common-display.png", e -> {
                         if (crateInUse) {
                             player.sendMessage(Language.get("crate.already.in.use"));
+                            Sound.NOTE_BASS.playSound(player);
                             return;
                         }
                         if (map.getOrDefault("common", 0) > 0) {
                             this.raffleCrate(player, "common");
                         } else {
                             player.sendMessage(Language.get("crate.no.crates"));
+                            Sound.NOTE_BASS.playSound(player);
                         }
                     })
                     .addButton("§8» §1§lUngewöhnliche §r§1Truhe\n§f§oVerfügbar: §r§8[§f" + map.getOrDefault("uncommon", 0) + "§8]", "http://eltown.net:3000/img/ui/crates/uncommon-display.png", e -> {
                         if (crateInUse) {
                             player.sendMessage(Language.get("crate.already.in.use"));
+                            Sound.NOTE_BASS.playSound(player);
                             return;
                         }
                         if (map.getOrDefault("uncommon", 0) > 0) {
                             this.raffleCrate(player, "uncommon");
                         } else {
                             player.sendMessage(Language.get("crate.no.crates"));
+                            Sound.NOTE_BASS.playSound(player);
                         }
                     })
                     .addButton("§8» §5§lEpische §r§5Truhe\n§f§oVerfügbar: §r§8[§f" + map.getOrDefault("epic", 0) + "§8]", "http://eltown.net:3000/img/ui/crates/epic-display.png", e -> {
                         if (crateInUse) {
                             player.sendMessage(Language.get("crate.already.in.use"));
+                            Sound.NOTE_BASS.playSound(player);
                             return;
                         }
                         if (map.getOrDefault("epic", 0) > 0) {
                             this.raffleCrate(player, "epic");
                         } else {
                             player.sendMessage(Language.get("crate.no.crates"));
+                            Sound.NOTE_BASS.playSound(player);
                         }
                     })
                     .addButton("§8» §g§lLegendäre §r§gTruhe\n§f§oVerfügbar: §r§8[§f" + map.getOrDefault("legendary", 0) + "§8]", "http://eltown.net:3000/img/ui/crates/legendary-display.png", e -> {
                         if (crateInUse) {
                             player.sendMessage(Language.get("crate.already.in.use"));
+                            Sound.NOTE_BASS.playSound(player);
                             return;
                         }
                         if (map.getOrDefault("legendary", 0) > 0) {
                             this.raffleCrate(player, "legendary");
                         } else {
                             player.sendMessage(Language.get("crate.no.crates"));
+                            Sound.NOTE_BASS.playSound(player);
                         }
                     })
                     .build();

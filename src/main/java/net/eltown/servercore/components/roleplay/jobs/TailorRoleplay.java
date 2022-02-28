@@ -41,9 +41,11 @@ public record TailorRoleplay(ServerCore serverCore) {
                 new ChainExecution.Builder()
                         .append(0, () -> {
                             player.sendMessage("§8» §fKarl §8| §7" + message.message().replace("%p", player.getName()));
+                            Sound.MOB_VILLAGER_HAGGLE.playSound(player);
                         })
                         .append(message.seconds(), () -> {
                             this.openKarl(player);
+                            Sound.MOB_VILLAGER_HAGGLE.playSound(player);
                             RoleplayListener.openQueue.remove(player.getName());
                         })
                         .build().start();
@@ -90,15 +92,15 @@ public record TailorRoleplay(ServerCore serverCore) {
                             if (money >= price) {
                                 this.serverCore.getEconomyAPI().reduceMoney(player.getName(), price);
                                 player.getInventory().addItem(itemStack);
-                                Sound.RANDOM_LEVELUP.playSound(player, 1, 3);
+                                Sound.MOB_VILLAGER_YES.playSound(player);
                                 player.sendMessage("§8» §fKarl §8| §7Vielen Dank für das Geschäft! Auf Wiedersehen!");
                             } else {
-                                Sound.NOTE_BASS.playSound(player);
+                                Sound.MOB_VILLAGER_NO.playSound(player);
                                 player.sendMessage("§8» §fKarl §8| §7Für diese Qualität muss man auch ein wenig Geld auf den Tisch legen.");
                             }
                         });
                     } else {
-                        Sound.NOTE_BASS.playSound(player);
+                        Sound.MOB_VILLAGER_NO.playSound(player);
                         player.sendMessage("§8» §fKarl §8| §7Oh, du trägst viel mit dir herum. Komm gleich am besten wieder, wenn du ein paar deiner Sachen abgelegt hast.");
                     }
                 })

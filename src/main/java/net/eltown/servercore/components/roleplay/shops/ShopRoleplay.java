@@ -11,8 +11,8 @@ import net.eltown.servercore.components.roleplay.ChainMessage;
 import net.eltown.servercore.components.roleplay.Cooldown;
 import net.eltown.servercore.components.roleplay.RoleplayID;
 import net.eltown.servercore.listeners.RoleplayListener;
+import net.eltown.servercore.utils.Sound;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -213,9 +213,11 @@ public record ShopRoleplay(ServerCore serverCore) {
                 new ChainExecution.Builder()
                         .append(0, () -> {
                             player.sendMessage("§8» §f" + shop.name() + " §8| §7" + message.message().replace("%p", player.getName()));
+                            Sound.MOB_VILLAGER_HAGGLE.playSound(player);
                         })
                         .append(message.seconds(), () -> {
                             this.openShopItems(player, shop);
+                            Sound.MOB_VILLAGER_HAGGLE.playSound(player);
                             RoleplayListener.openQueue.remove(player.getName());
                         })
                         .build().start();
@@ -229,6 +231,7 @@ public record ShopRoleplay(ServerCore serverCore) {
             this.serverCore.getShopAPI().getItemPrice(material.name(), 1, (buy, sell) -> {
                 shopItemsWindow.addButton(new ItemStack(material).getI18NDisplayName() + "\n" + shop.color() + "§l1x   §r§a+ §r§f$" + this.serverCore.getMoneyFormat().format(buy) + " §8| §c- §r§f$" + this.serverCore.getMoneyFormat().format(sell), "http://eltown.net:3000/img/shopitems/" + material.name().toUpperCase() + ".png", e -> {
                     this.openItemShop(player, shop, material, buy, sell);
+                    Sound.MOB_VILLAGER_HAGGLE.playSound(player);
                 });
             });
         });
@@ -256,6 +259,7 @@ public record ShopRoleplay(ServerCore serverCore) {
                                     final ItemStack item = new ItemStack(material, i);
                                     if (!this.serverCore.canAddItem(player.getInventory(), item)) {
                                         player.sendMessage(Language.get("roleplay.shop.item.inventory.full"));
+                                        Sound.MOB_VILLAGER_NO.playSound(player);
                                         return;
                                     }
 
@@ -265,17 +269,20 @@ public record ShopRoleplay(ServerCore serverCore) {
                                             this.serverCore.getShopAPI().sendBought(material.name(), i);
                                             player.getInventory().addItem(item);
                                             player.sendMessage(Language.get("roleplay.shop.item.bought", i, item.getI18NDisplayName(), this.serverCore.getMoneyFormat().format(finalPrice)));
+                                            Sound.MOB_VILLAGER_YES.playSound(player);
                                         } else {
                                             player.sendMessage(Language.get("roleplay.shop.item.not.enough.money"));
+                                            Sound.MOB_VILLAGER_NO.playSound(player);
                                         }
                                     });
                                 })
-                                .onNo(v -> v.playSound(v.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 1))
+                                .onNo(v -> Sound.MOB_VILLAGER_NO.playSound(player))
                                 .build();
                         buyWindow.send(player);
                     });
                 } catch (final Exception exception) {
                     player.sendMessage(Language.get("roleplay.shop.item.invalid.amount"));
+                    Sound.MOB_VILLAGER_NO.playSound(player);
                 }
             });
             selectWindow.send(player);
@@ -313,8 +320,9 @@ public record ShopRoleplay(ServerCore serverCore) {
                                         this.serverCore.getShopAPI().sendSold(material.name(), count.get());
                                         player.getInventory().removeItem(item);
                                         player.sendMessage(Language.get("roleplay.shop.item.sold", count.get(), item.getI18NDisplayName(), this.serverCore.getMoneyFormat().format(finalPrice)));
+                                        Sound.MOB_VILLAGER_YES.playSound(player);
                                     })
-                                    .onNo(v -> v.playSound(v.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 1))
+                                    .onNo(v -> Sound.MOB_VILLAGER_NO.playSound(player))
                                     .build();
                             buyWindow.send(player);
                         });
@@ -329,6 +337,7 @@ public record ShopRoleplay(ServerCore serverCore) {
                                     .onYes(v -> {
                                         if (count.get() < i) {
                                             player.sendMessage(Language.get("roleplay.shop.item.inventory.invalid"));
+                                            Sound.MOB_VILLAGER_NO.playSound(player);
                                             return;
                                         }
                                         item.setAmount(i);
@@ -337,14 +346,16 @@ public record ShopRoleplay(ServerCore serverCore) {
                                         this.serverCore.getShopAPI().sendSold(material.name(), i);
                                         player.getInventory().removeItem(item);
                                         player.sendMessage(Language.get("roleplay.shop.item.sold", i, item.getI18NDisplayName(), this.serverCore.getMoneyFormat().format(finalPrice)));
+                                        Sound.MOB_VILLAGER_YES.playSound(player);
                                     })
-                                    .onNo(v -> v.playSound(v.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 1))
+                                    .onNo(v -> Sound.MOB_VILLAGER_NO.playSound(player))
                                     .build();
                             buyWindow.send(player);
                         });
                     }
                 } catch (final Exception exception) {
                     player.sendMessage(Language.get("roleplay.shop.item.invalid.amount"));
+                    Sound.MOB_VILLAGER_NO.playSound(player);
                 }
             });
             selectWindow.send(player);

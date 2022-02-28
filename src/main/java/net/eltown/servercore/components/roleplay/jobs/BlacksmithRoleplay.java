@@ -44,9 +44,11 @@ public record BlacksmithRoleplay(ServerCore serverCore) {
                 new ChainExecution.Builder()
                         .append(0, () -> {
                             player.sendMessage("§8» §fBen §8| §7" + message.message().replace("%p", player.getName()));
+                            Sound.MOB_VILLAGER_HAGGLE.playSound(player);
                         })
                         .append(message.seconds(), () -> {
                             this.openBlacksmithShop(player);
+                            Sound.MOB_VILLAGER_HAGGLE.playSound(player);
                             RoleplayListener.openQueue.remove(player.getName());
                         })
                         .build().start();

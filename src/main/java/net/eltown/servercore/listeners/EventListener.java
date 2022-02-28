@@ -215,7 +215,7 @@ public record EventListener(ServerCore serverCore) implements Listener {
                                                         
                         §7Auf unserem §0Discord-Server §7kannst du bei §0Problemen oder Fragen §7auch ganz einfach ein Ticket öffnen, damit sich ein Teammitglied um dich kümmert. Falls du keinen Discord-Account hast, dann kannst du auch hier im Spiel ein Ticket öffnen mit §0/ticket §7oder mit §0/support§7.
                                                         
-                        §fÜber kommende §0Updates §fwirst du auf unserem §0Discord-Server §finformiert. Du kannst diesen unter §9http://bit.ly/discord-et §fbeitreten.
+                        §fÜber kommende §0Updates §fwirst du auf unserem §0Discord-Server §finformiert. Du kannst diesen unter §9https://discord.eltown.net §fbeitreten.
                                                         
                                                         
                         §8» §fDas war's auch schon! Du erhälst §950$ Startgeld und ein paar nützliche Items§f. Viel Spaß beim Erkunden und Spielen!
@@ -227,7 +227,7 @@ public record EventListener(ServerCore serverCore) implements Listener {
                     player.sendMessage("§r");
                     player.sendMessage("§r");
                     player.sendMessage("§r");
-                    player.sendMessage("§8» §fCore §8| §7Unseren Discord-Server findest du unter §9http://bit.ly/discord-et§7.");
+                    player.sendMessage("§8» §fCore §8| §7Unseren Discord-Server findest du unter §9https://discord.eltown.net§7.");
                     player.sendMessage("§8» §fCore §8| §2Bei Fragen, melde dich einfach im Chat. Viel Spaß beim Erkunden und Spielen!");
                 })
                 .onClose(this::openWelcomeWindow)

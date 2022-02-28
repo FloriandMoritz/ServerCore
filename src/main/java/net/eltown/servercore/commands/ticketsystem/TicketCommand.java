@@ -20,7 +20,7 @@ public class TicketCommand extends Command {
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String s, @NotNull String[] args) {
         if (sender instanceof Player player) {
-            player.sendMessage("§8» §fCore §8| §7Dieses Feature ist bald erst verfügbar. Für weitere Informationen, besuche unseren Discord-Server unter §9http://bit.ly/discord-et§7.");
+            player.sendMessage("§8» §fCore §8| §7Dieses Feature ist bald erst verfügbar. Für weitere Informationen, besuche unseren Discord-Server unter §9https://discord.eltown.net§7.");
         }
         return true;
     }

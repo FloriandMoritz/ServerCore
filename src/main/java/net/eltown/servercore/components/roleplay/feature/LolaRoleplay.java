@@ -13,6 +13,7 @@ import net.eltown.servercore.components.roleplay.ChainMessage;
 import net.eltown.servercore.components.roleplay.Cooldown;
 import net.eltown.servercore.components.roleplay.RoleplayID;
 import net.eltown.servercore.listeners.RoleplayListener;
+import net.eltown.servercore.utils.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -43,9 +44,11 @@ public record LolaRoleplay(ServerCore serverCore) {
                 new ChainExecution.Builder()
                         .append(0, () -> {
                             player.sendMessage("§8» §fLola §8| §7" + message.message().replace("%p", player.getName()));
+                            Sound.MOB_VILLAGER_HAGGLE.playSound(player);
                         })
                         .append(message.seconds(), () -> {
                             this.openLola(player);
+                            Sound.MOB_VILLAGER_HAGGLE.playSound(player);
                             RoleplayListener.openQueue.remove(player.getName());
                         })
                         .build().start();
@@ -101,6 +104,7 @@ public record LolaRoleplay(ServerCore serverCore) {
                                             this.givePlayerDailyReward(player, dailyRewards);
                                         } else {
                                             player.sendMessage(Language.get("reward.onlinetime", 20 - (int) minutes));
+                                            Sound.NOTE_BASS.playSound(player);
                                         }
                                     });
                                 })
@@ -128,6 +132,7 @@ public record LolaRoleplay(ServerCore serverCore) {
                                             this.givePlayerDailyReward(player, dailyRewards);
                                         } else {
                                             player.sendMessage(Language.get("reward.onlinetime", 20 - (int) minutes));
+                                            Sound.NOTE_BASS.playSound(player);
                                         }
                                     });
                                 })
@@ -155,6 +160,7 @@ public record LolaRoleplay(ServerCore serverCore) {
                                             this.givePlayerDailyReward(player, dailyRewards);
                                         } else {
                                             player.sendMessage(Language.get("reward.onlinetime", 20 - (int) minutes));
+                                            Sound.NOTE_BASS.playSound(player);
                                         }
                                     });
                                 })
@@ -306,6 +312,7 @@ public record LolaRoleplay(ServerCore serverCore) {
             case "crate" -> this.serverCore.getCrateAPI().addCrate(player.getName(), dataSplit[1], Integer.parseInt(dataSplit[2]));
         }
         player.sendMessage(Language.get("reward.received", reward.description(), reward.day()));
+        Sound.RANDOM_LEVELUP.playSound(player, 1, 2);
     }
 
     private void smallTalk(final String npc, final Player player, final Consumer<ChainMessage> message) {
