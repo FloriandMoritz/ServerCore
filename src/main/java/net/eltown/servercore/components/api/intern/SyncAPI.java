@@ -50,7 +50,7 @@ public class SyncAPI {
         final int level = player.getLevel();
         final float experience = player.getExp();
         final String gamemode = player.getGameMode().toString();
-        final boolean flying = player.isFlying();
+        final boolean flying = false;
 
         this.serverCore.getTinyRabbit().send(Queue.SYNC_RECEIVE, SyncCalls.REQUEST_SETSYNC.name(), player.getName(),
                 inventories[0],
@@ -87,7 +87,7 @@ public class SyncAPI {
                     final int level = Integer.parseInt(delivery.getData()[10]);
                     final float experience = Float.parseFloat(delivery.getData()[11]);
                     final GameMode gamemode = GameMode.valueOf(delivery.getData()[12]);
-                    final boolean flying = Boolean.parseBoolean(delivery.getData()[13]);
+                    final boolean flying = false;
                     callback.accept(new SyncPlayer(inventory, armorInventory, enderchest, foodLevel, saturation, exhaustion, selectedSlot, potionEffects, totalExperience, level, experience, gamemode, flying));
                 }
             }
@@ -137,7 +137,7 @@ public class SyncAPI {
             player.setLevel(syncPlayer.level());
             player.setExp(syncPlayer.experience());
             player.setGameMode(syncPlayer.gameMode());
-            player.setFlying(syncPlayer.flying());
+            //player.setFlying(syncPlayer.flying());
 
             loaded.add(player.getName());
             player.sendMessage(Language.get("sync.data.loaded"));

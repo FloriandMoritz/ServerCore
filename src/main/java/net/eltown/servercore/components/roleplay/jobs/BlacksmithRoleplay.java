@@ -197,6 +197,10 @@ public record BlacksmithRoleplay(ServerCore serverCore) {
     public void openRepairService(final Player player) {
         final ItemStack itemStack = player.getInventory().getItemInMainHand();
         final Damageable damageable = (Damageable) itemStack.getItemMeta();
+        if (itemStack.getItemMeta() == null || damageable == null) {
+            player.sendMessage(Language.get("roleplay.blacksmith.repair.invalid.item"));
+            return;
+        }
         final double costs = (damageable.getDamage() * .29) + 60;
         if (damageable.getDamage() != 0) {
             final ModalWindow window = new ModalWindow.Builder("§7» §8Item reparieren", "§fLasse das Item in deiner Hand hier reparieren." +

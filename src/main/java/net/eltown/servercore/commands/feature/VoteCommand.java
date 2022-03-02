@@ -1,8 +1,10 @@
 package net.eltown.servercore.commands.feature;
 
 import net.eltown.servercore.ServerCore;
+import net.eltown.servercore.components.data.CoreCalls;
 import net.eltown.servercore.components.language.Language;
 import net.eltown.servercore.components.roleplay.Cooldown;
+import net.eltown.servercore.components.tinyrabbit.Queue;
 import net.eltown.servercore.utils.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -34,6 +36,7 @@ public class VoteCommand extends Command {
                             Sound.NOTE_BASS.playSound(player);
                         }
                         case "1" -> this.serverCore.getGiftKeyAPI().createKey(this.serverCore.createId(6), 1, "levelxp;250>:<money;50>:<crate;common;2>:<crate;uncommon;1", player.getName(), (72 * 3600000L) + System.currentTimeMillis(), key -> {
+                            this.serverCore.getTinyRabbit().send(Queue.CORE_RECEIVE, CoreCalls.REQUEST_BROADCAST_PROXY_MESSAGE.name(), Language.get("vote.vote.broadcast", player.getName()));
                             player.sendMessage(Language.get("vote.successful.voted", key));
                             Sound.RANDOM_LEVELUP.playSound(player, 1, 2);
                             this.serverCore.setVoted(player.getName());

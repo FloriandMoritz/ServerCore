@@ -148,6 +148,7 @@ public class ServerCore extends JavaPlugin {
         /*
          * Commands
          */
+        this.getServer().getCommandMap().register("sys", new CoreDebugCommand(this));
         if (this.serverName.equals("server-1")) this.getServer().getCommandMap().register("sys", new CrateSystemCommand(this));
         this.getServer().getCommandMap().register("sys", new CustomEnchantmentCommand(this));
         this.getServer().getCommandMap().register("sys", new FlyCommand(this));
@@ -328,8 +329,8 @@ public class ServerCore extends JavaPlugin {
         }
     }
 
-    private final String getURL = "https://minecraftpocket-servers.com/api/?object=votes&element=claim&key=1UdYRD3CmGvbFu6A8Qs4qtyQZW2vsxV6WK&username=";
-    private final String setURL = "https://minecraftpocket-servers.com/api/?action=post&object=votes&element=claim&key=1UdYRD3CmGvbFu6A8Qs4qtyQZW2vsxV6WK&username=";
+    private final String getURL = "https://minecraftpocket-servers.com/api/?object=votes&element=claim&key=BQde8US4ETSwL8VvqJvYlmVAsk3Wa4dcL5&username=";
+    private final String setURL = "https://minecraftpocket-servers.com/api/?action=post&object=votes&element=claim&key=BQde8US4ETSwL8VvqJvYlmVAsk3Wa4dcL5&username=";
 
     public void getVote(final String player, final Consumer<String> callback) {
         CompletableFuture.runAsync(() -> {

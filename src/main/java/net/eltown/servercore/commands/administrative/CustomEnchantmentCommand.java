@@ -18,10 +18,12 @@ public class CustomEnchantmentCommand extends Command {
     public CustomEnchantmentCommand(final ServerCore serverCore) {
         super("customenchantment");
         this.serverCore = serverCore;
+        this.setPermission("core.command.customenchantment");
     }
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String s, @NotNull String[] args) {
+        if (!sender.hasPermission(this.getPermission())) return true;
         if (sender instanceof Player player) {
             final List<String> enchantments = new LinkedList<>(List.of(
                     "LUMBERJACK", "DRILL", "EMERALD_FARMER", "EXPERIENCE", "VEIN_MINING"

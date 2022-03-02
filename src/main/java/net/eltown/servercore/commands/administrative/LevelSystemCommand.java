@@ -18,10 +18,12 @@ public class LevelSystemCommand extends Command {
     public LevelSystemCommand(final ServerCore serverCore) {
         super("levelsystem");
         this.serverCore = serverCore;
+        this.setPermission("core.command.levelsystem");
     }
 
     @Override
     public boolean execute(@NotNull CommandSender sender, @NotNull String s, @NotNull String[] args) {
+        if (!sender.hasPermission(this.getPermission())) return true;
         if (sender instanceof Player player) {
             this.openUpdateReward(player);
         }

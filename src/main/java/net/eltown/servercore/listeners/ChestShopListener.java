@@ -382,8 +382,8 @@ public record ChestShopListener(ServerCore serverCore) implements Listener {
                                                                     this.serverCore.getBankAPI().withdrawMoney(chestAccount.getAccount(), chestShop.getShopPrice());
                                                                     this.serverCore.getBankAPI().depositMoney(sellAccount.getAccount(), chestShop.getShopPrice());
 
+                                                                    chest.update();
                                                                     chest.getInventory().addItem(buyItem);
-                                                                    chest.update(true);
                                                                     player.getInventory().removeItem(buyItem);
 
                                                                     if (!messageCooldown.hasCooldown(player.getName() + "/" + chestShop.getId()))
@@ -425,8 +425,8 @@ public record ChestShopListener(ServerCore serverCore) implements Listener {
                                                         this.serverCore.getBankAPI().withdrawMoney(bankAccount.getAccount(), chestShop.getShopPrice());
                                                         this.serverCore.getEconomyAPI().addMoney(player.getName(), chestShop.getShopPrice());
 
+                                                        chest.update();
                                                         chest.getInventory().addItem(buyItem);
-                                                        chest.update(true);
                                                         player.getInventory().removeItem(buyItem);
 
                                                         if (!messageCooldown.hasCooldown(player.getName() + "/" + chestShop.getId()))

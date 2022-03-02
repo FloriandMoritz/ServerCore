@@ -8,6 +8,7 @@ import net.eltown.servercore.components.api.intern.GroupAPI;
 import net.eltown.servercore.components.api.intern.LevelAPI;
 import net.eltown.servercore.components.api.intern.QuestAPI;
 import net.eltown.servercore.components.api.intern.SettingsAPI;
+import net.eltown.servercore.components.data.crates.CratesCalls;
 import net.eltown.servercore.components.data.friends.FriendCalls;
 import net.eltown.servercore.components.data.groupmanager.GroupCalls;
 import net.eltown.servercore.components.data.level.Level;
@@ -17,9 +18,7 @@ import net.eltown.servercore.components.data.quests.QuestPlayer;
 import net.eltown.servercore.components.data.settings.AccountSettings;
 import net.eltown.servercore.components.data.settings.SettingsCalls;
 import net.eltown.servercore.components.event.MoneyChangeEvent;
-import net.eltown.servercore.components.forms.simple.SimpleWindow;
 import net.eltown.servercore.components.tinyrabbit.Queue;
-import net.eltown.servercore.utils.Sound;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -153,6 +152,11 @@ public record EventListener(ServerCore serverCore) implements Listener {
                 this.serverCore.getTinyRabbit().send(Queue.FRIEND_RECEIVE, FriendCalls.REQUEST_CREATE_FRIEND_DATA.name(), player.getName());
 
                 /*
+                 * Crates
+                 */
+                this.serverCore.getTinyRabbit().send(Queue.CRATES_RECEIVE, CratesCalls.REQUEST_CREATE_PLAYER_DATA.name(), player.getName());
+
+                /*
                  * Quests
                  */
                 this.serverCore.getTinyRabbit().sendAndReceive(delivery -> {
@@ -193,7 +197,7 @@ public record EventListener(ServerCore serverCore) implements Listener {
                                 new ItemStack(Material.CHAINMAIL_CHESTPLATE, 1),
                                 new ItemStack(Material.CHAINMAIL_LEGGINGS, 1)
                         );
-                    }, 90);
+                    }, 100);
                 }
             }
         });
@@ -221,18 +225,11 @@ public record EventListener(ServerCore serverCore) implements Listener {
                         §8» §fDas war's auch schon! Du erhälst §950$ Startgeld und ein paar nützliche Items§f. Viel Spaß beim Erkunden und Spielen!
                         """;
         player.sendMessage(content);
-        final SimpleWindow window = new SimpleWindow.Builder("§7» §8Willkommen!", content.replace("%p", player.getName()))
-                .addButton("§8» §9Spiel starten", e -> {
-                    Sound.RANDOM_LEVELUP.playSound(player, 1, 2);
-                    player.sendMessage("§r");
-                    player.sendMessage("§r");
-                    player.sendMessage("§r");
-                    player.sendMessage("§8» §fCore §8| §7Unseren Discord-Server findest du unter §9https://discord.eltown.net§7.");
-                    player.sendMessage("§8» §fCore §8| §2Bei Fragen, melde dich einfach im Chat. Viel Spaß beim Erkunden und Spielen!");
-                })
-                .onClose(this::openWelcomeWindow)
-                .build();
-        window.send(player);
+        player.sendMessage("§r");
+        player.sendMessage("§r");
+        player.sendMessage("§r");
+        player.sendMessage("§8» §fCore §8| §7Unseren Discord-Server findest du unter §9https://discord.eltown.net§7.");
+        player.sendMessage("§8» §fCore §8| §2Bei Fragen, melde dich einfach im Chat. Viel Spaß beim Erkunden und Spielen!");
     }
 
     @EventHandler
@@ -311,8 +308,8 @@ public record EventListener(ServerCore serverCore) implements Listener {
         final List<String> list = new ArrayList<>(event.getCommands());
 
         for (final String command : list) {
-            if (command.contains(":") || command.contains("/") || command.toLowerCase().contains("ver") || command.toLowerCase().contains("version") || command.toLowerCase().contains("icanhasbukkit")
-                    || command.toLowerCase().contains("me") || command.toLowerCase().contains("teammsg")) {
+            if (command.contains(":") || command.contains("/") || command.equalsIgnoreCase("ver") || command.toLowerCase().contains("version") || command.toLowerCase().contains("icanhasbukkit")
+                    || command.equalsIgnoreCase("me") || command.equalsIgnoreCase("teammsg")) {
                 event.getCommands().remove(command);
             }
         }
@@ -324,7 +321,7 @@ public record EventListener(ServerCore serverCore) implements Listener {
         final String message = event.getMessage();
         if (!player.isOp()) {
             if (message.toLowerCase().contains("bukkit") || message.toLowerCase().contains("spigot") || message.toLowerCase().contains("minecraft") || message.toLowerCase().contains("paper") ||
-                    message.toLowerCase().contains("ver") || message.toLowerCase().contains("version") || message.toLowerCase().contains("me") || message.toLowerCase().contains("tell") || message.toLowerCase().contains("teammsg")) {
+                    message.equalsIgnoreCase("ver") || message.toLowerCase().contains("version") || message.equalsIgnoreCase("me") || message.equalsIgnoreCase("tell") || message.equalsIgnoreCase("teammsg")) {
                 player.sendMessage("§8» §fCore §8| §7Dieser Befehl existiert nicht.");
                 event.setCancelled(true);
             }
