@@ -2,6 +2,7 @@ package net.eltown.servercore.components.roleplay.feature;
 
 import net.eltown.servercore.ServerCore;
 import net.eltown.servercore.components.data.crates.Raffle;
+import net.eltown.servercore.components.event.PlayerCrateOpenEvent;
 import net.eltown.servercore.components.forms.custom.CustomWindow;
 import net.eltown.servercore.components.forms.modal.ModalWindow;
 import net.eltown.servercore.components.forms.simple.SimpleWindow;
@@ -266,6 +267,7 @@ public record JohnRoleplay(ServerCore serverCore) {
         this.serverCore.getCrateAPI().getCrateRewards(crate, rewards -> {
             final Raffle raffle = new Raffle(new ArrayList<>(rewards));
             this.serverCore.getServer().getScheduler().runTask(this.serverCore, new RaffleTask(this.serverCore, raffle, player));
+            this.serverCore.getServer().getPluginManager().callEvent(new PlayerCrateOpenEvent(player, crate, rewards, raffle));
             crateInUse = true;
         });
     }

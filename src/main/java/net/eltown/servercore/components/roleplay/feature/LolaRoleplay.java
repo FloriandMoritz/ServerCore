@@ -4,6 +4,7 @@ import net.eltown.servercore.ServerCore;
 import net.eltown.servercore.components.api.intern.SyncAPI;
 import net.eltown.servercore.components.data.giftkeys.Giftkey;
 import net.eltown.servercore.components.data.rewards.DailyReward;
+import net.eltown.servercore.components.event.PlayerClaimDailyRewardEvent;
 import net.eltown.servercore.components.forms.custom.CustomWindow;
 import net.eltown.servercore.components.forms.modal.ModalWindow;
 import net.eltown.servercore.components.forms.simple.SimpleWindow;
@@ -312,6 +313,7 @@ public record LolaRoleplay(ServerCore serverCore) {
             case "crate" -> this.serverCore.getCrateAPI().addCrate(player.getName(), dataSplit[1], Integer.parseInt(dataSplit[2]));
         }
         player.sendMessage(Language.get("reward.received", reward.description(), reward.day()));
+        this.serverCore.getServer().getPluginManager().callEvent(new PlayerClaimDailyRewardEvent(player, dailyRewards, reward));
         Sound.RANDOM_LEVELUP.playSound(player, 1, 2);
     }
 

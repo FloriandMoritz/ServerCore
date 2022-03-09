@@ -2,6 +2,7 @@ package net.eltown.servercore.components.roleplay.shops;
 
 import net.eltown.servercore.ServerCore;
 import net.eltown.servercore.components.api.intern.SyncAPI;
+import net.eltown.servercore.components.event.PlayerBuyItemEvent;
 import net.eltown.servercore.components.forms.custom.CustomWindow;
 import net.eltown.servercore.components.forms.modal.ModalWindow;
 import net.eltown.servercore.components.forms.simple.SimpleWindow;
@@ -269,6 +270,7 @@ public record ShopRoleplay(ServerCore serverCore) {
                                             this.serverCore.getShopAPI().sendBought(material.name(), i);
                                             player.getInventory().addItem(item);
                                             player.sendMessage(Language.get("roleplay.shop.item.bought", i, item.getI18NDisplayName(), this.serverCore.getMoneyFormat().format(finalPrice)));
+                                            this.serverCore.getServer().getPluginManager().callEvent(new PlayerBuyItemEvent(player, shop, item, finalPrice));
                                             Sound.MOB_VILLAGER_YES.playSound(player);
                                         } else {
                                             player.sendMessage(Language.get("roleplay.shop.item.not.enough.money"));
@@ -320,6 +322,7 @@ public record ShopRoleplay(ServerCore serverCore) {
                                         this.serverCore.getShopAPI().sendSold(material.name(), count.get());
                                         player.getInventory().removeItem(item);
                                         player.sendMessage(Language.get("roleplay.shop.item.sold", count.get(), item.getI18NDisplayName(), this.serverCore.getMoneyFormat().format(finalPrice)));
+                                        this.serverCore.getServer().getPluginManager().callEvent(new PlayerBuyItemEvent(player, shop, item, finalPrice));
                                         Sound.MOB_VILLAGER_YES.playSound(player);
                                     })
                                     .onNo(v -> Sound.MOB_VILLAGER_NO.playSound(player))
