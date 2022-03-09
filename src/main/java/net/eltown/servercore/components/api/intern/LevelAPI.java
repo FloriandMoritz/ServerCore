@@ -5,6 +5,7 @@ import net.eltown.servercore.components.data.giftkeys.GiftkeyCalls;
 import net.eltown.servercore.components.data.level.Level;
 import net.eltown.servercore.components.data.level.LevelCalls;
 import net.eltown.servercore.components.data.level.LevelReward;
+import net.eltown.servercore.components.event.PlayerExperienceAddEvent;
 import net.eltown.servercore.components.language.Language;
 import net.eltown.servercore.components.tinyrabbit.Queue;
 import net.kyori.adventure.text.Component;
@@ -43,6 +44,7 @@ public record LevelAPI(ServerCore serverCore) {
         Objects.requireNonNull(player.getScoreboard().getTeam("level")).setPrefix("   §f" + this.getLevel(player.getName()).getLevel() + " §8[" + this.getLevelDisplay(player) + "§8]  ");
 
         player.sendActionBar(Component.text("§a+ §2" + this.serverCore.getMoneyFormat().format(experience) + "XP"));
+        this.serverCore.getServer().getPluginManager().callEvent(new PlayerExperienceAddEvent(player, experience, level));
 
         this.checkForLevelUp(player);
     }
