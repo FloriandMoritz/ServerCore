@@ -26,6 +26,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.VillagerCareerChangeEvent;
 import org.bukkit.event.player.*;
@@ -332,6 +333,13 @@ public record EventListener(ServerCore serverCore) implements Listener {
     public void on(final PlayerArmorStandManipulateEvent event) {
         if (event.getRightClicked().getPersistentDataContainer().has(new NamespacedKey(ServerCore.getServerCore(), "container.hologram"), PersistentDataType.INTEGER) ||
                 event.getRightClicked().getPersistentDataContainer().has(new NamespacedKey(ServerCore.getServerCore(), "fnpc.key"), PersistentDataType.INTEGER)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void on(final CreatureSpawnEvent event) {
+        if (event.getEntityType() == EntityType.WITHER && this.serverCore.getServerName().equals("server-1")) {
             event.setCancelled(true);
         }
     }
