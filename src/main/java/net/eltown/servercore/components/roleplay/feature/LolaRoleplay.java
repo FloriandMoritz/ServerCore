@@ -313,7 +313,7 @@ public record LolaRoleplay(ServerCore serverCore) {
             case "crate" -> this.serverCore.getCrateAPI().addCrate(player.getName(), dataSplit[1], Integer.parseInt(dataSplit[2]));
         }
         player.sendMessage(Language.get("reward.received", reward.description(), reward.day()));
-        this.serverCore.getServer().getPluginManager().callEvent(new PlayerClaimDailyRewardEvent(player, dailyRewards, reward));
+        this.serverCore.getServer().getScheduler().runTask(this.serverCore, () -> this.serverCore.getServer().getPluginManager().callEvent(new PlayerClaimDailyRewardEvent(player, dailyRewards, reward)));
         Sound.RANDOM_LEVELUP.playSound(player, 1, 2);
     }
 

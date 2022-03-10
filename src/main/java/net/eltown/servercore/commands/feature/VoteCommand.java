@@ -40,7 +40,7 @@ public class VoteCommand extends Command {
                             this.serverCore.getTinyRabbit().send(Queue.CORE_RECEIVE, CoreCalls.REQUEST_BROADCAST_PROXY_MESSAGE.name(), Language.get("vote.vote.broadcast", player.getName()));
                             player.sendMessage(Language.get("vote.successful.voted", key));
                             Sound.RANDOM_LEVELUP.playSound(player, 1, 2);
-                            this.serverCore.getServer().getPluginManager().callEvent(new PlayerVoteEvent(player, key));
+                            this.serverCore.getServer().getScheduler().runTask(this.serverCore, () -> this.serverCore.getServer().getPluginManager().callEvent(new PlayerVoteEvent(player, key)));
                             this.serverCore.setVoted(player.getName());
                         });
                         case "2" -> {
