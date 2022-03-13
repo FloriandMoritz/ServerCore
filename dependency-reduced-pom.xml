@@ -60,7 +60,7 @@
     <dependency>
       <groupId>io.papermc.paper</groupId>
       <artifactId>paper-api</artifactId>
-      <version>1.18-R0.1-SNAPSHOT</version>
+      <version>1.18.2-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -93,6 +93,10 @@
         </exclusion>
         <exclusion>
           <artifactId>adventure-api</artifactId>
+          <groupId>net.kyori</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>adventure-text-minimessage</artifactId>
           <groupId>net.kyori</groupId>
         </exclusion>
         <exclusion>
