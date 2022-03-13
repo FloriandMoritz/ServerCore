@@ -37,5 +37,7 @@ public class Queue {
     public static final String ECONOMY_CALLBACK = "api.economy.callback";
     public static final String SHOPS_RECEIVE = "api.shops.receive";
     public static final String SHOPS_CALLBACK = "api.shops.callback";
+    public static final String PASS_RECEIVE = "api.passes.receive";
+    public static final String PASS_CALLBACK = "api.passes.callback";
 
 }

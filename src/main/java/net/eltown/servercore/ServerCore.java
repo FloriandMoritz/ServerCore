@@ -73,6 +73,7 @@ public class ServerCore extends JavaPlugin {
     private ShopAPI shopAPI;
     private BankAPI bankAPI;
     private RewardAPI rewardAPI;
+    private PassAPI passAPI;
 
     private JohnRoleplay johnRoleplay;
     private LolaRoleplay lolaRoleplay;
@@ -133,6 +134,7 @@ public class ServerCore extends JavaPlugin {
         this.shopAPI = new ShopAPI(this);
         this.bankAPI = new BankAPI(this);
         this.rewardAPI = new RewardAPI(this);
+        this.passAPI = new PassAPI(this);
 
         /*
          * Listeners
@@ -161,6 +163,7 @@ public class ServerCore extends JavaPlugin {
         if (this.serverName.equals("server-1")) this.getServer().getCommandMap().register("sys", new ImportChestCommand(this));
         this.getServer().getCommandMap().register("sys", new LevelSystemCommand(this));
         this.getServer().getCommandMap().register("sys", new NpcCommand(this));
+        this.getServer().getCommandMap().register("sys", new PassSystemCommand(this));
         this.getServer().getCommandMap().register("sys", new PrintItemCommand(this));
         this.getServer().getCommandMap().register("sys", new QuestSystemCommand(this));
         this.getServer().getCommandMap().register("sys", new RewardSystemCommand(this));

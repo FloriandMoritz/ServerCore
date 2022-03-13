@@ -141,6 +141,7 @@ public record QuestListener(ServerCore serverCore) implements Listener {
     @EventHandler
     public void on(final BlockFertilizeEvent event) {
         final Player player = event.getPlayer();
+        if (player == null) return;
         final QuestPlayer questPlayer = QuestAPI.cachedQuestPlayer.get(player.getName());
         questPlayer.getQuestPlayerData().forEach(questData -> {
             if (questData.getData().startsWith("fertilize")) {
