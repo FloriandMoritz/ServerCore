@@ -267,6 +267,11 @@ public class ChestShopAPI {
     }
 
     public void setLicense(final String player, final ShopLicense.ShopLicenseType licenseType) {
+        if (!this.cachedLicenses.containsKey(player)) {
+            this.cachedLicenses.put(player, new ShopLicense(player, licenseType, 0));
+            this.serverCore.getTinyRabbit().send(Queue.CHESTSHOP_RECEIVE, ChestshopCalls.REQUEST_SET_LICENSE.name(), player, licenseType.name().toUpperCase());
+            return;
+        }
         this.cachedLicenses.get(player).setLicense(licenseType);
         this.serverCore.getTinyRabbit().send(Queue.CHESTSHOP_RECEIVE, ChestshopCalls.REQUEST_SET_LICENSE.name(), player, licenseType.name().toUpperCase());
     }
